@@ -1,0 +1,20 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ProdeduralBuildingGenerator", "ProdeduralBuildingGenerator\ProdeduralBuildingGenerator.vcxproj", "{0018D434-9CB7-4F67-AD1F-8CF66408C282}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0018D434-9CB7-4F67-AD1F-8CF66408C282}.Debug|Win32.ActiveCfg = Debug|Win32
+		{0018D434-9CB7-4F67-AD1F-8CF66408C282}.Debug|Win32.Build.0 = Debug|Win32
+		{0018D434-9CB7-4F67-AD1F-8CF66408C282}.Release|Win32.ActiveCfg = Release|Win32
+		{0018D434-9CB7-4F67-AD1F-8CF66408C282}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
