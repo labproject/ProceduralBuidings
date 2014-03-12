@@ -76,6 +76,7 @@
   <ItemGroup>
     <ClCompile Include="GNode.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Modeling.cpp" />
     <ClCompile Include="OpenGL.cpp" />
     <ClCompile Include="Symbol.cpp" />
     <ClCompile Include="TestENV.cpp" />
