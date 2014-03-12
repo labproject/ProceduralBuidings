@@ -77,14 +77,21 @@
     <ClCompile Include="GNode.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Modeling.cpp" />
-    <ClCompile Include="OpenGL.cpp" />
+    <ClCompile Include="Parsing.cpp" />
+    <ClCompile Include="Visualization.cpp" />
     <ClCompile Include="Symbol.cpp" />
-    <ClCompile Include="TestENV.cpp" />
+    <ClCompile Include="integration.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="mainHeader.h" />
+    <ClInclude Include="GNode.h" />
+    <ClInclude Include="Modeling.h" />
+    <ClInclude Include="Parsing.h" />
+    <ClInclude Include="Integration.h" />
+    <ClInclude Include="Symbol.h" />
+    <ClInclude Include="Visualization.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="ClassDiagram1.cd" />
     <None Include="freeglut.dll" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

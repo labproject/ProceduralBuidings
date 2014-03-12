@@ -1,4 +1,4 @@
-#include "mainHeader.h"
+#include "GNode.h"
 
 
 	GNode::GNode()
