@@ -32,3 +32,5 @@ ipch/*
 ProdeduralBuildingGenerator.sdf
 ProdeduralBuildingGenerator.sln
 ipch
+ProdeduralBuildingGenerator/ProdeduralBuildingGenerator.vcxproj
+ProdeduralBuildingGenerator/ProdeduralBuildingGenerator.vcxproj.filters
