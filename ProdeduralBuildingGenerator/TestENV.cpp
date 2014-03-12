@@ -54,10 +54,6 @@ void testENV()
 	//insert into m: map.insert("string",g).. to be checked again how it works.
 	cout<<"GIT_TEST"<<endl;
 	cout<<endl<<endl<<"-----------------------"<<endl<<"End Test Sequence"<<endl<<"-----------------------"<<endl;	
-	
-	//git comment
 
-	cout << "hallo..." << endl;
-	cout<<"hi"<<endl;
 	
 };
