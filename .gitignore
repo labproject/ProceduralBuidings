@@ -32,3 +32,4 @@ ipch/*
 ProdeduralBuildingGenerator.sdf
 ProdeduralBuildingGenerator.sln
 ipch
+ProdeduralBuildingGenerator/main.cpp
