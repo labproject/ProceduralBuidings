@@ -36,16 +36,16 @@ void testENV()
 	Here are some testlines 
 	for the Grammar Objects
 	*/
-	vector<string>words;
-	words.push_back("tree");
-	words.push_back("house");
-	words.push_back("elephant");
+	vector<string>parameters;
+	parameters.push_back("0.5");
+	parameters.push_back("1r");
+	parameters.push_back("0.2");
 	
 	//GRAMMAROBJECT CREATION
 	cout<<"Create:		GNode g"<<endl;
 	GNode *g = new GNode("a","b",3);
 	cout<<"Set:		parameters of g"<<endl;
-	g->parameters=words;
+	g->parameters=parameters;
 
 	cout<<endl;
 
