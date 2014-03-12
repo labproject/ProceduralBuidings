@@ -27,10 +27,18 @@
     <ClCompile Include="TestENV.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
+    <ClCompile Include="OpenGL.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="mainHeader.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="freeglut.dll">
+      <Filter>Quelldateien</Filter>
+    </None>
   </ItemGroup>
 </Project>

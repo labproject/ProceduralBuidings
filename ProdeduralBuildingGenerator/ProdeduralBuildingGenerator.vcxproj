@@ -76,11 +76,15 @@
   <ItemGroup>
     <ClCompile Include="GNode.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="OpenGL.cpp" />
     <ClCompile Include="Symbol.cpp" />
     <ClCompile Include="TestENV.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="mainHeader.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="freeglut.dll" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
