@@ -11,6 +11,5 @@ int main()
 	modeling();
 	visualization();
 
-
 	return 0;
 }
