@@ -55,6 +55,7 @@ void testENV()
 	cout<<"GIT_TEST"<<endl;
 	cout<<endl<<endl<<"-----------------------"<<endl<<"End Test Sequence"<<endl<<"-----------------------"<<endl;	
 
+	cout<<"hoffentlich klappt das"<<endl;	
 	cout << "aenderung 1" << endl;
 
 	
