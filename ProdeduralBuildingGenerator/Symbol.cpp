@@ -1,4 +1,4 @@
-#include "mainHeader.h"
+#include "Symbol.h"
 
 	//Standard Comstructor
 	Symbol::Symbol(){}

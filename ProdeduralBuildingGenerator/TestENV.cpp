@@ -1,6 +1,11 @@
-#include "mainHeader.h"
+#include "testENV.h"
+#include "Symbol.h"
+#include "GNode.h"
 #include <map>
+#include <iostream>
+#include <vector>
 #include <string>
+
 
 void testENV()
 {
@@ -17,8 +22,10 @@ void testENV()
 	sVec.push_back(1);
 	sVec.push_back(1);
 	
-	cout<<"-----------------------"<<endl<<"Start Test Sequence"<<endl<<"-----------------------"<<endl<<endl<<endl;
+	cout<<"-----------------------"<<endl<<"Start Test Sequence"<<endl<<"-----------------------"<<endl<<endl;
 	//SYMBOL CREATION
+	cout<<"SYMBOL CLASS TEST"<<endl;
+	
 	cout<<"Create:		Symbol a"<<endl;
 	Symbol *a = new Symbol(sVec,sVec,"test");
 	cout<<"Scale:		Symbol a"<<endl;
@@ -33,15 +40,13 @@ void testENV()
 	CHECK RETURNING SYMBOL IN A VECTOR<SYMBOL> OUT OF A MEMBERFUNCTION OF SYMBOL
 	*/
 
-	cout<<endl<<endl<<"-----------------------"<<endl<<"Begin Class test"<<endl<<"-----------------------"<<endl;	
+	
 
-	cout<<"Check Returning Symbols"<<endl;
+	
 	a->T(2,3,0.4);
 	vector<Symbol> testVec = a->test();
 	string out =testVec.at(0).getName();
 	cout<<out<<endl;
-
-	cout<<endl<<endl<<"-----------------------"<<endl<<"End Class test"<<endl<<"-----------------------"<<endl;	
 	cout<<endl;
 	
 
@@ -57,6 +62,7 @@ void testENV()
 	parameters.push_back("1r");
 	parameters.push_back("0.2");
 	
+	cout<<endl<<"GRAMMAR CLASS TEST"<<endl;	
 	//GRAMMAROBJECT CREATION
 	cout<<"Create:		GNode g"<<endl;
 	GNode *g = new GNode("a","b",3);
@@ -65,16 +71,17 @@ void testENV()
 
 	cout<<endl;
 
+
+	cout<<endl<<"MAP TEST"<<endl;	
 	cout<<"Create:		map<string,GNode> m"<<endl;
 	//map<string,GNode> m;
 	//insert into m: map.insert("string",g).. to be checked again how it works.
-	cout<<"GIT_TEST"<<endl;
-	cout<<endl<<endl<<"-----------------------"<<endl<<"End Test Sequence"<<endl<<"-----------------------"<<endl;	
+	
 
+	cout<<endl<<"GIT TEST"<<endl;	
 	cout<<"hoffentlich klappt das"<<endl;	
 	cout << "aenderung 1" << endl;
 
-	cout<<endl<<endl<<"-----------------------"<<endl<<"Begin String test"<<endl<<"-----------------------"<<endl;	
 
 	GNode query;
 	query.function = "subDiv";
@@ -87,5 +94,5 @@ void testENV()
 		//a->repeat();
 	}
 
-	cout<<endl<<endl<<"-----------------------"<<endl<<"End String test"<<endl<<"-----------------------"<<endl;	
+	cout<<endl<<endl<<"-----------------------"<<endl<<"End Test Sequence"<<endl<<"-----------------------"<<endl<<endl<<endl;	
 };
