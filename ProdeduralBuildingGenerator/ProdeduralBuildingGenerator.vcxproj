@@ -80,13 +80,13 @@
     <ClCompile Include="Parsing.cpp" />
     <ClCompile Include="Visualization.cpp" />
     <ClCompile Include="Symbol.cpp" />
-    <ClCompile Include="TestENV.cpp" />
+    <ClCompile Include="integration.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GNode.h" />
     <ClInclude Include="Modeling.h" />
     <ClInclude Include="Parsing.h" />
-    <ClInclude Include="testENV.h" />
+    <ClInclude Include="Integration.h" />
     <ClInclude Include="Symbol.h" />
     <ClInclude Include="Visualization.h" />
   </ItemGroup>

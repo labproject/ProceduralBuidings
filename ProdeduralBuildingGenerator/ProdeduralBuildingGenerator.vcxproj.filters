@@ -24,9 +24,6 @@
     <ClCompile Include="Symbol.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
-    <ClCompile Include="TestENV.cpp">
-      <Filter>Quelldateien</Filter>
-    </ClCompile>
     <ClCompile Include="Modeling.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
@@ -34,6 +31,9 @@
       <Filter>Quelldateien</Filter>
     </ClCompile>
     <ClCompile Include="Visualization.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="integration.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
   </ItemGroup>
@@ -44,9 +44,6 @@
     <ClInclude Include="Symbol.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
-    <ClInclude Include="testENV.h">
-      <Filter>Headerdateien</Filter>
-    </ClInclude>
     <ClInclude Include="Parsing.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
@@ -54,6 +51,9 @@
       <Filter>Headerdateien</Filter>
     </ClInclude>
     <ClInclude Include="Visualization.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="Integration.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
   </ItemGroup>
