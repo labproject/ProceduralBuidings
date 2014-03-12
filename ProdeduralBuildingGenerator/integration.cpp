@@ -1,10 +1,4 @@
 #include "integration.h"
-#include "Symbol.h"
-#include "GNode.h"
-#include <map>
-#include <iostream>
-#include <vector>
-#include <string>
 
 
 void testENV()
