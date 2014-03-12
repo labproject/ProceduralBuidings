@@ -56,4 +56,7 @@ void testENV()
 	cout<<endl<<endl<<"-----------------------"<<endl<<"End Test Sequence"<<endl<<"-----------------------"<<endl;	
 
 	cout<<"hoffentlich klappt das"<<endl;	
+	cout << "aenderung 1" << endl;
+
+	
 };
