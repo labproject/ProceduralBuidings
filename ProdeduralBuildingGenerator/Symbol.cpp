@@ -61,5 +61,34 @@
 		//Your code here...
 		return derivatives;
 	}
+	/*
+	================
+	GETTERS AND SETTERS 
+	================
+	*/
+	string Symbol::getName()
+	{
+		return name;
+	}
 
 
+	/*
+	================
+	TEST Rules 
+	================
+	*/
+	vector<Symbol> Symbol::test()
+	{
+		vector<Symbol>res;
+		Symbol a;
+		Symbol b;
+
+		a.name="Box";
+		b.name="Facade";
+
+		res.push_back(a);
+		res.push_back(b);
+
+
+	return res;
+	}

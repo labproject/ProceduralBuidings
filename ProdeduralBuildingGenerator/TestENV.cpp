@@ -1,6 +1,6 @@
 #include "mainHeader.h"
 #include <map>
-
+#include <string>
 
 void testENV()
 {
@@ -29,9 +29,25 @@ void testENV()
 	//a->repeat(...)
 	//...
 
+	/*
+	CHECK RETURNING SYMBOL IN A VECTOR<SYMBOL> OUT OF A MEMBERFUNCTION OF SYMBOL
+	*/
 
+	cout<<endl<<endl<<"-----------------------"<<endl<<"Begin Class test"<<endl<<"-----------------------"<<endl;	
+
+	cout<<"Check Returning Symbols"<<endl;
+	a->T(2,3,0.4);
+	vector<Symbol> testVec = a->test();
+	string out =testVec.at(0).getName();
+	cout<<out<<endl;
+
+	cout<<endl<<endl<<"-----------------------"<<endl<<"End Class test"<<endl<<"-----------------------"<<endl;	
 	cout<<endl;
 	
+
+
+
+
 	/*
 	Here are some testlines 
 	for the Grammar Objects
@@ -58,5 +74,18 @@ void testENV()
 	cout<<"hoffentlich klappt das"<<endl;	
 	cout << "aenderung 1" << endl;
 
-	
+	cout<<endl<<endl<<"-----------------------"<<endl<<"Begin String test"<<endl<<"-----------------------"<<endl;	
+
+	GNode query;
+	query.function = "subDiv";
+	cout<<query.function<<endl;
+
+	if(query.function == "subDiv"){
+		//a->subDiv();
+	}
+	else if (query.function == "repeat"){
+		//a->repeat();
+	}
+
+	cout<<endl<<endl<<"-----------------------"<<endl<<"End String test"<<endl<<"-----------------------"<<endl;	
 };

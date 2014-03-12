@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <string>
 
 using namespace std;
 
@@ -42,6 +43,11 @@ public:
 	vector<Symbol>comp(string);
 	vector<Symbol>repeat(char, double, string);
 
+	//GETTERS & SETTERS
+	string getName();
+
+	//TEST FUNCTIONS
+	vector<Symbol> test();
 };
 
 
@@ -55,7 +61,7 @@ class GNode
 {
 public:
 
-	//fctptr						*function;	//this is a pointer to the function executed by the line. I still have to figure out how this can work.
+	string					function;			//string: name of function to use. for example subDiv, repeat or comp.
 	
 	vector<string>			parameters;			//the Parameters for the function stored as strings
 	vector<string>			symbolNames;		//The Names of the Symbols we derive from our previous symbol
