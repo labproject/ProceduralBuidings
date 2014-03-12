@@ -28,3 +28,5 @@ _ReSharper*/
 *.vssscc
 $tf*/
 ProdeduralBuildingGenerator.opensdf
+ipch/prodeduralbuildinggenerator-3d7b378c/prodeduralbuildinggenerator-a362a353.ipch
+ProdeduralBuildingGenerator.sdf

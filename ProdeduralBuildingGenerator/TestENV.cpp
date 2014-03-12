@@ -52,7 +52,7 @@ void testENV()
 	cout<<"Create:		map<string,GNode> m"<<endl;
 	//map<string,GNode> m;
 	//insert into m: map.insert("string",g).. to be checked again how it works.
-
+	cout<<"GIT_TEST"<<endl;
 	cout<<endl<<endl<<"-----------------------"<<endl<<"End Test Sequence"<<endl<<"-----------------------"<<endl;	
 	
 
