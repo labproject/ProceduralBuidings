@@ -6,10 +6,11 @@
 
 int main()
 {
-	testENV();
+	
 	parsing();
 	modeling();
 	visualization();
+	testENV();
 
 	return 0;
 }
