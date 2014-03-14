@@ -17,7 +17,7 @@ class Symbol
 {
 public:
 	//CLASS VARIABLES
-	vector<double>			position;
+	vector<double>			position;	// 3-dimensinal vector with value corresponding to x,y,z coordinate.
 	vector<double>			scale;
 	vector<double>			rotation;	//4-dimensional Vector ([0] = angle, [1-3] = rotationvector
 	vector<double>			color;		//contains RGB values from 0 to 1
