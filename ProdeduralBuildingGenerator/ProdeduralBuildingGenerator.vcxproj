@@ -74,6 +74,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Global.cpp" />
     <ClCompile Include="GNode.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Modeling.cpp" />
@@ -83,6 +84,7 @@
     <ClCompile Include="integration.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="global.h" />
     <ClInclude Include="GNode.h" />
     <ClInclude Include="Modeling.h" />
     <ClInclude Include="Parsing.h" />
