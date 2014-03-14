@@ -51,11 +51,14 @@ void testENV()
 	Here are some testlines 
 	for the Grammar Objects
 	*/
+
+	vector<pair< float , float>> parameters;
+	/* the following should be changed since the parameter structure is different now
 	vector<string>parameters;
 	parameters.push_back("0.5");
 	parameters.push_back("1r");
 	parameters.push_back("0.2");
-	
+	*/
 	cout<<endl<<"GRAMMAR CLASS TEST"<<endl;	
 	//GRAMMAROBJECT CREATION
 	cout<<"Create:		GNode g"<<endl;
