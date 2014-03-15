@@ -38,9 +38,9 @@ public:
 	void R(double);
 
 	//PRODUCTIONRULES
-	vector<Symbol>		subDiv(char, vector<double>&, vector<string>&);
-	vector<Symbol>		comp(string);
-	vector<Symbol>		repeat(char, double, string);
+	vector<Symbol>		subDiv( int, vector<double>&, vector<string>&);
+	vector<Symbol>		comp( vector<string> );
+	vector<Symbol>		repeat( int, double, string);
 
 	//GETTERS & SETTERS
 	string				getName();
