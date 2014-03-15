@@ -5,13 +5,14 @@
 #include	<iostream>
 #include	<string>
 #include	"Symbol.h"
+#include	"ntree.hpp"
 
 
 using namespace std;
 
 
 //all your functions can be declared here
-void modeling();
+stlplus::ntree<Symbol> modeling();
 
 
 
