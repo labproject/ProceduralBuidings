@@ -8,7 +8,7 @@
 #include <iostream>
 #include <vector>
 #include <string>
-
+#include "ntree.hpp"
 
 
 using namespace std;

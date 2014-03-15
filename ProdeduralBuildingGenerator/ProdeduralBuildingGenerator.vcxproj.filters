@@ -67,6 +67,5 @@
     <None Include="freeglut.dll">
       <Filter>Quelldateien</Filter>
     </None>
-    <None Include="ClassDiagram1.cd" />
   </ItemGroup>
 </Project>

@@ -10,7 +10,7 @@ void testENV()
 	and Scopes can be created 
 	and how rules can be applied
 	*/
-	//testline
+	
 	vector<double> sVec;
 	sVec.push_back(1);
 	sVec.push_back(1);
@@ -91,5 +91,34 @@ void testENV()
 		//a->repeat();
 	}
 
+	//TEST TREE STRUCTRURE
+	cout<<endl<<endl<<"TREETEST"<<endl<<"create TestSymbol"<<endl;
+	Symbol testSymbol;
+	cout<<"Create Tree 'devTree'"<<endl;
+	stlplus::ntree<Symbol> devTree;
+	cout<<"Append TestSymbol as Root"<<endl;
+	devTree.insert(testSymbol);
+	cout<<"Access Symbol contained in root"<<endl;
+	Symbol root = *devTree.root();
+	cout<<"create two new nodes to append on root"<<endl;
+	Symbol testB;
+	Symbol testA;
+	cout<<"name testNodes"<<endl;
+	testB.name  = "Facets";
+	testA.name = "Sidewings";
+
+	cout<<"create Iterator to access Root"<<endl;
+	stlplus::ntree<Symbol>::iterator it = devTree.root();
+	cout<<"Append Symbols as CHildnodes to Root"<<endl;
+	devTree.append(it,testA);
+	devTree.append(it,testB);
+	cout<<"Access Symbols appended to root and print names"<<endl;
+	for (unsigned int i=0;i<devTree.children(it);i++){
+		stlplus::ntree<Symbol>::iterator child = devTree.child(it,i);
+		Symbol node = *child;
+		cout<<node.name<<endl;
+	}
+	
+	
 	cout<<endl<<endl<<"-----------------------"<<endl<<"End Test Sequence"<<endl<<"-----------------------"<<endl<<endl<<endl;	
 };

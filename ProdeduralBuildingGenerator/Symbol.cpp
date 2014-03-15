@@ -22,9 +22,9 @@
 	{ 
 		// 14.03.14_by Ruotong Li
 		// when do the translating, we only need to move the position of symbol to the new place, other parameters don't change
-		p[0] += x;
-		p[1] += y;
-		p[2] += z;
+		position[0] += x;
+		position[1] += y;
+		position[2] += z;
 	}
 
 	//Scale
@@ -32,9 +32,9 @@
 	{
 		// 14.03.14_by Ruotong Li
 		// when do the scaling, nothing but the scale of the symbol has changed.
-		s[0] *= x;
-		s[1] *= y;
-		s[2] *= z;
+		scale[0] *= x;
+		scale[1] *= y;
+		scale[2] *= z;
 	}
 
 	//rotation around y Axis
