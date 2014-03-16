@@ -1,11 +1,7 @@
 #include "visualization.h"
 
-#include "symbol.h"
-#include <GL/freeglut.h>
 
-
-
-
+stlplus::ntree<Symbol> Tree;
 static GLfloat spin = 0.0;
 
 void buildObjects(){
@@ -13,46 +9,46 @@ void buildObjects(){
 	glBegin(GL_QUADS);
 	
 	glColor3d(0.5,0.0,0.5);  
-	glEdgeFlag(TRUE);// Set The Color To Green
+	glEdgeFlag(TRUE);
 	glVertex3d( 1.0, 1.0,-1.0);          // Top Right Of The Quad (Top)
 	glVertex3d(-1.0, 1.0,-1.0);          // Top Left Of The Quad (Top)
-	glVertex3d(-1.0, 1.0, 1.0);          // Bottom Ledt Od The Quad (Top)
+	glVertex3d(-1.0, 1.0, 1.0);          // Bottom Ledt Of The Quad (Top)
 	glVertex3d( 1.0, 1.0, 1.0);
 
 	glColor3d(0.5,0.0,0.5);   
-	glEdgeFlag(TRUE);// Set The Color To Orange
+	glEdgeFlag(TRUE);
 	glVertex3d( 1.0,-1.0, 1.0);          // Top Right Of The Quad (Bottom)
 	glVertex3d(-1.0,-1.0, 1.0);          // Top Left Of The Quad (Bottom)
 	glVertex3d(-1.0,-1.0,-1.0);          // Bottom Left Of The Quad (Bottom)
 	glVertex3d( 1.0,-1.0,-1.0);          // Bottom Right Od The Quad (Bottom)
 
 
-	glColor3d(0.5,0.0,0.5);          // Set The Color To Red
+	glColor3d(0.5,0.0,0.5);         
 	glEdgeFlag(TRUE);
 	glVertex3d( 1.0, 1.0, 1.0);          // Top Right Of The Quad (Front)
 	glVertex3d(-1.0, 1.0, 1.0);          // Top Left Of The Quad (Front)
 	glVertex3d(-1.0,-1.0, 1.0);          // Bottom Left Of The Quad (Front)
 	glVertex3d( 1.0,-1.0, 1.0);          // Bottom Right Of The Quad (Front)
 
-	glColor3d(0.8,0.0,0.8);          // Set The Color To Yellow
+	glColor3d(0.8,0.0,0.8);          // front
 	glEdgeFlag(TRUE);
 	glVertex3d( 1.0,-1.0,-1.0);          // Bottom Left Of The Quad (Back)
 	glVertex3d(-1.0,-1.0,-1.0);          // Bottom Right Of The Quad (Back)
 	glVertex3d(-1.0, 1.0,-1.0);          // Top Right Of The Quad (Back)
 	glVertex3d( 1.0, 1.0,-1.0);          // Top Left Of The Quad (Back)
 
-	glColor3d(0.5,0.0,0.5);          // Set The Color To Blue
+	glColor3d(0.5,0.0,0.5);          
 	glVertex3d(-1.0, 1.0, 1.0);          // Top Right Of The Quad (Left)
 	glVertex3d(-1.0, 1.0,-1.0);          // Top Left Of The Quad (Left)
 	glVertex3d(-1.0,-1.0,-1.0);          // Bottom Left Of The Quad (Left)
 	glVertex3d(-1.0,-1.0, 1.0);          // Bottom Right Of The Quad (Left)
 
-	glColor3d(0.5,0.0,0.5);          // Set The Color To Violet
+	glColor3d(0.5,0.0,0.5);          
 	glVertex3d( 1.0, 1.0,-1.0);          // Top Right Of The Quad (Right)
 	glVertex3d( 1.0, 1.0, 1.0);          // Top Left Of The Quad (Right)
 	glVertex3d( 1.0,-1.0, 1.0);          // Bottom Left Of The Quad (Right)
 	glVertex3d( 1.0,-1.0,-1.0);          // Bottom Right Of The Quad (Right)
-    glEnd();                        // Done Drawing The Quad
+    glEnd();                       
 
 
 
@@ -62,25 +58,7 @@ void buildObjects(){
 void display() {
 
  	glClearColor(1.0, 1.0, 1.0, 1.0);
-	
-
-	vector<double> sVec;
-	sVec.push_back(10);
-	sVec.push_back(-10);
-	sVec.push_back(0);
-
-	Symbol *a = new Symbol(sVec,sVec,"test");
-
 	glLoadIdentity();
-
-
-
-
-	glColor3d(1.0, 0.0, 0.5);
-
-	double x = a->position[0];
-	double y = a->position[1];
-	double z = a->position[2];
 
 	glRotated(60,-0.1,1,0);
 	glTranslated(0,0,0);	
@@ -143,7 +121,7 @@ void reshape(GLsizei w, GLsizei h){
 
 	//set viewport
 	glViewport(0,0,w,h);
-	glMatrixMode(GL_PROJECTION);                        // Select The Projection Matrix
+	glMatrixMode(GL_PROJECTION);                  // Select The Projection Matrix
     glLoadIdentity();                           // Reset The Projection Matrix
  
     aspectRatio = (GLfloat) w / (GLfloat) h;
@@ -163,12 +141,45 @@ void init(){
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		glEnable(GL_DEPTH_TEST);
 		glEnable(GL_BLEND);
-glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	glEnable(GL_POINT_SMOOTH); // Smooth out points
-glEnable(GL_LINE_SMOOTH); // Smooth out lines
-glEnable(GL_POLYGON_SMOOTH); // Smooth out polygon edges
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		glEnable(GL_POINT_SMOOTH); // Smooth out points
+		glEnable(GL_LINE_SMOOTH); // Smooth out lines
+		glEnable(GL_POLYGON_SMOOTH); // Smooth out polygon edges
 }
 
+
+void initTestTree(){
+	vector<double> pos, scale;
+	pos.push_back(1);
+	pos.push_back(1);
+	pos.push_back(0);
+	
+	scale.push_back(8);
+	scale.push_back(5);
+	scale.push_back(10);
+
+	Symbol *a = new Symbol(pos,scale, "facade");
+
+	pos[0] = pos[1] = pos[2] = 3;
+	scale[0] = 10;
+	scale[1] = 4;
+	scale[2] = 6;
+
+	Symbol *b = new Symbol(pos,scale, "sidewing");
+
+	pos[0] = pos[1] = 10;
+	scale[0] = 20;
+	scale[1] = 8;
+	scale[2] = 10;
+
+	Symbol *c = new Symbol(pos,scale, "house");
+
+	Tree.insert(*a);
+	stlplus::ntree<Symbol>::iterator it = Tree.root();
+	Tree.append(it,*b);
+	Tree.append(it,*c);
+
+}
 
 void visualization(int argc, char **argv){
 
@@ -176,17 +187,16 @@ void visualization(int argc, char **argv){
 
 
 	glutInit(&argc, argv); // Initialize GLUT
-	glutInitDisplayMode(GLUT_SINGLE | GLUT_DEPTH); // Set up a basic display buffer (only single buffered for now)
+	glutInitDisplayMode(GLUT_SINGLE | GLUT_DEPTH); 
 	glutInitWindowSize(500, 500); // Set the width and height of the window
 	glutInitWindowPosition(100, 100); // Set the position of the window
 	glutCreateWindow("symbol"); // Set the title for the window
 
-	glutDisplayFunc(display); // Tell GLUT to use the method "display" for rendering
+	glutDisplayFunc(display); 
 	glutReshapeFunc(reshape);
-	glutMouseFunc(mouse); // Tell GLUT to use the method "display" as our idle method as well
+	glutMouseFunc(mouse);
 	init();
 
 
-	glutMainLoop(); // Enter GLUT's main loop
-
+	glutMainLoop(); 
 }
