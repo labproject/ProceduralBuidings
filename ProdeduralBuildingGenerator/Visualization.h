@@ -6,7 +6,7 @@
 
 using namespace std;
 
-void visualization();
+void visualization(int argc, char **argv);
 
 
 
