@@ -118,6 +118,11 @@ void testENV()
 		Symbol node = *child;
 		cout<<node.name<<endl;
 	}
+
+	vector<double> scale(3,0);
+	for(vector<double>::iterator it = scale.begin(); it!=scale.end();it++){
+		cout<<*it<<endl;
+	}
 	
 	
 	cout<<endl<<endl<<"-----------------------"<<endl<<"End Test Sequence"<<endl<<"-----------------------"<<endl<<endl<<endl;	
