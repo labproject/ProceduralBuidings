@@ -62,7 +62,7 @@
 		3) translation it to the right position.
 		4) push the new symbol into a vector "derivatives"
 		*/
-		for ( int i = 0; i < splits.size(); i++)
+		for ( unsigned int i = 0; i < splits.size(); i++)
 		{
 			// create new symbol
 			Symbol deriv_Element( position, scale, symbols[i]);	

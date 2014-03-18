@@ -57,7 +57,7 @@ public:
 	1) please give result with symbolNames vector in such order ( buttomside, topside, sideface1, sideface2, ... sidefaceN)
 	2) namethe sidefaces in a anti-clockwise start with plane-XY goes throught the coordination origin.
 	*/
-	double					prob;				//The probablity of taking such fucntion
+	float					prob;				//The probablity of taking such fucntion
 	GNode();
 	GNode(string,string,int);
 };

@@ -67,5 +67,14 @@
     <None Include="freeglut.dll">
       <Filter>Quelldateien</Filter>
     </None>
+    <None Include="Office Building.txt">
+      <Filter>Ressourcendateien</Filter>
+    </None>
+    <None Include="Simple Building.txt">
+      <Filter>Ressourcendateien</Filter>
+    </None>
+    <None Include="Config.txt">
+      <Filter>Ressourcendateien</Filter>
+    </None>
   </ItemGroup>
 </Project>

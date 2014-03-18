@@ -1,15 +1,17 @@
 //PRIORITY 1
 lot->S(1r,building_height,1r){box}
-box->subDiv(Z,Scope.sz*rand[0.3,0.5],1r){facades|sidewings}
-sidewings->subDiv(X,Scope.sy*rand[0.2,0.6],1r){sidewing|epsilon}->subDiv(X,1r,Scope.sy.rand[0.2,0.6]){epsilon|sidewing}
-sidewing->S(1r,1r,Scope.sz*rand[0.4,1.0]){facades}:0.5->S(1r,Scope.sy*rand[0.2,0.9]){facades}: 0.3->(){epsilon}: 0.2
-facades->Comp("Sidefaces"){facade|front}
+box->subDiv(Z,Scope.sz*rand[0.3-0.5],1r){facades|sidewings}
+sidewings->subDiv(X,Scope.sy*rand[0.2-0.6],1r){sidewing|epsilon}->subDiv(X,1r,Scope.sy*rand[0.2-0.6]){epsilon|sidewing}
+sidewing->S(1r,1r,Scope.sz*rand[0.4-1.0]){facades}:0.5->S(1r,Scope.sy*rand[0.2-0.9]){facades}: 0.3->(){epsilon}: 0.2
+facades->Comp("sidefaces"){facade|front}
 //PRIORITY 2
 front->subDiv(Y,groundFloor_height,1r,topFloor_height){groundFloor|floors|topFloor}
-groundFloor->subDiv(X,1r,entrance_Width,1r){groundtiles|entrance|groundtiles}
+groundFloor->subDiv(X,1r,entrance_width,1r){groundtiles|entrance|groundtiles}
 //PRIORITY 3
 facade->(){floors}
 floors->repeat(Y,floor_height){floor}
 floor->repeat(X,tiles_width){tiles}
 tiles->subDiv(X,1r,window_width,1r){wall|tile|wall}
 tile->subDiv(Y,window_position,window_height,1r){wall|window|wall}
+wall->subDiv(X,rand[0-12]*29.5,window_position*rand[0.2-0.6],window_height*0.4,4,55r){brick1|brick2|brick3|brick4|brick5}
+

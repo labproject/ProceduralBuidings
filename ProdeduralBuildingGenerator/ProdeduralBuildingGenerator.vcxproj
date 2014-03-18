@@ -95,7 +95,10 @@
     <ClInclude Include="Visualization.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Config.txt" />
     <None Include="freeglut.dll" />
+    <None Include="Office Building.txt" />
+    <None Include="Simple Building.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
