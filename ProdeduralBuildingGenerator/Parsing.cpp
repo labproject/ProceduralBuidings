@@ -63,27 +63,32 @@ void readConfig(string str)
 
 
 /*
-=======================================================================================================
-SPLIT sting (EACH LINE) INTO ITS COMPONENTS: STRINGS: ID,FUNCTION,PARAMETERS,SYMBOL IDs and PROBABILITY
-=======================================================================================================
+===================================================
+SPLIT sting (EACH LINE) FROM GRAMMAR FILE INTO ITS
+COMPONENTS AS STRINGS:
+ID, FUNCTION, PARAMETERS, SYMBOLIDs and PROBABILITY
+===================================================
 */
 void split(string str)
 {
-	
+	//RETURN ON COMMENTED OR EMPTY LINES
 	if (str.find("//")!=str.npos)return;
 	else if(str=="")return;
 	
-	string ID ="";						//ID of Symbol that rules are applied to
+	//DECLARE VARIABLES FOR SEGMENTATION OF THE STRING
+	int pos = 0;
+	int end = 0;
+	
+	//DECLARE VARIABLES FOR SEGMENTED STRINGS
+	string ID ="";					
 	vector<string> function;
 	vector<string> parameters;
 	vector<string> SymbolIDs;
 	vector<string> probability;
-	int pos = 0;
-	int end = 0;
+	
 	
 	//SEGMENT LINE INTO ITS COMPONENTS ID, FUNCTION, PARAMETERS and SYMBOLIDs
-	while(str!="")
-{	
+	while(str!=""){	
 
 		//extract SymbolID
 		pos = str.find("->");
@@ -128,45 +133,52 @@ void split(string str)
 		
 	}
 
-	//CONVERT STRINGS AND FILL PARAMETERS IN GNODE:
+	//SPLIT STRINGS, CONVERT TO FLOAT VALUES AND FILL GNODE:
 	writeGNode(ID,function,parameters,SymbolIDs,probability);
-
-	/*	
-	cout<<"-----------"<<endl;
-	cout<<"-----------"<<endl<<endl;
-	*/
-	
-	
+		
 }
 /*
-====================================
-WRITE CONVERTED PARAMETERS IN GNODE:
-====================================
+======================================
+CONVERT PARAMETERS AND WRITE IN GNODE:
+======================================
 */
 void writeGNode(string ID,vector<string> fnct ,vector<string>param,vector<string>symb,vector<string>prob)
 {
 	/*
 	Remeber the structure: map<ID,vector<GNode>>!! 
 
-	this function receives the functions, parameters, SymbolIDs and Probabilities as strings.
-	Those strings need to be processed:
+	this function receives the FUNCTIONS, PARAMETERS, SYMBOLIDs and PROBABILITIES as vector<strings>.
+	Those strings contained in the vectors need to be processed:
 	@Functions:
-	Each entry in vector<string> fnct holds the name of the function that is used!
+	Each entry in vector<string> fnct holds the name of the function that CAN be used under the ID!
 	@Parameters: 
-	Each entry in vector<string>param holds ONE string of ALL parameters for a function.
-	The parameters need to be split up using @function: proceedPARAM().
+	Each entry in vector<string>param holds ONE string of ALL parameters for ONE function.
+	The parameters need to be split up using the method: proceedPARAM().
+		@RETURN: A vector of pair<float,float> Coding in the System explained by Ruotong!
 	@Symbols:
 	Similar to the parameters the Symbols are stored in a STRING
-	The Symbols need to be split up and saved using @function: proceedSYMBID()
+	The Symbols need to be split up and saved using the method: proceedSYMBID()
+		@RETURN: A vector of strings -> the new IDs
 	@Probability:
 	The Probability of a function comes in as string. 
-	It needs to be converted using @function: proceedPROB()
+	It needs to be converted using the method: proceedPROB()
+		@RETURN: A the string of the probability converted to float
 
-	The whole SET above can be applied multiple times to a single ID,
-	We store a vector of GNodes containing the above functions, parameters, Symbolsnames and probabilities.
-	This is why we need to go through each vector (they all have the same lenght)...
+
+
+	Each ID can have multiple functions (and therefore also parameters, symbolids and probabilities).
+	Such a Set is passed as a level of depth in each vector. 
+	the FUNCTION funct.at(3); gets the PARAMETERS params.at(3); that results in the new IDs with the 
+	names stored in symb.at(3); with a PROBABILITY prob.at(3);
+	Therefore we need to check each vector in its depth. Each of those Level define the Content of 
+	one GNODE
+	
+	Accessing the Parameters etc. Level by Level we need to proceed as indicated above using 
+	proceedPARAM();
+	proceedSYMBID();
+	proceedPROB();
 	*/
-	for(unsigned int i=0;i<fnct.size();i++){
+	for(unsigned int i=0;i<fnct.size();i++){ //Check each LEVEL of Depth in the Vectors
 		GNode node; 
 		node.function = fnct.at(i);
 		vector<pair<float,float>>iParameter = proceedPARAM(param.at(i));
@@ -189,9 +201,13 @@ CONVERT string OF PARAMETERS INTO vector<pair<float,float>>
 */
 vector<pair<float,float>>proceedPARAM(string str)
 {
+	/*
+	VARIABLES:
+		The single parameters in the string of parameters are split and saved in
+		vector<String> @Params.
+		*/
 	vector<string> params;
 	string tmp;
-	string res;
 
 	//SEGMENT STRING AND SAVE IT TO VECTOR
 	int pos =0;
@@ -200,13 +216,25 @@ vector<pair<float,float>>proceedPARAM(string str)
 		tmp = str.substr(0,pos);
 		params.push_back(tmp);
 		str.erase(0,pos+1);
-		res+="(";
-		res+=tmp;
-		res+=")";
 	}
-	//cout<<res<<endl;		//PRINT
 
-	//CONVERT STRING IN VECTOR<PAIR<FLOAT,FLOAT>>
+	/*
+	DECLARE VARIABLES FOR CONVERSION IN pair<float,float>;
+	@vec: VECTOR OF PAIRS
+		each contains the information that was originally given by the STRING
+	@par: PARAMETER FROM ABOVE DECLARED AND DEFINED vector<string>PARAMS
+		temporary slot to save parameter strings.
+	@sub: TEMPORARY SUB-STRING
+		used to save "possible relative values" 
+		it is used once the RELATIVE QUERY starts!
+	@mult: SAVES THE POSITION WITHIN THE STRING IF "*" IS FOUND
+		used to indicate "possible multiplication operations"
+		it is used once the MULTIPLICATION QUERY starts!
+	@relVal: SAVES THE POSSIBLE RELATIVE VALUE AS FLOAT
+		it is used once the RELATUVE QUERY starts
+	@First,Second: STORE THE VALUE FOR ENTRIES IN THE pair<first,second>
+	*/
+
 	vector<pair<float,float>> vec;
 	
 	string par;
@@ -218,7 +246,7 @@ vector<pair<float,float>>proceedPARAM(string str)
 	float first;
 	float second;
 	
-	//FOR EACH PARAMETER
+	//FOR EACH PARAMETER IN THE EARLIER SEPERATED vector<string>PARAMS
 	for(vector<string>::iterator it = params.begin();it!=params.end();it++){
 		par = *it;
 		mult = par.find("*");
@@ -230,7 +258,7 @@ vector<pair<float,float>>proceedPARAM(string str)
 		//CONTENT QUERY
 
 		if(par =="X"||par =="Y"||par =="Z"){
-			//QUERY IF DIMENSION
+			//QUERY DIMENSION
 			cout<<"DIMENSION:	";
 			if(par=="X")first= 1;
 			if(par=="Y")first= 2;
@@ -238,52 +266,64 @@ vector<pair<float,float>>proceedPARAM(string str)
 			
 			second = 0;
 			
-		}else if(confIT!=config.end()){
+		}else if(confIT!=config.end()){					//CHECK IF MAP config RETURNS A VALUE
 			//QUERY IF GLOBAL VARIABLE IS FOUND
 			cout<<"GLOBALVALUE:	";
-			first = config.at(par);			//look up global variable and save it in first
-			second = 1;						//set second to 1 because both values are multiplied
+			first = config.at(par);						//look up global variable and save it as first
+			second = 1;									//set second to 1 because both values are multiplied
 
-		}else if(mult!=-1){
+		}else if(mult!=-1){								//CHECK IF PARAMETER DESCRIBES MULTIPLICATION
 			//QUERY IF MULTIPLICATION IS FOUND
 			cout<<"MULTIPLY:	";
-			string mFirst = par.substr(0,mult);
-			string mSecond = par.substr(mult+1,par.npos);
-			//CALL FUNCTION THAT DISTINGUISHES BETWEEN GLOBAL VARIABLE, rand() and absolute values
+			string mFirst = par.substr(0,mult);			//save Parameter BEFORE "*" as string
+			string mSecond = par.substr(mult+1,par.npos);//save Parameter AFTER "*" as string
+
+			//CALL FUNCTION THAT DISTINGUISHES BETWEEN globalVariables, ScopeOperations, randomValues and absoluteValues
 			first = interpret(mFirst); 
 			second = interpret(mSecond);
 
-		
-		}else if(rel!=-1&&relVal!=0&&rel==par.length()-1){
-			//QUERY IF RELATIVE VALUE IS FOUND
+		}else if(rel!=-1&&relVal!=0&&rel==par.length()-1){	//QUERY IF RELATIVE VALUE IS FOUND
+			/*The Line above checks: 
+				is Letter "r" found in string?
+				is the Rest of the string is a Number ?
+				is the found Letter "r" is the LAST letter In the string
+			*/
+			
 			cout<<"RELATIVE:	";
-			first = -4;
-			second = relVal;
+			first = -4;				//CODE FOR RELATIVE VALUES
+			second = relVal;		//ACTUAL RELATIVE VALUE (calculated on top!)
 
-		}else if((float)atof(par.c_str())!=0){
-			//QUERY IF ABSOLUTE VALUE IS FOUND
+		}else if((float)atof(par.c_str())!=0){				//QUERY IF ABSOLUTE VALUE IS FOUND
+			/*
+			The Line above Checks:
+				is the String found a Valid float number?
+			*/
+			
 			cout<<"ABSOLUTE:	";
 			first = 1;
 			second = (float)atof(par.c_str());
 		
-		}else if(par==""){
+		}else if(par==""){					//QUERY IF NO PARAMETERS ARE GIVEN
 			cout<<"EMPTY:		";
-			first = -5;
-			second = 0;
-		}else if (par == "sidefaces"){
+			first = -5;		//TO ASK RUOTONG ABOUT THIS CASE
+			second = 0;		//TO ASK RUOTONG ABOUT THIS CASE
+		
+		}else if (par == "sidefaces"){		//QUERY IF A CERTAIN STRING IS GIVEN AS PARAMETER!
 			cout<<"SIDEFACES	";
-			first = -6;
-			second = 0;
-		}else{
+			first = -6;		//TO ASK RUOTONG ABOUT THIS CASE
+			second = 0;		//TO ASK RUOTONG ABOUT THIS CASE
+		
+		}else{				//ANY OTHER CASE WILL REPORT AN ERROR!
 			first	= -100;
 			second	= -100;
 			cout<<par<<"					";
 			drawRed("ERROR!");cout<<endl;
 		}
+		//THE CREATED VALUES first AND second ARE NOW PUSHED TO A VECTOR OF pairs<float,float> CODING THE ACTUAL PARAMETERS
 		vec.push_back(pair<float,float>(first,second));
 		cout<<"<"<<first<<">	"<<"<"<<second<<">"<<endl;
 		
-	}//end for
+	}//end forLoop
 	cout<<"--------------------------------"<<endl;
 	cout<<"# of Parameters: " <<vec.size()<<endl<<endl;
 	return vec;
@@ -308,11 +348,7 @@ vector<string>proceedSYMBID(string str)
 		tmp = str.substr(0,pos);
 		Symbols.push_back(tmp);
 		str.erase(0,pos+1);
-			res+="{";
-		res+=tmp;
-		res+="}";
 	}
-	//cout<<res<<endl;			//PRINT
 	return Symbols;
 }
 
@@ -324,12 +360,12 @@ CONVERT string OF PROBABILITY INTO float
 */
 float proceedPROB(string str)
 {
-	
 	string num =str;
 	float val = (float)atof(num.c_str());
 	//cout<<"Pr["<<val<<"]"<<endl<<endl;		//PRINT
 	return val;
 }
+
 /*
 ==========================================
 IF THERE IS MULTIPLICATION 
@@ -339,12 +375,13 @@ THIS FUNCTION INTERPRETS A GIVEN STRING AS
 -SCOPE.SX/Y/Z, 
 -RANDOM FUNCTION 
 -OR GLOBAL VARIABLE
+OTHER POSSIBILITIES ARE NOT VALID!!
 ==========================================
 */
 float interpret(string par)
 {
 	
-	float result=0;
+	float result=-1;
 	int random = par.find("rand[");
 	int scope = par.find("Scope.s");
 	string tmp1;
