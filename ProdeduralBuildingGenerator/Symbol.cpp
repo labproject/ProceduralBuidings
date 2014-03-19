@@ -1,5 +1,15 @@
 #include "Symbol.h"
 
+/*
+-Rename function
+-epsilon -> makes inactive
+	rename node to "epsilon" make this.node inactive!
+	apply rule-> if name of new Symbol is epsilon -> make this.child inactive
+	apply rule-> after a rule is applied make this.node inactive
+-Occlusion
+	
+*/
+
 	//Standard Comstructor
 	Symbol::Symbol(){}
 	

@@ -3,7 +3,7 @@ lot->S(1r,building_height,1r){box}
 box->subDiv(Z,Scope.sz*rand[0.3-0.5],1r){facades|sidewings}
 sidewings->subDiv(X,Scope.sy*rand[0.2-0.6],1r){sidewing|epsilon}->subDiv(X,1r,Scope.sy*rand[0.2-0.6]){epsilon|sidewing}
 sidewing->S(1r,1r,Scope.sz*rand[0.4-1.0]){facades}:0.5->S(1r,Scope.sy*rand[0.2-0.9]){facades}: 0.3->(){epsilon}: 0.2
-facades->Comp("sidefaces"){facade|front}
+facades->Comp("sidefaces"){epsilon|epsilon|facade|facade|facade|front}
 //PRIORITY 2
 front->subDiv(Y,groundFloor_height,1r,topFloor_height){groundFloor|floors|topFloor}
 groundFloor->subDiv(X,1r,entrance_width,1r){groundtiles|entrance|groundtiles}

@@ -3,7 +3,7 @@
 
 int globalCount=0;
 static map<string,float> config;
-static map<string,vector<GNode>> ruleSet;
+vector<pair<string,vector<GNode>>> ruleSet;
 
 
 /*
@@ -11,7 +11,7 @@ static map<string,vector<GNode>> ruleSet;
 PARSING MAIN FUNCTION. READ config.txt and office_/simple_building.txt, SEPERATE EACH LINE AND SEND IT TO split(string)
 =======================================================================================================================
 */
-map<string,vector<GNode>> parsing()
+vector<pair<string,vector<GNode>>> parsing()
 {
 	cout<<"-----------------------"<<endl<<"PARSING"<<endl<<"-----------------------"<<endl<<endl<<endl;
 	
@@ -97,7 +97,7 @@ void split(string str)
 
 		//extract function name	
 		pos = str.find("(");			
-		function.push_back(str.substr(0, pos));
+		function.push_back(proceedFNCT(str.substr(0, pos)));
 		str.erase(0, pos+1);
 		
 		//extract Parameters
@@ -303,15 +303,16 @@ vector<pair<float,float>>proceedPARAM(string str)
 			first = 1;
 			second = (float)atof(par.c_str());
 		
+		}else if (par == "sidefaces"){		//QUERY IF A CERTAIN STRING IS GIVEN AS PARAMETER!
+			cout<<"SIDEFACES	";
+			first = -6;		//TO ASK RUOTONG ABOUT THIS CASE
+			second = 0;		//TO ASK RUOTONG ABOUT THIS CASE
+		
 		}else if(par==""){					//QUERY IF NO PARAMETERS ARE GIVEN
 			cout<<"EMPTY:		";
 			first = -5;		//TO ASK RUOTONG ABOUT THIS CASE
 			second = 0;		//TO ASK RUOTONG ABOUT THIS CASE
 		
-		}else if (par == "sidefaces"){		//QUERY IF A CERTAIN STRING IS GIVEN AS PARAMETER!
-			cout<<"SIDEFACES	";
-			first = -6;		//TO ASK RUOTONG ABOUT THIS CASE
-			second = 0;		//TO ASK RUOTONG ABOUT THIS CASE
 		
 		}else{				//ANY OTHER CASE WILL REPORT AN ERROR!
 			first	= -100;
@@ -366,6 +367,12 @@ float proceedPROB(string str)
 	return val;
 }
 
+
+string proceedFNCT(string str)
+{
+	if (str=="") return "rename";
+	else return str;
+}
 /*
 ==========================================
 IF THERE IS MULTIPLICATION 

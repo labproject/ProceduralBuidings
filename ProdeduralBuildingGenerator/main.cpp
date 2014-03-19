@@ -9,7 +9,7 @@ int main(int argc, char **argv)
 	
 	parsing();
 	modeling();
-	visualization(argc, argv);
+	//visualization(argc, argv);
 	testENV();
 
 	return 0;
