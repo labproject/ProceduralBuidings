@@ -68,12 +68,12 @@
 			Symbol deriv_Element( position, scale, symbols[i]);	
 
 			// scale
-			vector<double> scale_p (3, 1);				// create a vector to store the scale parameter
+			vector<double> scale_p (3, 1.0);				// create a vector to store the scale parameter
 			scale_p[d] = splits[i] / scale[d];			// calculate the scale parameter
 			deriv_Element.S ( scale_p[0], scale_p[1], scale_p[2]);	// call the S function do calculation
 
 			// translation
-			vector<double> trans_p (3, 0);				// create a vector to store the translation parameter
+			vector<double> trans_p (3, 0.0);				// create a vector to store the translation parameter
 			for ( int j = 0; j < i; j ++)				// calculate the position of the new symbol
 				position[d] += splits[i];
 			deriv_Element.T (trans_p[0], trans_p[1], trans_p[2]);	// Translate the new symbol
@@ -103,40 +103,40 @@
 		int i = 0;	// use as the index of the namelist
 		// 1) splict bottom
 		Symbol deriv_Element_01( position, scale, symbols[i]);	// create new symbol
-		deriv_Element_01.S ( 1, 0, 1);										// remove the Y dimention
+		deriv_Element_01.S ( 1.0, 0.0, 1.0);										// remove the Y dimention
 		derivatives.push_back (deriv_Element_01);							// push_back
 		i ++;
 
 		// 2) splict top
 		Symbol deriv_Element_02( position, scale, symbols[i]);	// create new symbol
-		deriv_Element_02.S ( 1, 0, 1);										// remove the Y dimention
-		deriv_Element_02.T ( 0, position[1], 0);							// tanslate it to the right position
+		deriv_Element_02.S ( 1.0, 0.0, 1.0);										// remove the Y dimention
+		deriv_Element_02.T ( 0.0, position[1], 0.0);							// tanslate it to the right position
 		derivatives.push_back (deriv_Element_02);							// push_back
 		i++;
 
 		// 3) splict side_face_1 XY at front
 		Symbol deriv_Element_03( position, scale, symbols[i]);	// create new symbol
-		deriv_Element_03.S ( 1, 1, 0);										// remove the Y dimention
+		deriv_Element_03.S ( 1.0, 1.0, 0.0);										// remove the Y dimention
 		derivatives.push_back (deriv_Element_03);							// push_back
 		i++;
 
 		// 4) splict side_face_1 YZ at right
 		Symbol deriv_Element_04( position, scale, symbols[i]);	// create new symbol
-		deriv_Element_04.S ( 0, 1, 1);										// remove the Y dimention
-		deriv_Element_04.T ( position[0], 0, 0);							// tanslate it to the right position
+		deriv_Element_04.S ( 0.0, 1.0, 1.0);										// remove the Y dimention
+		deriv_Element_04.T ( position[0], 0.0, 0.0);							// tanslate it to the right position
 		derivatives.push_back (deriv_Element_04);							// push_back
 		i++;
 
 		// 5) splict side_face_3 XY at back
 		Symbol deriv_Element_05( position, scale, symbols[i]);	// create new symbol
-		deriv_Element_05.S ( 1, 1, 0);										// remove the Y dimention
-		deriv_Element_05.T ( 0, 0, position[2]);							// tanslate it to the right position
+		deriv_Element_05.S ( 1.0, 1.0, 0.0);										// remove the Y dimention
+		deriv_Element_05.T ( 0.0, 0.0, position[2]);							// tanslate it to the right position
 		derivatives.push_back (deriv_Element_05);							// push_back
 		i++;
 
 		// 6) splict side_face_1 YZ at left
 		Symbol deriv_Element_06( position, scale, symbols[i]);	// create new symbol
-		deriv_Element_06.S ( 0, 1, 1);										// remove the Y dimention
+		deriv_Element_06.S ( 0.0, 1.0, 1.0);										// remove the Y dimention
 		derivatives.push_back (deriv_Element_06);							// push_back
 		i++;
 
@@ -158,6 +158,7 @@
 		int i = 1;							// use as count the number of new crated symbols
 		vector<double> scale_p( 3, 1 );		// creat a parameter shows the new symbols scale vector
 		scale_p[dim] = size / scale[dim];
+
 		while ( size * i < scale[dim] )
 		{
 			// 1) create new symbol ( repeat element )
