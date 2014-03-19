@@ -4,12 +4,12 @@
 #include "Visualization.h"
 
 
-int main()
+int main(int argc, char **argv)
 {
 	
 	parsing();
 	modeling();
-	visualization();
+	visualization(argc, argv);
 	testENV();
 
 	return 0;

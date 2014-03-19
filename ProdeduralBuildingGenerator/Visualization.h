@@ -3,10 +3,12 @@
 
 #include	<iostream>
 #include	<string>
-
+#include "symbol.h"
+#include "ntree.hpp"
+#include <GL/freeglut.h>
 using namespace std;
 
-void visualization();
+void visualization(int argc, char **argv);
 
 
 
