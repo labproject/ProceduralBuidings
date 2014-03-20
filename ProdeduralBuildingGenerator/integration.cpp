@@ -111,7 +111,7 @@ void testENV()
 
 	cout<<"create Iterator to access Root"<<endl;
 	stlplus::ntree<Symbol>::iterator it = devTree.root();
-	cout<<"Append Symbols as CHildnodes to Root"<<endl;
+	cout<<"Append Symbols as Childnodes to Root"<<endl;
 	devTree.append(it,testA);
 	devTree.append(it,testB);
 	cout<<"Access Symbols appended to root and print names"<<endl;

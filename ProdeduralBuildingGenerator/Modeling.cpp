@@ -1,4 +1,3 @@
-
 #include "Modeling.h"
 
 
@@ -64,6 +63,7 @@
 	3) take the data from GNode and pass the corresponding parameter to the fucnton;
 	4) return the new created vector< Symbol > node_child;
 */
+
 vector<Symbol> apply_rule ( Symbol &node_parent, GNode *rule )
 {
 	// 1) create a new vector<Symbol> node_child as the return value;

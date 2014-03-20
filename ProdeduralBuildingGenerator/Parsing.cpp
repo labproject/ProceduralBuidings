@@ -33,12 +33,31 @@ vector<pair<string,vector<GNode>>> parsing()
 	infile.open("Office Building.txt");         
 	while(!infile.eof()){
 		while(getline(infile,line)){			//post Line in line
+			//THE FUN STARTS HERE!
 			split(line);						//Splint Line into Commands
+			//THAT WAS IT.. :)
 		}
 		infile.close();
 		break;
 	}
-
+	//PRINT RULE SET
+		for(vector<pair<string,vector<GNode>> >::iterator rule = ruleSet.begin(); rule != ruleSet.end(); rule++){
+			drawRed(rule->first+": ");
+			for (vector<GNode>::iterator node = rule->second.begin(); node != rule->second.end(); node++){
+				cout<<endl<<"  ";
+				cout<< node->function<< "  ";
+				for(vector<pair<float,float>>::iterator param = node->parameters.begin(); param != node->parameters.end(); param++){
+					cout<<"<"<< param->first<<","<<param->second<<">";
+				}
+				cout<<"{ ";
+				for(vector<string>::iterator sym = node->symbolNames.begin(); sym != node->symbolNames.end(); sym++){
+					cout<<*sym+" ";
+				}
+				cout<<"}";
+			}
+			cout <<endl;
+		}
+	//RETURN RULE SET
 	return ruleSet;
 }
 
@@ -121,17 +140,6 @@ void split(string str)
 			str.erase(0,end);
 		}
 	}
-	//PRINT RULE BLOCK STRINGS
-	cout<<endl<<"RuleNr.: "<<++globalCount<<endl;
-	for (unsigned int i=0;i<function.size();i++){
-		cout<<"ID:			"<<ID<<endl;
-		cout <<"Function:		"<<function.at(i)<<endl;
-		cout<<"Parameter:		"<<parameters.at(i)<<endl;
-		cout<<"SymbolID:		"<<SymbolIDs.at(i)<<endl;
-		cout<<"Probability:		"<<probability.at(i)<<endl;
-		cout<<"-----------"<<endl;
-		
-	}
 
 	//SPLIT STRINGS, CONVERT TO FLOAT VALUES AND FILL GNODE:
 	writeGNode(ID,function,parameters,SymbolIDs,probability);
@@ -178,21 +186,26 @@ void writeGNode(string ID,vector<string> fnct ,vector<string>param,vector<string
 	proceedSYMBID();
 	proceedPROB();
 	*/
+	vector<GNode> vec;
 	for(unsigned int i=0;i<fnct.size();i++){ //Check each LEVEL of Depth in the Vectors
 		GNode node; 
 		node.function = fnct.at(i);
+
 		vector<pair<float,float>>iParameter = proceedPARAM(param.at(i));
 		vector<string>iSymbol = proceedSYMBID(symb.at(i));
 		float probability = proceedPROB(prob.at(i));
-		//
+		
 		node.parameters=iParameter;
 		node.symbolNames=iSymbol;
 		node.prob=probability;
-		vector<GNode> vec;
+		
 		vec.push_back(node);
 		
+		
 		}
-	}
+	
+		ruleSet.push_back(pair<string,vector<GNode>>(ID,vec));
+}
 
 /*
 ===========================================================
@@ -236,7 +249,7 @@ vector<pair<float,float>>proceedPARAM(string str)
 	*/
 
 	vector<pair<float,float>> vec;
-	
+	string parameterType;
 	string par;
 	string sub;
 	int mult;
@@ -259,7 +272,7 @@ vector<pair<float,float>>proceedPARAM(string str)
 
 		if(par =="X"||par =="Y"||par =="Z"){
 			//QUERY DIMENSION
-			cout<<"DIMENSION:	";
+			parameterType="DIMENSION:	";
 			if(par=="X")first= 1;
 			if(par=="Y")first= 2;
 			if(par=="Z")first= 3;
@@ -268,13 +281,13 @@ vector<pair<float,float>>proceedPARAM(string str)
 			
 		}else if(confIT!=config.end()){					//CHECK IF MAP config RETURNS A VALUE
 			//QUERY IF GLOBAL VARIABLE IS FOUND
-			cout<<"GLOBALVALUE:	";
+			parameterType="GLOBALVALUE:	";
 			first = config.at(par);						//look up global variable and save it as first
 			second = 1;									//set second to 1 because both values are multiplied
 
 		}else if(mult!=-1){								//CHECK IF PARAMETER DESCRIBES MULTIPLICATION
 			//QUERY IF MULTIPLICATION IS FOUND
-			cout<<"MULTIPLY:	";
+			parameterType="MULTIPLY:	";
 			string mFirst = par.substr(0,mult);			//save Parameter BEFORE "*" as string
 			string mSecond = par.substr(mult+1,par.npos);//save Parameter AFTER "*" as string
 
@@ -289,7 +302,7 @@ vector<pair<float,float>>proceedPARAM(string str)
 				is the found Letter "r" is the LAST letter In the string
 			*/
 			
-			cout<<"RELATIVE:	";
+			parameterType="RELATIVE:	";
 			first = -4;				//CODE FOR RELATIVE VALUES
 			second = relVal;		//ACTUAL RELATIVE VALUE (calculated on top!)
 
@@ -299,34 +312,36 @@ vector<pair<float,float>>proceedPARAM(string str)
 				is the String found a Valid float number?
 			*/
 			
-			cout<<"ABSOLUTE:	";
+			parameterType="ABSOLUTE:	";
 			first = 1;
 			second = (float)atof(par.c_str());
 		
 		}else if (par == "sidefaces"){		//QUERY IF A CERTAIN STRING IS GIVEN AS PARAMETER!
-			cout<<"SIDEFACES	";
+			parameterType="SIDEFACES	";
 			first = -6;		//TO ASK RUOTONG ABOUT THIS CASE
 			second = 0;		//TO ASK RUOTONG ABOUT THIS CASE
 		
 		}else if(par==""){					//QUERY IF NO PARAMETERS ARE GIVEN
-			cout<<"EMPTY:		";
+			parameterType="EMPTY:		";
 			first = -5;		//TO ASK RUOTONG ABOUT THIS CASE
 			second = 0;		//TO ASK RUOTONG ABOUT THIS CASE
 		
 		
 		}else{				//ANY OTHER CASE WILL REPORT AN ERROR!
-			first	= -100;
-			second	= -100;
-			cout<<par<<"					";
+			parameterType=par+"					";
 			drawRed("ERROR!");cout<<endl;
+			first	= 0;
+			second	= 0;
+
 		}
 		//THE CREATED VALUES first AND second ARE NOW PUSHED TO A VECTOR OF pairs<float,float> CODING THE ACTUAL PARAMETERS
+		
+		
 		vec.push_back(pair<float,float>(first,second));
-		cout<<"<"<<first<<">	"<<"<"<<second<<">"<<endl;
 		
 	}//end forLoop
-	cout<<"--------------------------------"<<endl;
-	cout<<"# of Parameters: " <<vec.size()<<endl<<endl;
+
+
 	return vec;
 }
 

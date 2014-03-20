@@ -13,10 +13,8 @@ using namespace std;
 
 
 //all your functions can be declared here
-stlplus::ntree<Symbol> modeling();
-
-
-
+stlplus::ntree<Symbol> modeling(Symbol&, vector< pair < string, vector<GNode>> >);
+vector<Symbol> apply_rule ( Symbol &, GNode *);
 
 //please do not write below this comment, thanks
 #endif
