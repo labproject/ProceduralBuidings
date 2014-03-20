@@ -6,6 +6,7 @@
 #include	<string>
 #include	"Symbol.h"
 #include	"ntree.hpp"
+#include	"GNode.h"
 
 
 using namespace std;

@@ -42,6 +42,15 @@
 	{
 		//Your code here...
 	}
+
+	// rename the Symbol with a new name
+	void Symbol:: rename ( string symbolName )
+	{
+		if ( symbolName == "epsilon" )
+			active = 0;
+		else
+			name = symbolName;
+	}
 	
 	/*
 	================
@@ -172,6 +181,18 @@
 			// 3) push_back and repeat
 			derivatives.push_back (deriv_Element);
 			i++;
+		}
+
+		// consider about the remaining part
+		i --;
+		if ( size * i < scale[dim] )
+		{
+			scale_p[dim] = ( scale[dim]- i * size ) / scale[dim];
+			Symbol deriv_Element( position, scale_p, "remaind");
+			vector<double> trans_p ( 3, 0 );
+			trans_p[dim] = size * ( i );
+			deriv_Element.T ( trans_p[0], trans_p[1], trans_p[2] );
+			derivatives.push_back (deriv_Element);
 		}
 
 		return derivatives;

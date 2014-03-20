@@ -37,6 +37,9 @@ public:
 	void S(double,double,double);		//What is better, 3 single values or a vector of three values?
 	void R(double);
 
+	// RENAME
+	void rename ( string);
+
 	//PRODUCTIONRULES
 	vector<Symbol>		subDiv( int, vector<double>&, vector<string>&);
 	vector<Symbol>		comp( vector<string> );
