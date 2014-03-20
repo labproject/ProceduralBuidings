@@ -12,9 +12,8 @@
 
 using namespace std;
 
-//map<string,float>config;
 
-map<string,vector<GNode>> parsing();
+vector<pair<string,vector<GNode>>> parsing();
 void readConfig(string);
 void split(string);
 void writeGNode(string,vector<string>,vector<string>,vector<string>,vector<string>);

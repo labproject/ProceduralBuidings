@@ -92,7 +92,9 @@ void testENV()
 	}
 
 	//TEST TREE STRUCTRURE
-	cout<<endl<<endl<<"TREETEST"<<endl<<"create TestSymbol"<<endl;
+	cout<<endl<<endl<<"TREETEST"<<endl;
+
+	cout<<"create TestSymbol"<<endl;
 	Symbol testSymbol;
 	cout<<"Create Tree 'devTree'"<<endl;
 	stlplus::ntree<Symbol> devTree;
@@ -116,7 +118,7 @@ void testENV()
 	for (unsigned int i=0;i<devTree.children(it);i++){
 		stlplus::ntree<Symbol>::iterator child = devTree.child(it,i);
 		Symbol node = *child;
-		cout<<node.name<<endl;
+		cout<<"NAME "<<node.name<<endl;
 	}
 
 	vector<double> scale(3,0);
