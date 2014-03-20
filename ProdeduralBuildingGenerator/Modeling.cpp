@@ -198,7 +198,6 @@ vector<Symbol> apply_rule ( Symbol &node_parent, GNode *rule )
 	//	"Occlusion" => 
 
 	return node_child;
-
 }
 
 stlplus::ntree<Symbol> modeling ( Symbol &S, vector< pair < string, vector<GNode>> > grammar )
