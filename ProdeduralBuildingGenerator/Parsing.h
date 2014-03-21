@@ -6,25 +6,20 @@
 #include <sstream>
 #include <fstream>
 #include "GNode.h"
-#include "Global.h"
 #include <vector>
-#include <map>
+
+
+/*
+Please do all your #include operations here in this file like the inclusions above
+*/
+
 
 using namespace std;
 
-
+/*
+Please DECLARE all your functions here in the main (just like the parsing() below;
+*/
 vector<pair<string,vector<GNode>>> parsing();
-void readConfig(string);
-void split(string);
-void writeGNode(string,vector<string>,vector<string>,vector<string>,vector<string>);
-
-
-float proceedPROB(string);
-float interpret(string);
-
-string proceedFNCT(string);
-vector<pair<float,float>> proceedPARAM(string);
-vector<string>proceedSYMBID(string);
 
 
 //please do not write below this comment, thanks

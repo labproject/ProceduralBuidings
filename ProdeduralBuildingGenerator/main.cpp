@@ -2,7 +2,7 @@
 #include "Parsing.h"
 #include "Modeling.h"
 #include "Visualization.h"
-#include "Global.h"
+
 
 int main(int argc, char **argv)
 {
