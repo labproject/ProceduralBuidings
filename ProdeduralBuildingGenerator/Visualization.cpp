@@ -99,7 +99,7 @@ void display() {
 	glClearColor(1.0, 1.0, 1.0, 1.0);
 
 	glLoadIdentity();
-	gluLookAt (0.0, 0.0, 1+zoom, xRef, yRef, zRef, 0.0, 1, 0); 
+	gluLookAt (1.0, 0, 5+zoom, xRef, yRef, zRef, 0.0, 1, 0); 
 
 	//Iterate over Tree
 	stlplus::ntree<Symbol>::iterator it = Tree.root();
@@ -110,19 +110,20 @@ void display() {
 		Symbol node = *child;
 		cout << node.name << endl;
 		if(node.name == "facade"){
-			glColor4d(1,0, 0, 0.9); 
+			//glColor4d(1,0, 0, 0.9); 
 		    glBindTexture(GL_TEXTURE_2D, texture[0]);
 
 		}
 		else{
-			glColor4d(0.3,0, 0.3, 1);
+			//glColor4d(0.3,0, 0.3, 1);
 			glBindTexture(GL_TEXTURE_2D, texture[1]);
 		}
 
 		
-
-		glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+		//glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
+		//glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
 		glTranslated(node.position[0], node.position[1], node.position[2]);
 		glScaled(node.scale[0], node.scale[1], node.scale[2]);
 		glCallList(cube);
@@ -159,7 +160,7 @@ void reshape(GLsizei w, GLsizei h){
 	if(w <= h)
 		glOrtho(-n, n, -n / aspectRatio, n / aspectRatio, n, -n); 
 	else
-		glOrtho(-n * aspectRatio, n * aspectRatio, -n, n, 5.0, -2.0);
+		glOrtho(-n * aspectRatio, n * aspectRatio, -n, n, n, -n);
 
 	
 	//gluPerspective(60, aspectRatio, 1, 10);
