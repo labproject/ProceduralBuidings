@@ -1,12 +1,12 @@
 #include "visualization.h"
 
-
 stlplus::ntree<Symbol> Tree;
 static GLfloat spin = 0.0, aspectRatio;
 GLuint cube, shape;
 //movement in scene:
 static GLdouble xRef = 0.0, yRef = 0.0, zRef = 0.0, zoom = 1.0, horizontal = 0.0, vertical = 0.0;
 GLuint	texture[2];
+
 
 void buildCube(){
 	//build a rectangular cube, which can be scaled and rotated
@@ -135,10 +135,6 @@ void display() {
 	glFlush();
 	glutSwapBuffers();
 }
-
-
-
-
 
 
 void reshape(GLsizei w, GLsizei h){
