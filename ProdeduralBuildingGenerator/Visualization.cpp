@@ -1,15 +1,21 @@
 #include "visualization.h"
+#define START 1
+#define BOXES 2
+#define FACADES 3
+#define TEXTURES 4
 
+bool start = true, boxes = true, facades = true, textures = true;
 stlplus::ntree<Symbol> Tree;
-static GLfloat spin = 0.0, aspectRatio;
+static GLfloat spin = 0.0, aspectRatio, n = 20.0f;
 GLuint cube, shape;
 //movement in scene:
 static GLdouble xRef = 0.0, yRef = 0.0, zRef = 0.0, zoom = 1.0, horizontal = 0.0, vertical = 0.0;
-GLuint	texture[2];
+GLuint	texture[3];
 
 
 void buildCube(){
 	//build a rectangular cube, which can be scaled and rotated
+	GLfloat x = 2048.0f/512.0f;
 
 	glBegin(GL_QUADS);
 		
@@ -17,47 +23,47 @@ void buildCube(){
 		//glColor3d(0.5,0.0,0.5);  
 		//glEdgeFlag(TRUE);
 		glTexCoord2f(0.0f, 0.0f); glVertex3d( 1.0, 1.0,0.0);          
-		glTexCoord2f(1.0f, 0.0f); glVertex3d(0.0, 1.0,0.0);          
-		glTexCoord2f(1.0f, 1.0f); glVertex3d(0.0, 1.0, 1.0);          
-		glTexCoord2f(0.0f, 1.0f); glVertex3d( 1.0, 1.0, 1.0);
+		glTexCoord2f(x, 0.0f); glVertex3d(0.0, 1.0,0.0);          
+		glTexCoord2f(x, x); glVertex3d(0.0, 1.0, 1.0);          
+		glTexCoord2f(0.0f, x); glVertex3d( 1.0, 1.0, 1.0);
 
 		//Bottom
 		//glColor3d(0.5,0.0,0.5);   
 		//glEdgeFlag(TRUE);
-		glTexCoord2f(1.0f, 0.0f); glVertex3d( 1.0,0.0, 1.0);        
-		glTexCoord2f(1.0f, 1.0f); glVertex3d(0.0,0.0, 1.0);          
-		glTexCoord2f(0.0f, 1.0f); glVertex3d(0.0,0.0,0.0);         
+		glTexCoord2f(x, 0.0f); glVertex3d( 1.0,0.0, 1.0);        
+		glTexCoord2f(x, x); glVertex3d(0.0,0.0, 1.0);          
+		glTexCoord2f(0.0f, x); glVertex3d(0.0,0.0,0.0);         
 		glTexCoord2f(0.0f, 0.0f); glVertex3d( 1.0,0.0,0.0);          
 
 		//Back
 		//glColor3d(0.5,0.0,0.5);         
 		//glEdgeFlag(TRUE);
-		glTexCoord2f(0.0f, 1.0f); glVertex3d( 1.0, 1.0, 1.0);          
+		glTexCoord2f(0.0f, x); glVertex3d( 1.0, 1.0, 1.0);          
 		glTexCoord2f(0.0f, 0.0f); glVertex3d(0.0, 1.0, 1.0);         
-		glTexCoord2f(1.0f, 0.0f); glVertex3d(0.0,0.0, 1.0);         
-		glTexCoord2f(1.0f, 1.0f); glVertex3d( 1.0,0.0, 1.0);         
+		glTexCoord2f(x, 0.0f); glVertex3d(0.0,0.0, 1.0);         
+		glTexCoord2f(x, x); glVertex3d( 1.0,0.0, 1.0);         
 
 		//Front
 		//glColor3d(1,0.0,0.8);         
 		//glEdgeFlag(TRUE);
-		glTexCoord2f(1.0f, 1.0f); glVertex3d( 1.0,0.0,0.0);        
-		glTexCoord2f(0.0f, 1.0f); glVertex3d(0.0,0.0,0.0);          
+		glTexCoord2f(x, x); glVertex3d( 1.0,0.0,0.0);        
+		glTexCoord2f(0.0f, x); glVertex3d(0.0,0.0,0.0);          
 		glTexCoord2f(0.0f, 0.0f); glVertex3d(0.0, 1.0,0.0);         
-		glTexCoord2f(1.0f, 0.0f); glVertex3d( 1.0, 1.0,0.0);   
+		glTexCoord2f(x, 0.0f); glVertex3d( 1.0, 1.0,0.0);   
 
 		//Left
 		//glColor3d(0.5,0.0,0.5);          
-		glTexCoord2f(1.0f, 0.0f); glVertex3d(0.0, 1.0, 1.0);          
-		glTexCoord2f(1.0f, 1.0f); glVertex3d(0.0, 1.0,0.0);       
-		glTexCoord2f(0.0f, 1.0f); glVertex3d(0.0,0.0,0.0);         
+		glTexCoord2f(x, 0.0f); glVertex3d(0.0, 1.0, 1.0);          
+		glTexCoord2f(x, x); glVertex3d(0.0, 1.0,0.0);       
+		glTexCoord2f(0.0f, x); glVertex3d(0.0,0.0,0.0);         
 		glTexCoord2f(0.0f, 0.0f); glVertex3d(0.0,0.0, 1.0);         
 
 		//Right
 		//glColor3d(0.5,0.0,0.5);          
 		glTexCoord2f(0.0f, 0.0f); glVertex3d( 1.0, 1.0,0.0);        
-		glTexCoord2f(1.0f, 0.0f); glVertex3d( 1.0, 1.0, 1.0);         
-		glTexCoord2f(1.0f, 1.0f); glVertex3d( 1.0,0.0, 1.0);         
-		glTexCoord2f(0.0f, 1.0f); glVertex3d( 1.0,0.0,0.0);          
+		glTexCoord2f(x, 0.0f); glVertex3d( 1.0, 1.0, 1.0);         
+		glTexCoord2f(x, x); glVertex3d( 1.0,0.0, 1.0);         
+		glTexCoord2f(0.0f, x); glVertex3d( 1.0,0.0,0.0);          
 
 	glEnd();                       
 }
@@ -79,13 +85,13 @@ void buildShape(){
 
 GLint loadTextures()                                    
 {
-    texture[0] = SOIL_load_OGL_texture("wall.jpg",SOIL_LOAD_AUTO,SOIL_CREATE_NEW_ID,SOIL_FLAG_INVERT_Y);
-	texture[1] = SOIL_load_OGL_texture("wall2.png",SOIL_LOAD_AUTO,SOIL_CREATE_NEW_ID,SOIL_FLAG_INVERT_Y);
-    if(texture[0] == 0)
-        return false;
- 
- 
-    
+    texture[0] = SOIL_load_OGL_texture("textures/wall.jpg",SOIL_LOAD_AUTO,SOIL_CREATE_NEW_ID,SOIL_FLAG_INVERT_Y);
+	texture[1] = SOIL_load_OGL_texture("textures/wallbricks.jpg",SOIL_LOAD_AUTO,SOIL_CREATE_NEW_ID,SOIL_FLAG_INVERT_Y);
+	texture[2] = SOIL_load_OGL_texture("textures/grass.jpg",SOIL_LOAD_AUTO,SOIL_CREATE_NEW_ID,SOIL_FLAG_INVERT_Y);
+
+
+    if(texture[0] == 0 || texture[1] == 0 || texture[2] == 0)
+        cout << "Problem loading texture" << endl;    
 
  
     return true;                                        
@@ -101,6 +107,19 @@ void display() {
 	glLoadIdentity();
 	gluLookAt (1.0, 0, 5+zoom, xRef, yRef, zRef, 0.0, 1, 0); 
 
+
+	//draw ground
+	GLfloat x = 1.0f;//4096.0f/512.0f; //test size
+	glBindTexture(GL_TEXTURE_2D, texture[2]);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glBegin(GL_QUADS);
+		glTexCoord2f(0, 0); glVertex3d(-n+2, -0.1, -n+2);          
+		glTexCoord2f(x, 0); glVertex3d(-n+2, -0.1, n-2);          
+		glTexCoord2f(x, x); glVertex3d(n-2, -0.1, n-2);          
+		glTexCoord2f(0, x); glVertex3d(n-2, -0.1, -n+2);
+	glEnd();
+
 	//Iterate over Tree
 	stlplus::ntree<Symbol>::iterator it = Tree.root();
 
@@ -108,7 +127,7 @@ void display() {
 		glPushMatrix();
 		stlplus::ntree<Symbol>::iterator child = Tree.child(it,i);
 		Symbol node = *child;
-		cout << node.name << endl;
+		//cout << node.name << endl;
 		if(node.name == "facade"){
 			//glColor4d(1,0, 0, 0.9); 
 		    glBindTexture(GL_TEXTURE_2D, texture[0]);
@@ -141,8 +160,8 @@ void reshape(GLsizei w, GLsizei h){
 
 	glLoadIdentity();
 
-	GLfloat n; //n is size of coordinate system
-	n = 20.0f;
+	
+	
 	if(h==0) //don't divide by zero
 		h=1;
 
@@ -323,6 +342,38 @@ GLvoid mouse(GLint button, GLint state, GLint x, GLint y)
    }
 }
 
+void menuEvents(int opt){
+	switch(opt){
+	case START:
+		start = true;
+		break;
+	case BOXES:
+		boxes = true;
+		break;
+	case FACADES:
+		facades = true;
+		break;
+	case TEXTURES:
+		textures = true;
+		break;
+	}
+}
+
+
+void createMenu(){
+	int menu;
+	menu = glutCreateMenu(menuEvents);
+
+	//add entries to menu
+	glutAddMenuEntry("Draw Start Symbol",START);
+	glutAddMenuEntry("Draw simple Boxes",BOXES);
+	glutAddMenuEntry("Draw Facades",FACADES);
+	glutAddMenuEntry("Draw Textures",TEXTURES);
+
+	//attach menu to right mouse button
+	glutAttachMenu(GLUT_RIGHT_BUTTON);
+}
+
 void visualization(int argc, char **argv){
 
 	cout<<"-----------------------"<<endl<<"VISUALIZATION"<<endl<<"-----------------------"<<endl<<endl<<endl;
@@ -336,6 +387,7 @@ void visualization(int argc, char **argv){
 
 	init();
 	initTestTree();
+	createMenu();
 	glutReshapeFunc(reshape);
 	glutDisplayFunc(display); 
 	//glutIdleFunc(display);
