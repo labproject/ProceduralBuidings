@@ -6,6 +6,7 @@
 #include "symbol.h"
 #include "ntree.hpp"
 #include <GL/freeglut.h>
+#include "SOIL.h"
 using namespace std;
 
 void visualization(int argc, char **argv);
