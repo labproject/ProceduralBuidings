@@ -13,6 +13,12 @@ static GLdouble xRef = 0.0, yRef = 0.0, zRef = 0.0, zoom = 1.0, horizontal = 0.0
 GLuint	texture[3];
 
 
+//set up light
+GLfloat LightAmbient[]= { 1,1, 1, 1 };    
+GLfloat LightDiffuse[]= { 1.0f, 1.0f, 1.0f, 1.0f }; 	
+GLfloat LightPosition[]= { 0.0f, -20.0f, -2.0f, 1.0f }; 
+
+
 void buildCube(){
 	//build a rectangular cube, which can be scaled and rotated
 	GLfloat x = 2048.0f/512.0f;
@@ -53,10 +59,10 @@ void buildCube(){
 
 		//Left
 		//glColor3d(0.5,0.0,0.5);          
-		glTexCoord2f(x, 0.0f); glVertex3d(0.0, 1.0, 1.0);          
-		glTexCoord2f(x, x); glVertex3d(0.0, 1.0,0.0);       
-		glTexCoord2f(0.0f, x); glVertex3d(0.0,0.0,0.0);         
-		glTexCoord2f(0.0f, 0.0f); glVertex3d(0.0,0.0, 1.0);         
+		glTexCoord2f(0, 0.0f); glVertex3d(0.0, 1.0, 1.0);          
+		glTexCoord2f(x, 0); glVertex3d(0.0, 1.0,0.0);       
+		glTexCoord2f(x, x); glVertex3d(0.0,0.0,0.0);         
+		glTexCoord2f(0.0f, x); glVertex3d(0.0,0.0, 1.0);         
 
 		//Right
 		//glColor3d(0.5,0.0,0.5);          
@@ -87,7 +93,7 @@ GLint loadTextures()
 {
     texture[0] = SOIL_load_OGL_texture("textures/wall.jpg",SOIL_LOAD_AUTO,SOIL_CREATE_NEW_ID,SOIL_FLAG_INVERT_Y);
 	texture[1] = SOIL_load_OGL_texture("textures/wallbricks.jpg",SOIL_LOAD_AUTO,SOIL_CREATE_NEW_ID,SOIL_FLAG_INVERT_Y);
-	texture[2] = SOIL_load_OGL_texture("textures/grass.jpg",SOIL_LOAD_AUTO,SOIL_CREATE_NEW_ID,SOIL_FLAG_INVERT_Y);
+	texture[2] = SOIL_load_OGL_texture("textures/concrete.jpg",SOIL_LOAD_AUTO,SOIL_CREATE_NEW_ID,SOIL_FLAG_INVERT_Y);
 
 
     if(texture[0] == 0 || texture[1] == 0 || texture[2] == 0)
@@ -105,9 +111,10 @@ void display() {
 	glClearColor(1.0, 1.0, 1.0, 1.0);
 
 	glLoadIdentity();
-	gluLookAt (1.0, 0, 5+zoom, xRef, yRef, zRef, 0.0, 1, 0); 
+	gluLookAt (-1.0+horizontal, -1+vertical, 5+zoom, xRef, yRef, zRef, 0.0, 1, 0); 
 
-
+	//glScaled(zoom,zoom,zoom);
+	glTranslated(0,-10,0);
 	//draw ground
 	GLfloat x = 1.0f;//4096.0f/512.0f; //test size
 	glBindTexture(GL_TEXTURE_2D, texture[2]);
@@ -120,6 +127,7 @@ void display() {
 		glTexCoord2f(0, x); glVertex3d(n-2, -0.1, -n+2);
 	glEnd();
 
+	glTranslated(0,0,-10);
 	//Iterate over Tree
 	stlplus::ntree<Symbol>::iterator it = Tree.root();
 
@@ -130,7 +138,8 @@ void display() {
 		//cout << node.name << endl;
 		if(node.name == "facade"){
 			//glColor4d(1,0, 0, 0.9); 
-		    glBindTexture(GL_TEXTURE_2D, texture[0]);
+			if(textures)
+				 glBindTexture(GL_TEXTURE_2D, texture[0]);
 
 		}
 		else{
@@ -143,6 +152,8 @@ void display() {
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 		//glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
 		//glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
+
+		glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
 		glTranslated(node.position[0], node.position[1], node.position[2]);
 		glScaled(node.scale[0], node.scale[1], node.scale[2]);
 		glCallList(cube);
@@ -178,7 +189,7 @@ void reshape(GLsizei w, GLsizei h){
 		glOrtho(-n * aspectRatio, n * aspectRatio, -n, n, n, -n);
 
 	
-	//gluPerspective(60, aspectRatio, 1, 10);
+	gluPerspective(4, aspectRatio, 1, 10);
 
  
     glMatrixMode(GL_MODELVIEW);                     // Select The Modelview Matrix
@@ -199,6 +210,13 @@ void init(){
 		glEnable(GL_POINT_SMOOTH); 
 		glEnable(GL_LINE_SMOOTH); 
 		glEnable(GL_POLYGON_SMOOTH); 
+
+		//Light
+		glLightfv(GL_LIGHT1, GL_AMBIENT, LightAmbient);  
+		glLightfv(GL_LIGHT1, GL_DIFFUSE, LightDiffuse);
+		glLightfv(GL_LIGHT1, GL_POSITION,LightPosition); 
+		//glEnable(GL_LIGHT1); 
+		//glEnable(GL_LIGHTING);
 
 		loadTextures();
 		
@@ -229,7 +247,7 @@ void initTestTree(){
 	Symbol *aa = new Symbol(pos,scale, "facade");
 
 
-	pos[0] = 0; pos[2] = 2.1;
+	pos[0] = 0; pos[2] = 2.;
 	pos[1] = 0;
 	scale[0] = 2;
 	scale[1] = 8;
@@ -271,6 +289,16 @@ GLvoid keyboard( GLubyte key, GLint x, GLint y )
 		zRef -= 0.5;
 		//if (zRef < -15.0) zRef = -15.0;
         glutPostRedisplay();
+		break;
+
+	case 43: //+ = move camera pos left
+		horizontal += 0.5;
+		glutPostRedisplay();
+		break;
+
+	case 45: //- move camera pos right
+		horizontal -= 0.5;
+		glutPostRedisplay();
 		break;
 	
 	} 
@@ -355,6 +383,7 @@ void menuEvents(int opt){
 		break;
 	case TEXTURES:
 		textures = true;
+		glutPostRedisplay();
 		break;
 	}
 }
