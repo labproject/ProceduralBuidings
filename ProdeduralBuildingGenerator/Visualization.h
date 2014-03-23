@@ -7,6 +7,7 @@
 #include "ntree.hpp"
 #include <GL/freeglut.h>
 #include "SOIL.h"
+#include "tree.hh"
 using namespace std;
 
 

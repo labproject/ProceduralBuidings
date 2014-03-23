@@ -5,13 +5,14 @@
 #define TEXTURES 4
 
 bool start = true, boxes = true, facades = true, textures = true;
-stlplus::ntree<Symbol> Tree;
 static GLfloat spin = 0.0, aspectRatio, n = 20.0f;
 GLuint cube, shape;
 //movement in scene:
-static GLdouble xRef = 0.0, yRef = 0.0, zRef = 0.0, zoom = 1.0, horizontal = 0.0, vertical = 0.0;
+static GLdouble xRef = 0.0, yRef = -10.0, zRef = 0.0, zoom = 1.0, horizontal = 0.0, vertical = 0.0, angle = 0.0;
 GLuint	texture[3];
 
+//Tree
+tree<Symbol> Tree;
 
 //set up light
 GLfloat LightAmbient[]= { 1,1, 1, 1 };    
@@ -44,10 +45,10 @@ void buildCube(){
 		//Back
 		//glColor3d(0.5,0.0,0.5);         
 		//glEdgeFlag(TRUE);
-		glTexCoord2f(0.0f, x); glVertex3d( 1.0, 1.0, 1.0);          
-		glTexCoord2f(0.0f, 0.0f); glVertex3d(0.0, 1.0, 1.0);         
-		glTexCoord2f(x, 0.0f); glVertex3d(0.0,0.0, 1.0);         
-		glTexCoord2f(x, x); glVertex3d( 1.0,0.0, 1.0);         
+		glTexCoord2f(x, x); glVertex3d( 1.0, 1.0, 1.0);          
+		glTexCoord2f(0.0f, x); glVertex3d(0.0, 1.0, 1.0);         
+		glTexCoord2f(0.0f, 0.0f); glVertex3d(0.0,0.0, 1.0);         
+		glTexCoord2f(x, 0.0f); glVertex3d( 1.0,0.0, 1.0);         
 
 		//Front
 		//glColor3d(1,0.0,0.8);         
@@ -91,8 +92,8 @@ void buildShape(){
 
 GLint loadTextures()                                    
 {
-    texture[0] = SOIL_load_OGL_texture("textures/wall.jpg",SOIL_LOAD_AUTO,SOIL_CREATE_NEW_ID,SOIL_FLAG_INVERT_Y);
-	texture[1] = SOIL_load_OGL_texture("textures/wallbricks.jpg",SOIL_LOAD_AUTO,SOIL_CREATE_NEW_ID,SOIL_FLAG_INVERT_Y);
+    texture[0] = SOIL_load_OGL_texture("textures/glass1.jpg",SOIL_LOAD_AUTO,SOIL_CREATE_NEW_ID,SOIL_FLAG_INVERT_Y);
+	texture[1] = SOIL_load_OGL_texture("textures/glass2.jpg",SOIL_LOAD_AUTO,SOIL_CREATE_NEW_ID,SOIL_FLAG_INVERT_Y);
 	texture[2] = SOIL_load_OGL_texture("textures/concrete.jpg",SOIL_LOAD_AUTO,SOIL_CREATE_NEW_ID,SOIL_FLAG_INVERT_Y);
 
 
@@ -111,10 +112,11 @@ void display() {
 	glClearColor(1.0, 1.0, 1.0, 1.0);
 
 	glLoadIdentity();
-	gluLookAt (-1.0+horizontal, -1+vertical, 5+zoom, xRef, yRef, zRef, 0.0, 1, 0); 
+	gluLookAt (-1.0+horizontal, -1+vertical, -20+zoom, xRef, yRef, zRef, 0.0, 1, 0); 
 
 	//glScaled(zoom,zoom,zoom);
 	glTranslated(0,-10,0);
+	glRotated(angle,0,1,0);
 	//draw ground
 	GLfloat x = 1.0f;//4096.0f/512.0f; //test size
 	glBindTexture(GL_TEXTURE_2D, texture[2]);
@@ -127,16 +129,20 @@ void display() {
 		glTexCoord2f(0, x); glVertex3d(n-2, -0.1, -n+2);
 	glEnd();
 
-	glTranslated(0,0,-10);
-	//Iterate over Tree
-	stlplus::ntree<Symbol>::iterator it = Tree.root();
+	glTranslated(-5,0,-5);
 
-	for (unsigned int i=0;i<Tree.children(it);i++){
+
+	//Iterate over Tree
+	
+	tree<Symbol>::leaf_iterator leaf = Tree.begin_leaf();
+	Symbol *child;
+
+	while (leaf != Tree.end_leaf()){
+
 		glPushMatrix();
-		stlplus::ntree<Symbol>::iterator child = Tree.child(it,i);
-		Symbol node = *child;
+		
 		//cout << node.name << endl;
-		if(node.name == "facade"){
+		if((*leaf).getName() == "facade"){
 			//glColor4d(1,0, 0, 0.9); 
 			if(textures)
 				 glBindTexture(GL_TEXTURE_2D, texture[0]);
@@ -154,10 +160,11 @@ void display() {
 		//glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
 
 		glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
-		glTranslated(node.position[0], node.position[1], node.position[2]);
-		glScaled(node.scale[0], node.scale[1], node.scale[2]);
+		glTranslated((*leaf).position[0], (*leaf).position[1], (*leaf).position[2]);
+		glScaled((*leaf).scale[0], (*leaf).scale[1], (*leaf).scale[2]);
 		glCallList(cube);
 		glPopMatrix();
+		leaf++;
 	}
 
 
@@ -238,38 +245,77 @@ void initTestTree(){
 	pos.push_back(0);
 	pos.push_back(0);
 	
-	scale.push_back(5);
 	scale.push_back(10);
-	scale.push_back(2);
+	scale.push_back(10);
+	scale.push_back(10);
 
-	Symbol *a = new Symbol(pos,scale, "facade");
+	Symbol *start = new Symbol(pos,scale, "start");
 
-	Symbol *aa = new Symbol(pos,scale, "facade");
+	pos[0] = 0; 
+	pos[1] = 0; 
+	pos[2] = 0;
+	
+	scale[0] = 10;
+	scale[1] = 10;
+	scale[2] = 1;
+
+	Symbol *facade = new Symbol(pos,scale, "facade");
 
 
-	pos[0] = 0; pos[2] = 2.;
-	pos[1] = 0;
-	scale[0] = 2;
+	pos[0] = 0; 
+	pos[1] = 0; 
+	pos[2] = 1;
+	
+	scale[0] = 10;
 	scale[1] = 8;
-	scale[2] = 12;
+	scale[2] = 8;
 
-	Symbol *b = new Symbol(pos,scale, "sidewing");
+	Symbol *sidewings = new Symbol(pos,scale, "sidewings");
+
+	pos[0] = 0; 
+	pos[1] = 0; 
+	pos[2] = 1;
+	
+	scale[0] = 3;
+	scale[1] = 8;
+	scale[2] = 8;
+
+	Symbol *sidewing1 = new Symbol(pos,scale, "sidewing1");
+
+	pos[0] = 7; 
+	pos[1] = 0; 
+	pos[2] = 1;
+	
+	scale[0] = 3;
+	scale[1] = 6;
+	scale[2] = 6;
+
+	Symbol *sidewing2 = new Symbol(pos,scale, "sidewing2");
+
+	tree<Symbol> derivTree;
+	tree<Symbol>::iterator root, one, two;
+
+	root = derivTree.begin();
+
+	one = derivTree.insert(root, *start);
+	two = derivTree.append_child(one, *facade);
+	two = derivTree.append_child(one, *sidewings);
+	derivTree.append_child(two, *sidewing1);
+	derivTree.append_child(two, *sidewing2);
+
+	tree<Symbol>::leaf_iterator leaf = derivTree.begin_leaf();
+
+	while (leaf != derivTree.end_leaf()){
+		//if(leaf != derivTree.begin())
+			cout << (*leaf).getName() << endl;
+		leaf++;
+	}
+
+	Tree = derivTree;
+
+	cout << (*Tree.begin_leaf()).getName() << endl;
 
 
-	pos[0] = 5.1; pos[2] = 0;
-	pos[1] = 0;
-	scale[0] = 4;
-	scale[1] = 4;
-	scale[2] = 4;
-
-	Symbol *c = new Symbol(pos,scale, "house");
-
-
-	Tree.insert(*a);
-	stlplus::ntree<Symbol>::iterator it = Tree.root();
-	Tree.append(it,*aa);
-	Tree.append(it,*b);
-	Tree.append(it,*c);
 
 
 }
@@ -309,14 +355,19 @@ GLvoid specialkeys( GLint key, GLint x, GLint y )
     switch (key) {
 
     case GLUT_KEY_LEFT:  //move left
-         xRef -= 0.5;
+         //xRef -= 0.5;
          //if (xRef < -15.0) xRef = -15.0;
-         glutPostRedisplay();
+        angle += 0.5;
+		if (angle > 360) angle = 0;
+		
+		glutPostRedisplay();
          break;
 
     case GLUT_KEY_RIGHT:    //move right
-         xRef += 0.5;
+        // xRef += 0.5;
          //if (xRef > 15.0) xRef = 15.0;
+		angle -= 0.5;
+		if (angle < 0) angle = 360;
          glutPostRedisplay();
          break;
 
