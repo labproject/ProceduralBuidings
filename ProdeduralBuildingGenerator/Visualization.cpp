@@ -4,20 +4,20 @@
 #define FACADES 3
 #define TEXTURES 4
 
-bool start = true, boxes = true, facades = true, textures = true;
+bool start = false, boxes = true, facades = true, textures = true;
 static GLfloat spin = 0.0, aspectRatio, n = 20.0f;
 GLuint cube, shape;
 //movement in scene:
 static GLdouble xRef = 0.0, yRef = -10.0, zRef = 0.0, zoom = 1.0, horizontal = 0.0, vertical = 0.0, angle = 0.0;
-GLuint	texture[3];
+GLuint	texture[10];
 
 //Tree
 tree<Symbol> Tree;
 
 //set up light
-GLfloat LightAmbient[]= { 1,1, 1, 1 };    
+GLfloat LightAmbient[]= { 0.8,0.8, 0.8, 1 };    
 GLfloat LightDiffuse[]= { 1.0f, 1.0f, 1.0f, 1.0f }; 	
-GLfloat LightPosition[]= { 0.0f, -20.0f, -2.0f, 1.0f }; 
+GLfloat LightPosition[]= { 0.0f, 10.0f, -20.0f, 1.0f }; 
 
 
 void buildCube(){
@@ -45,10 +45,10 @@ void buildCube(){
 		//Back
 		//glColor3d(0.5,0.0,0.5);         
 		//glEdgeFlag(TRUE);
-		glTexCoord2f(x, x); glVertex3d( 1.0, 1.0, 1.0);          
-		glTexCoord2f(0.0f, x); glVertex3d(0.0, 1.0, 1.0);         
-		glTexCoord2f(0.0f, 0.0f); glVertex3d(0.0,0.0, 1.0);         
-		glTexCoord2f(x, 0.0f); glVertex3d( 1.0,0.0, 1.0);         
+		glTexCoord2f(0.0f, 0.0f); glVertex3d( 1.0, 1.0, 1.0);          
+		glTexCoord2f(x, 0); glVertex3d(0.0, 1.0, 1.0);         
+		glTexCoord2f(x,x); glVertex3d(0.0,0.0, 1.0);         
+		glTexCoord2f(0.0f, x); glVertex3d( 1.0,0.0, 1.0);         
 
 		//Front
 		//glColor3d(1,0.0,0.8);         
@@ -80,8 +80,6 @@ void buildShape(){
 
 	glBegin(GL_QUADS);       
 
-		glColor3d(0,1.0,0.);         
-		glEdgeFlag(TRUE);
 		glVertex3d( 1.0,0.0,0.0);        
 		glVertex3d(0.0,0.0,0.0);          
 		glVertex3d(0.0, 1.0,0.0);         
@@ -92,9 +90,11 @@ void buildShape(){
 
 GLint loadTextures()                                    
 {
-    texture[0] = SOIL_load_OGL_texture("textures/glass1.jpg",SOIL_LOAD_AUTO,SOIL_CREATE_NEW_ID,SOIL_FLAG_INVERT_Y);
+    texture[0] = SOIL_load_OGL_texture("textures/windowfront3.jpg",SOIL_LOAD_AUTO,SOIL_CREATE_NEW_ID,SOIL_FLAG_INVERT_Y);
 	texture[1] = SOIL_load_OGL_texture("textures/glass2.jpg",SOIL_LOAD_AUTO,SOIL_CREATE_NEW_ID,SOIL_FLAG_INVERT_Y);
 	texture[2] = SOIL_load_OGL_texture("textures/concrete.jpg",SOIL_LOAD_AUTO,SOIL_CREATE_NEW_ID,SOIL_FLAG_INVERT_Y);
+	texture[3] = SOIL_load_OGL_texture("textures/wall2.png",SOIL_LOAD_AUTO,SOIL_CREATE_NEW_ID,SOIL_FLAG_INVERT_Y);
+	texture[4] = SOIL_load_OGL_texture("textures/brick10.jpg",SOIL_LOAD_AUTO,SOIL_CREATE_NEW_ID,SOIL_FLAG_INVERT_Y);
 
 
     if(texture[0] == 0 || texture[1] == 0 || texture[2] == 0)
@@ -107,12 +107,19 @@ GLint loadTextures()
 void display() {
 
 	//gluLookAt (0.0 + horizontal, 0.0 + vertical, -10.0+zoom, xRef, yRef, zRef, 0.0, 1, 0); 
-	
+	if(start){
+		glEnable(GL_LIGHT1); 
+		glEnable(GL_LIGHTING);
+	}
+	else{
+		glDisable(GL_LIGHT1);
+		glDisable(GL_LIGHTING);
+	}
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glClearColor(1.0, 1.0, 1.0, 1.0);
 
 	glLoadIdentity();
-	gluLookAt (-1.0+horizontal, -1+vertical, -20+zoom, xRef, yRef, zRef, 0.0, 1, 0); 
+	gluLookAt (-1.0+horizontal, 4+vertical, -20+zoom, xRef, yRef, zRef, 0.0, 1, 0); 
 
 	//glScaled(zoom,zoom,zoom);
 	glTranslated(0,-10,0);
@@ -142,15 +149,16 @@ void display() {
 		glPushMatrix();
 		
 		//cout << node.name << endl;
-		if((*leaf).getName() == "facade"){
+		if((*leaf).getName() == "front"){
 			//glColor4d(1,0, 0, 0.9); 
-			if(textures)
-				 glBindTexture(GL_TEXTURE_2D, texture[0]);
+			glBindTexture(GL_TEXTURE_2D, texture[0]);
 
 		}
+		else if((*leaf).getName() == "top")
+			glBindTexture(GL_TEXTURE_2D, texture[3]);
 		else{
 			//glColor4d(0.3,0, 0.3, 1);
-			glBindTexture(GL_TEXTURE_2D, texture[1]);
+			glBindTexture(GL_TEXTURE_2D, texture[4]);
 		}
 
 		
@@ -158,8 +166,11 @@ void display() {
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 		//glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
 		//glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
+		GLfloat mat_specular[] = { 1.0, 1.0, 1.0, 1.0 };
+		GLfloat mat_shininess[] = { 50.0 };
+		glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
+		glMaterialfv(GL_FRONT, GL_SHININESS, mat_shininess);
 
-		glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
 		glTranslated((*leaf).position[0], (*leaf).position[1], (*leaf).position[2]);
 		glScaled((*leaf).scale[0], (*leaf).scale[1], (*leaf).scale[2]);
 		glCallList(cube);
@@ -222,8 +233,7 @@ void init(){
 		glLightfv(GL_LIGHT1, GL_AMBIENT, LightAmbient);  
 		glLightfv(GL_LIGHT1, GL_DIFFUSE, LightDiffuse);
 		glLightfv(GL_LIGHT1, GL_POSITION,LightPosition); 
-		//glEnable(GL_LIGHT1); 
-		//glEnable(GL_LIGHTING);
+
 
 		loadTextures();
 		
@@ -292,6 +302,46 @@ void initTestTree(){
 
 	Symbol *sidewing2 = new Symbol(pos,scale, "sidewing2");
 
+	pos[0] = 0; 
+	pos[1] = 0; 
+	pos[2] = 0;
+	
+	scale[0] = 10;
+	scale[1] = 10;
+	scale[2] = 0;
+
+	Symbol *front = new Symbol(pos,scale, "front");
+
+	pos[0] = 10; 
+	pos[1] = 0; 
+	pos[2] = 0;
+	
+	scale[0] = 0;
+	scale[1] = 10;
+	scale[2] = 1;
+
+	Symbol *side1 = new Symbol(pos,scale, "side1");
+
+	pos[0] = 0; 
+	pos[1] = 0; 
+	pos[2] = 0;
+	
+	scale[0] = 0;
+	scale[1] = 10;
+	scale[2] = 1;
+
+	Symbol *side2 = new Symbol(pos,scale, "side2");
+
+	pos[0] = 0; 
+	pos[1] = 10; 
+	pos[2] = 0;
+	
+	scale[0] = 10;
+	scale[1] = 0;
+	scale[2] = 1;
+
+	Symbol *top = new Symbol(pos,scale, "top");
+
 	tree<Symbol> derivTree;
 	tree<Symbol>::iterator root, one, two;
 
@@ -299,21 +349,26 @@ void initTestTree(){
 
 	one = derivTree.insert(root, *start);
 	two = derivTree.append_child(one, *facade);
+	derivTree.append_child(two, *front);
+	derivTree.append_child(two, *side1);
+	derivTree.append_child(two, *side2);
+	derivTree.append_child(two, *top);
 	two = derivTree.append_child(one, *sidewings);
 	derivTree.append_child(two, *sidewing1);
 	derivTree.append_child(two, *sidewing2);
 
 	tree<Symbol>::leaf_iterator leaf = derivTree.begin_leaf();
 
+	cout << "leaf nodes: " << endl;
 	while (leaf != derivTree.end_leaf()){
 		//if(leaf != derivTree.begin())
-			cout << (*leaf).getName() << endl;
+			cout << "			" << (*leaf).getName() << endl;
 		leaf++;
 	}
 
 	Tree = derivTree;
 
-	cout << (*Tree.begin_leaf()).getName() << endl;
+	cout << "test, first leaf:	" << (*Tree.begin_leaf()).getName() << endl;
 
 
 
@@ -424,7 +479,9 @@ GLvoid mouse(GLint button, GLint state, GLint x, GLint y)
 void menuEvents(int opt){
 	switch(opt){
 	case START:
-		start = true;
+		if (start == true) start = false;
+		else start = true;
+		glutPostRedisplay();
 		break;
 	case BOXES:
 		boxes = true;
@@ -445,7 +502,7 @@ void createMenu(){
 	menu = glutCreateMenu(menuEvents);
 
 	//add entries to menu
-	glutAddMenuEntry("Draw Start Symbol",START);
+	glutAddMenuEntry("Light",START);
 	glutAddMenuEntry("Draw simple Boxes",BOXES);
 	glutAddMenuEntry("Draw Facades",FACADES);
 	glutAddMenuEntry("Draw Textures",TEXTURES);
