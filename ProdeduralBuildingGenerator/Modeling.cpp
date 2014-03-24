@@ -1,5 +1,24 @@
 #include "Modeling.h"
+#include <time.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <Windows.h>
 
+using namespace std;
+
+float random (float a, float b)
+{
+    float result;
+    float low = min(a,b);
+    float diff = abs(a-b);
+    float tmp;
+
+    srand(time(NULL));
+    tmp = rand()%10;
+    tmp = (tmp/10);
+    result = low+tmp*diff;
+    return result;
+}
 
 // 16.03.14_by Ruotong Li
 	/*--------------- Algorithms 1 -----------------*/ // turns out not right!! _by Li,Ruotong@19.03.2014
@@ -223,22 +242,22 @@ tree <Symbol> modeling ( Symbol &S, vector< pair < string, vector<GNode>> > gram
 		vector<Symbol> child_Symbol;
 
 		// 2) go through the nTree and mark all the symbols with the symbol_ID same as the Symbol, put them into vector<Symbol> temp_Symbol
-		vector<Symbol> temp_Symbol;		
+		vector< tree<Symbol> :: iterator > temp_Symbol;		
 		for ( tree<Symbol> :: iterator it = derivTree.begin(); it != derivTree.end(); it ++)
 		{
 			if ( it -> name == g_it -> first )
-				temp_Symbol.push_back( *it );
+				temp_Symbol.push_back( it );
 			else
 				continue;
 		}
 		
 		//3) for each Symbol in the temp_Symbol, create a random number and decided which rule to take from the vector<GNode> rules.
 		vector<GNode>::iterator temp_GNode = g_it -> second.begin();
-		for ( vector<Symbol> :: iterator it = temp_Symbol.begin(); it != temp_Symbol.end(); it++)
+		for ( vector< tree<Symbol> :: iterator > :: iterator it = temp_Symbol.begin(); it != temp_Symbol.end(); it++) 
+			// "it" is the iterator of the temp_Symbol which is a vector of the Symbols we need to apply rules.
 		{
-			double rand = 1.0;
+			float rand = random( 0.0, 1.0 );
 			double probability = 0.0;
-			// add the random here
 
 			while ( rand <= probability ) 
 			{
@@ -246,13 +265,16 @@ tree <Symbol> modeling ( Symbol &S, vector< pair < string, vector<GNode>> > gram
 				temp_GNode ++;
 			}
 			//4) apply rule on the symbol by implement the function: vector< Symbol > apply_rule ( Symbol temp_Symbol, GNode rule );
-			GNode G = *temp_GNode;
-			child_Symbol = apply_rule ( *it, &G );
+			GNode G = *temp_GNode;					// G denote the temp rule we want apply on the Symbol S
+			tree< Symbol >::iterator p_it = *it;	// S_p_it denote the loation of the tree parent
+			//Symbol temp_parent = *p_it;			
+			
+			child_Symbol = apply_rule ( *p_it, &G );	// child_Symbol is the result for each parent node.
 	
 			//5) put the new created Symbol into the nTree, if there's no new Symbol( apply S, T, rename..) then keep the tree same.
 			for ( vector<Symbol> :: iterator c_it = child_Symbol.begin(); c_it != child_Symbol.end(); c_it ++)
 			{
-				derivTree.append_child ( it, *c_it );
+				derivTree.append_child ( p_it, *c_it );
 			}
 
 		}		
