@@ -252,7 +252,7 @@ tree <Symbol> modeling ( Symbol &S, vector< pair < string, vector<GNode>> > gram
 			//5) put the new created Symbol into the nTree, if there's no new Symbol( apply S, T, rename..) then keep the tree same.
 			for ( vector<Symbol> :: iterator c_it = child_Symbol.begin(); c_it != child_Symbol.end(); c_it ++)
 			{
-				derivTree.append_child ( it, *c_it );
+			//	derivTree.append_child ( it, *c_it );
 			}
 
 		}		
