@@ -4,19 +4,20 @@
 #define FACADES 3
 #define TEXTURES 4
 
-bool start = true, boxes = true, facades = true, textures = true;
-stlplus::ntree<Symbol> Tree;
+bool start = false, boxes = true, facades = true, textures = true;
 static GLfloat spin = 0.0, aspectRatio, n = 20.0f;
 GLuint cube, shape;
 //movement in scene:
-static GLdouble xRef = 0.0, yRef = 0.0, zRef = 0.0, zoom = 1.0, horizontal = 0.0, vertical = 0.0;
-GLuint	texture[3];
+static GLdouble xRef = 0.0, yRef = -10.0, zRef = 0.0, zoom = 1.0, horizontal = 0.0, vertical = 0.0, angle = 0.0;
+GLuint	texture[10];
 
+//Tree
+tree<Symbol> Tree;
 
 //set up light
-GLfloat LightAmbient[]= { 1,1, 1, 1 };    
+GLfloat LightAmbient[]= { 0.8,0.8, 0.8, 1 };    
 GLfloat LightDiffuse[]= { 1.0f, 1.0f, 1.0f, 1.0f }; 	
-GLfloat LightPosition[]= { 0.0f, -20.0f, -2.0f, 1.0f }; 
+GLfloat LightPosition[]= { 0.0f, 10.0f, -20.0f, 1.0f }; 
 
 
 void buildCube(){
@@ -44,10 +45,10 @@ void buildCube(){
 		//Back
 		//glColor3d(0.5,0.0,0.5);         
 		//glEdgeFlag(TRUE);
-		glTexCoord2f(0.0f, x); glVertex3d( 1.0, 1.0, 1.0);          
-		glTexCoord2f(0.0f, 0.0f); glVertex3d(0.0, 1.0, 1.0);         
-		glTexCoord2f(x, 0.0f); glVertex3d(0.0,0.0, 1.0);         
-		glTexCoord2f(x, x); glVertex3d( 1.0,0.0, 1.0);         
+		glTexCoord2f(0.0f, 0.0f); glVertex3d( 1.0, 1.0, 1.0);          
+		glTexCoord2f(x, 0); glVertex3d(0.0, 1.0, 1.0);         
+		glTexCoord2f(x,x); glVertex3d(0.0,0.0, 1.0);         
+		glTexCoord2f(0.0f, x); glVertex3d( 1.0,0.0, 1.0);         
 
 		//Front
 		//glColor3d(1,0.0,0.8);         
@@ -79,8 +80,6 @@ void buildShape(){
 
 	glBegin(GL_QUADS);       
 
-		glColor3d(0,1.0,0.);         
-		glEdgeFlag(TRUE);
 		glVertex3d( 1.0,0.0,0.0);        
 		glVertex3d(0.0,0.0,0.0);          
 		glVertex3d(0.0, 1.0,0.0);         
@@ -91,9 +90,11 @@ void buildShape(){
 
 GLint loadTextures()                                    
 {
-    texture[0] = SOIL_load_OGL_texture("textures/wall.jpg",SOIL_LOAD_AUTO,SOIL_CREATE_NEW_ID,SOIL_FLAG_INVERT_Y);
-	texture[1] = SOIL_load_OGL_texture("textures/wallbricks.jpg",SOIL_LOAD_AUTO,SOIL_CREATE_NEW_ID,SOIL_FLAG_INVERT_Y);
+    texture[0] = SOIL_load_OGL_texture("textures/windowfront3.jpg",SOIL_LOAD_AUTO,SOIL_CREATE_NEW_ID,SOIL_FLAG_INVERT_Y);
+	texture[1] = SOIL_load_OGL_texture("textures/glass2.jpg",SOIL_LOAD_AUTO,SOIL_CREATE_NEW_ID,SOIL_FLAG_INVERT_Y);
 	texture[2] = SOIL_load_OGL_texture("textures/concrete.jpg",SOIL_LOAD_AUTO,SOIL_CREATE_NEW_ID,SOIL_FLAG_INVERT_Y);
+	texture[3] = SOIL_load_OGL_texture("textures/wall2.png",SOIL_LOAD_AUTO,SOIL_CREATE_NEW_ID,SOIL_FLAG_INVERT_Y);
+	texture[4] = SOIL_load_OGL_texture("textures/brick10.jpg",SOIL_LOAD_AUTO,SOIL_CREATE_NEW_ID,SOIL_FLAG_INVERT_Y);
 
 
     if(texture[0] == 0 || texture[1] == 0 || texture[2] == 0)
@@ -106,15 +107,23 @@ GLint loadTextures()
 void display() {
 
 	//gluLookAt (0.0 + horizontal, 0.0 + vertical, -10.0+zoom, xRef, yRef, zRef, 0.0, 1, 0); 
-	
+	if(start){
+		glEnable(GL_LIGHT1); 
+		glEnable(GL_LIGHTING);
+	}
+	else{
+		glDisable(GL_LIGHT1);
+		glDisable(GL_LIGHTING);
+	}
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glClearColor(1.0, 1.0, 1.0, 1.0);
 
 	glLoadIdentity();
-	gluLookAt (-1.0+horizontal, -1+vertical, 5+zoom, xRef, yRef, zRef, 0.0, 1, 0); 
+	gluLookAt (-1.0+horizontal, 4+vertical, -20+zoom, xRef, yRef, zRef, 0.0, 1, 0); 
 
 	//glScaled(zoom,zoom,zoom);
 	glTranslated(0,-10,0);
+	glRotated(angle,0,1,0);
 	//draw ground
 	GLfloat x = 1.0f;//4096.0f/512.0f; //test size
 	glBindTexture(GL_TEXTURE_2D, texture[2]);
@@ -127,24 +136,29 @@ void display() {
 		glTexCoord2f(0, x); glVertex3d(n-2, -0.1, -n+2);
 	glEnd();
 
-	glTranslated(0,0,-10);
-	//Iterate over Tree
-	stlplus::ntree<Symbol>::iterator it = Tree.root();
+	glTranslated(-5,0,-5);
 
-	for (unsigned int i=0;i<Tree.children(it);i++){
+
+	//Iterate over Tree
+	
+	tree<Symbol>::leaf_iterator leaf = Tree.begin_leaf();
+	Symbol *child;
+
+	while (leaf != Tree.end_leaf()){
+
 		glPushMatrix();
-		stlplus::ntree<Symbol>::iterator child = Tree.child(it,i);
-		Symbol node = *child;
+		
 		//cout << node.name << endl;
-		if(node.name == "facade"){
+		if((*leaf).getName() == "front"){
 			//glColor4d(1,0, 0, 0.9); 
-			if(textures)
-				 glBindTexture(GL_TEXTURE_2D, texture[0]);
+			glBindTexture(GL_TEXTURE_2D, texture[0]);
 
 		}
+		else if((*leaf).getName() == "top")
+			glBindTexture(GL_TEXTURE_2D, texture[3]);
 		else{
 			//glColor4d(0.3,0, 0.3, 1);
-			glBindTexture(GL_TEXTURE_2D, texture[1]);
+			glBindTexture(GL_TEXTURE_2D, texture[4]);
 		}
 
 		
@@ -152,12 +166,16 @@ void display() {
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 		//glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
 		//glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
+		GLfloat mat_specular[] = { 1.0, 1.0, 1.0, 1.0 };
+		GLfloat mat_shininess[] = { 50.0 };
+		glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
+		glMaterialfv(GL_FRONT, GL_SHININESS, mat_shininess);
 
-		glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
-		glTranslated(node.position[0], node.position[1], node.position[2]);
-		glScaled(node.scale[0], node.scale[1], node.scale[2]);
+		glTranslated((*leaf).position[0], (*leaf).position[1], (*leaf).position[2]);
+		glScaled((*leaf).scale[0], (*leaf).scale[1], (*leaf).scale[2]);
 		glCallList(cube);
 		glPopMatrix();
+		leaf++;
 	}
 
 
@@ -215,8 +233,7 @@ void init(){
 		glLightfv(GL_LIGHT1, GL_AMBIENT, LightAmbient);  
 		glLightfv(GL_LIGHT1, GL_DIFFUSE, LightDiffuse);
 		glLightfv(GL_LIGHT1, GL_POSITION,LightPosition); 
-		//glEnable(GL_LIGHT1); 
-		//glEnable(GL_LIGHTING);
+
 
 		loadTextures();
 		
@@ -238,38 +255,122 @@ void initTestTree(){
 	pos.push_back(0);
 	pos.push_back(0);
 	
-	scale.push_back(5);
 	scale.push_back(10);
-	scale.push_back(2);
+	scale.push_back(10);
+	scale.push_back(10);
 
-	Symbol *a = new Symbol(pos,scale, "facade");
+	Symbol *start = new Symbol(pos,scale, "start");
 
-	Symbol *aa = new Symbol(pos,scale, "facade");
+	pos[0] = 0; 
+	pos[1] = 0; 
+	pos[2] = 0;
+	
+	scale[0] = 10;
+	scale[1] = 10;
+	scale[2] = 1;
+
+	Symbol *facade = new Symbol(pos,scale, "facade");
 
 
-	pos[0] = 0; pos[2] = 2.;
-	pos[1] = 0;
-	scale[0] = 2;
+	pos[0] = 0; 
+	pos[1] = 0; 
+	pos[2] = 1;
+	
+	scale[0] = 10;
 	scale[1] = 8;
-	scale[2] = 12;
+	scale[2] = 8;
 
-	Symbol *b = new Symbol(pos,scale, "sidewing");
+	Symbol *sidewings = new Symbol(pos,scale, "sidewings");
+
+	pos[0] = 0; 
+	pos[1] = 0; 
+	pos[2] = 1;
+	
+	scale[0] = 3;
+	scale[1] = 8;
+	scale[2] = 8;
+
+	Symbol *sidewing1 = new Symbol(pos,scale, "sidewing1");
+
+	pos[0] = 7; 
+	pos[1] = 0; 
+	pos[2] = 1;
+	
+	scale[0] = 3;
+	scale[1] = 6;
+	scale[2] = 6;
+
+	Symbol *sidewing2 = new Symbol(pos,scale, "sidewing2");
+
+	pos[0] = 0; 
+	pos[1] = 0; 
+	pos[2] = 0;
+	
+	scale[0] = 10;
+	scale[1] = 10;
+	scale[2] = 0;
+
+	Symbol *front = new Symbol(pos,scale, "front");
+
+	pos[0] = 10; 
+	pos[1] = 0; 
+	pos[2] = 0;
+	
+	scale[0] = 0;
+	scale[1] = 10;
+	scale[2] = 1;
+
+	Symbol *side1 = new Symbol(pos,scale, "side1");
+
+	pos[0] = 0; 
+	pos[1] = 0; 
+	pos[2] = 0;
+	
+	scale[0] = 0;
+	scale[1] = 10;
+	scale[2] = 1;
+
+	Symbol *side2 = new Symbol(pos,scale, "side2");
+
+	pos[0] = 0; 
+	pos[1] = 10; 
+	pos[2] = 0;
+	
+	scale[0] = 10;
+	scale[1] = 0;
+	scale[2] = 1;
+
+	Symbol *top = new Symbol(pos,scale, "top");
+
+	tree<Symbol> derivTree;
+	tree<Symbol>::iterator root, one, two;
+
+	root = derivTree.begin();
+
+	one = derivTree.insert(root, *start);
+	two = derivTree.append_child(one, *facade);
+	derivTree.append_child(two, *front);
+	derivTree.append_child(two, *side1);
+	derivTree.append_child(two, *side2);
+	derivTree.append_child(two, *top);
+	two = derivTree.append_child(one, *sidewings);
+	derivTree.append_child(two, *sidewing1);
+	derivTree.append_child(two, *sidewing2);
+
+	tree<Symbol>::leaf_iterator leaf = derivTree.begin_leaf();
+
+	cout << "leaf nodes: " << endl;
+	while (leaf != derivTree.end_leaf()){
+		//if(leaf != derivTree.begin())
+			cout << "			" << (*leaf).getName() << endl;
+		leaf++;
+	}
+
+	Tree = derivTree;
+
+	cout << "test, first leaf:	" << (*Tree.begin_leaf()).getName() << endl;
 
 
-	pos[0] = 5.1; pos[2] = 0;
-	pos[1] = 0;
-	scale[0] = 4;
-	scale[1] = 4;
-	scale[2] = 4;
-
-	Symbol *c = new Symbol(pos,scale, "house");
-
-
-	Tree.insert(*a);
-	stlplus::ntree<Symbol>::iterator it = Tree.root();
-	Tree.append(it,*aa);
-	Tree.append(it,*b);
-	Tree.append(it,*c);
 
 
 }
@@ -309,14 +410,19 @@ GLvoid specialkeys( GLint key, GLint x, GLint y )
     switch (key) {
 
     case GLUT_KEY_LEFT:  //move left
-         xRef -= 0.5;
+         //xRef -= 0.5;
          //if (xRef < -15.0) xRef = -15.0;
-         glutPostRedisplay();
+        angle += 0.5;
+		if (angle > 360) angle = 0;
+		
+		glutPostRedisplay();
          break;
 
     case GLUT_KEY_RIGHT:    //move right
-         xRef += 0.5;
+        // xRef += 0.5;
          //if (xRef > 15.0) xRef = 15.0;
+		angle -= 0.5;
+		if (angle < 0) angle = 360;
          glutPostRedisplay();
          break;
 
@@ -373,7 +479,9 @@ GLvoid mouse(GLint button, GLint state, GLint x, GLint y)
 void menuEvents(int opt){
 	switch(opt){
 	case START:
-		start = true;
+		if (start == true) start = false;
+		else start = true;
+		glutPostRedisplay();
 		break;
 	case BOXES:
 		boxes = true;
@@ -394,7 +502,7 @@ void createMenu(){
 	menu = glutCreateMenu(menuEvents);
 
 	//add entries to menu
-	glutAddMenuEntry("Draw Start Symbol",START);
+	glutAddMenuEntry("Light",START);
 	glutAddMenuEntry("Draw simple Boxes",BOXES);
 	glutAddMenuEntry("Draw Facades",FACADES);
 	glutAddMenuEntry("Draw Textures",TEXTURES);
