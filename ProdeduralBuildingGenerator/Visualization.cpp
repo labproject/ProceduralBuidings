@@ -9,8 +9,8 @@ static GLfloat spin = 0.0, aspectRatio, n = 20.0f;
 GLuint cube, shape;
 //movement in scene:
 static GLdouble xRef = 0.0, yRef = -10.0, zRef = 0.0, zoom = 1.0, horizontal = 0.0, vertical = 0.0, angle = 0.0;
-GLuint	texture[10], t_size = 10;
-
+GLuint	tex_wall[12], tex_window[10], tex_glass[10], tex_roof[10], tex_floor[10], tex_env[11], t_size = 10;
+int prob1, prob2, prob3, prob4, prob5;
 //Tree
 tree<Symbol> Tree;
 
@@ -80,20 +80,57 @@ void buildShape(){
 
 GLint loadTextures()                                    
 {
-			texture[0] = SOIL_load_OGL_texture("textures/windowfront3.jpg",SOIL_LOAD_AUTO,SOIL_CREATE_NEW_ID,SOIL_FLAG_INVERT_Y);
-			texture[1] = SOIL_load_OGL_texture("textures/glass2.jpg",SOIL_LOAD_AUTO,SOIL_CREATE_NEW_ID,SOIL_FLAG_INVERT_Y);
-			texture[2] = SOIL_load_OGL_texture("textures/concrete.jpg",SOIL_LOAD_AUTO,SOIL_CREATE_NEW_ID,SOIL_FLAG_INVERT_Y);
-			texture[3] = SOIL_load_OGL_texture("textures/wall2.png",SOIL_LOAD_AUTO,SOIL_CREATE_NEW_ID,SOIL_FLAG_INVERT_Y);
-			texture[4] = SOIL_load_OGL_texture("textures/brick10.jpg",SOIL_LOAD_AUTO,SOIL_CREATE_NEW_ID,SOIL_FLAG_INVERT_Y);
-			texture[5] = SOIL_load_OGL_texture("textures/brick5.jpg",SOIL_LOAD_AUTO,SOIL_CREATE_NEW_ID,SOIL_FLAG_INVERT_Y);
-			texture[6] = SOIL_load_OGL_texture("textures/brick1.jpg",SOIL_LOAD_AUTO,SOIL_CREATE_NEW_ID,SOIL_FLAG_INVERT_Y);
+	//initialize random seed
+	srand (time(NULL));
 
+	string filename;
 
+	//Textures for Environment
+			for(int i = 0; i < 11; i++){
+				filename = "textures/ground" + to_string(static_cast<long long>(i)) + ".jpg";
+				cout << "loading " << filename << endl;
+				tex_env[i] = SOIL_load_OGL_texture(filename.c_str(),SOIL_LOAD_AUTO,SOIL_CREATE_NEW_ID,SOIL_FLAG_INVERT_Y);
+				if (tex_env[i] == 0 ) cout << "ERROR loading texture " << filename << endl;
+			}
+				
+				prob1 = rand() % 11;
 
-	for (int i = 0; i < t_size; i++){
-		if(texture[i] == 0)
-			 cout << "Problem loading texture " << i << endl;    
-	}
+	//Textures for Wall
+			for(int i = 0; i < 12; i++){
+				filename = "textures/brick" + to_string(static_cast<long long>(i)) + ".jpg";
+				cout << "loading " << filename << endl;
+				tex_wall[i] = SOIL_load_OGL_texture(filename.c_str(),SOIL_LOAD_AUTO,SOIL_CREATE_NEW_ID,SOIL_FLAG_INVERT_Y);
+				if (tex_wall[i] == 0 ) cout << "ERROR loading texture " << filename << endl;
+			}
+
+			prob2 = rand() % 12;
+
+	//Textures Glass
+
+			for(int i = 0; i < 9; i++){
+				filename = "textures/glass" + to_string(static_cast<long long>(i)) + ".jpg";
+				cout << "loading " << filename << endl;
+				tex_glass[i] = SOIL_load_OGL_texture(filename.c_str(),SOIL_LOAD_AUTO,SOIL_CREATE_NEW_ID,SOIL_FLAG_INVERT_Y);
+				if (tex_glass[i] == 0 ) cout << "ERROR loading texture " << i << endl;
+			}
+
+			prob3 = rand() % 9;
+
+			prob5 = rand() % 9 + 1;
+			if (prob5 == 9 ) prob5 = 0;
+
+	//Textures for Roof
+
+			for(int i = 0; i < 8; i++){
+				filename = "textures/roof" + to_string(static_cast<long long>(i)) + ".jpg";
+				cout << "loading " << filename << endl;
+				tex_roof[i] = SOIL_load_OGL_texture(filename.c_str(),SOIL_LOAD_AUTO,SOIL_CREATE_NEW_ID,SOIL_FLAG_INVERT_Y);
+				if (tex_roof[i] == 0 ) cout << "ERROR loading texture " << i << endl;
+			}
+
+			prob4 = rand() % 9;
+
+			cout << prob1 << prob2 << prob3 << prob4;
 
  
     return true;                                        
@@ -120,8 +157,9 @@ void display() {
 	glTranslated(0,-10,0);
 	glRotated(angle,0,1,0);
 	//draw ground
-	GLfloat x = 1.0f;//4096.0f/512.0f; //test size
-	glBindTexture(GL_TEXTURE_2D, texture[2]);
+	GLfloat x = 2048.0f/512.0f;//test size
+	
+	glBindTexture(GL_TEXTURE_2D, tex_env[prob1]);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 	glBegin(GL_QUADS);
@@ -147,19 +185,19 @@ void display() {
 		//cout << node.name << endl;
 		if((*leaf).getName() == "front"){
 			//glColor4d(1,0, 0, 0.9); 
-			glBindTexture(GL_TEXTURE_2D, texture[0]);
+			glBindTexture(GL_TEXTURE_2D, tex_glass[prob3]);
 
 		}
 		else if((*leaf).getName() == "top")
-			glBindTexture(GL_TEXTURE_2D, texture[3]);
+			glBindTexture(GL_TEXTURE_2D, tex_wall[prob4]);
 		else if ((*leaf).getName() == "side"){
 			
-			glBindTexture(GL_TEXTURE_2D, texture[5]);
+			glBindTexture(GL_TEXTURE_2D, tex_wall[prob5]);
 		}
 		else if ((*leaf).getName() == "back")
-			glBindTexture(GL_TEXTURE_2D, texture[5]);
+			glBindTexture(GL_TEXTURE_2D, tex_wall[prob2]);
 		else
-			glBindTexture(GL_TEXTURE_2D, texture[6]);
+			glBindTexture(GL_TEXTURE_2D, tex_wall[prob2]);
 
 		
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
@@ -352,21 +390,114 @@ void initTestTree(){
 
 	Symbol *back = new Symbol(pos,scale, "back");
 
+
+	//Sidewing2
+	pos[0] = 10; 
+	pos[1] = 0; 
+	pos[2] = 1;
+	
+	scale[0] = 0;
+	scale[1] = 6;
+	scale[2] = 6;
+
+	Symbol *sidew1 = new Symbol(pos,scale, "side");
+
+	pos[0] = 7; 
+	pos[1] = 0; 
+	pos[2] = 1;
+	
+	scale[0] = 0;
+	scale[1] = 6;
+	scale[2] = 6;
+
+	Symbol *sidew2 = new Symbol(pos,scale, "side");
+
+	pos[0] = 7; 
+	pos[1] = 6; 
+	pos[2] = 1;
+	
+	scale[0] = 3;
+	scale[1] = 0;
+	scale[2] = 6;
+
+	Symbol *sidewtop = new Symbol(pos,scale, "top");
+
+	pos[0] = 7; 
+	pos[1] = 0; 
+	pos[2] = 7;
+	
+	scale[0] = 3;
+	scale[1] = 6;
+	scale[2] = 0;
+
+	Symbol *sidewback = new Symbol(pos,scale, "back");
+
+
+	//Sidewing1
+	pos[0] = 3; 
+	pos[1] = 0; 
+	pos[2] = 1;
+	
+	scale[0] = 0;
+	scale[1] = 8;
+	scale[2] = 8;
+
+	Symbol *sidew11 = new Symbol(pos,scale, "side");
+
+	pos[0] = 0; 
+	pos[1] = 0; 
+	pos[2] = 1;
+	
+	scale[0] = 0;
+	scale[1] = 8;
+	scale[2] = 8;
+
+	Symbol *sidew12 = new Symbol(pos,scale, "side");
+
+	pos[0] = 0; 
+	pos[1] = 8; 
+	pos[2] = 1;
+	
+	scale[0] = 3;
+	scale[1] = 0;
+	scale[2] = 8;
+
+	Symbol *sidewtop1 = new Symbol(pos,scale, "top");
+
+	pos[0] = 0; 
+	pos[1] = 0; 
+	pos[2] = 9;
+	
+	scale[0] = 3;
+	scale[1] = 8;
+	scale[2] = 0;
+
+	Symbol *sidewback1 = new Symbol(pos,scale, "back");
+
 	tree<Symbol> derivTree;
-	tree<Symbol>::iterator root, one, two;
+	tree<Symbol>::iterator root, one, two, three;
 
 	root = derivTree.begin();
 
 	one = derivTree.insert(root, *start);
-	two = derivTree.append_child(one, *facade);
-	derivTree.append_child(two, *front);
-	derivTree.append_child(two, *side1);
-	derivTree.append_child(two, *side2);
-	derivTree.append_child(two, *top);
-	derivTree.append_child(two, *back);
-	two = derivTree.append_child(one, *sidewings);
-	derivTree.append_child(two, *sidewing1);
-	derivTree.append_child(two, *sidewing2);
+		two = derivTree.append_child(one, *facade);
+			derivTree.append_child(two, *front);
+			derivTree.append_child(two, *side1);
+			derivTree.append_child(two, *side2);
+			derivTree.append_child(two, *top);
+			derivTree.append_child(two, *back);
+		two = derivTree.append_child(one, *sidewings);
+			three = derivTree.append_child(two, *sidewing1);	
+				derivTree.append_child(three, *sidew11);
+				derivTree.append_child(three, *sidew12);
+				derivTree.append_child(three, *sidewtop1);
+				derivTree.append_child(three, *sidewback1);
+
+			three = derivTree.append_child(two, *sidewing2);
+				derivTree.append_child(three, *sidew1);
+				derivTree.append_child(three, *sidew2);
+				derivTree.append_child(three, *sidewtop);
+				derivTree.append_child(three, *sidewback);
 
 	tree<Symbol>::leaf_iterator leaf = derivTree.begin_leaf();
 

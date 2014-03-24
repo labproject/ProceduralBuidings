@@ -24,9 +24,6 @@
     <ClCompile Include="Symbol.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
-    <ClCompile Include="Modeling.cpp">
-      <Filter>Quelldateien</Filter>
-    </ClCompile>
     <ClCompile Include="Parsing.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
@@ -34,6 +31,9 @@
       <Filter>Quelldateien</Filter>
     </ClCompile>
     <ClCompile Include="integration.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="Modeling.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
   </ItemGroup>
