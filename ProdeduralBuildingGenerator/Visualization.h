@@ -3,6 +3,7 @@
 
 #include	<iostream>
 #include	<string>
+#include <time.h>
 #include "symbol.h"
 #include "ntree.hpp"
 #include <GL/freeglut.h>

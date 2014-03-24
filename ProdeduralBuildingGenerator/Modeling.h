@@ -7,7 +7,7 @@
 #include	"Symbol.h"
 #include	"ntree.hpp"
 #include	"GNode.h"
-#include "tree.hh"
+#include	"tree.hh"
 
 
 using namespace std;
