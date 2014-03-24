@@ -200,7 +200,7 @@ vector<Symbol> apply_rule ( Symbol &node_parent, GNode *rule )
 	return node_child;
 }
 
-stlplus::ntree<Symbol> modeling ( Symbol &S, vector< pair < string, vector<GNode>> > grammar )
+tree <Symbol> modeling ( Symbol &S, vector< pair < string, vector<GNode>> > grammar )
 	// Symbol S is the first symbol we start our modelling.
 	//  map< string symbol_ID, vector<Gnode> rule_set > is the datastructure got from Parsing =======> is no longer used! _by Li,Ruotong @ 19.03.2014
 	// !!!@19.03.2014 New datastructure: vector< pair < string symbol_ID, vector<Gnode> rule_set> >
@@ -209,16 +209,55 @@ stlplus::ntree<Symbol> modeling ( Symbol &S, vector< pair < string, vector<GNode
 
 	/*
 	!!! now We modified the datastructure as : vector< piar< string Symbol_ID, vecor<GNode> rules >>
-	1) take the pair one by one to apply rules on the symbol 
-	2) go through the nTree and mark all the symbols with the symbol_ID same as the Symbol, 
-		put them into vector<Symbol> temp_Symbol
-	3) create a random number and decided which rule to take from the vector<GNode> rules.
-	4) apply rule on the symbol by implement the following function
-		vector< Symbol > apply_rule ( Symbol temp_Symbol, GNode rule );
-	5) put the new created Symbol into the nTree, if there's no new Symbol( apply S, T, rename..) then keep the tree same.
-	6) next pair -> 2)
 	*/
-	stlplus::ntree<Symbol> derivTree;
+	//stlplus::ntree<Symbol> derivTree;----------- we use tree instead of ntree
+
+	tree<Symbol> derivTree;			// create the tree
+	tree<Symbol>::iterator top;		// the root iterator
+
+	derivTree.insert(top, S);		// push S into the tree as initialize
+
+	// 1) take the pair one by one to apply rules on the symbol 
+	for ( vector< pair < string, vector<GNode>> > :: iterator g_it = grammar.begin(); g_it != grammar.end(); g_it ++ )
+	{
+		vector<Symbol> child_Symbol;
+
+		// 2) go through the nTree and mark all the symbols with the symbol_ID same as the Symbol, put them into vector<Symbol> temp_Symbol
+		vector<Symbol> temp_Symbol;		
+		for ( tree<Symbol> :: iterator it = derivTree.begin(); it != derivTree.end(); it ++)
+		{
+			if ( it -> name == g_it -> first )
+				temp_Symbol.push_back( *it );
+			else
+				continue;
+		}
+		
+		//3) for each Symbol in the temp_Symbol, create a random number and decided which rule to take from the vector<GNode> rules.
+		vector<GNode>::iterator temp_GNode = g_it -> second.begin();
+		for ( vector<Symbol> :: iterator it = temp_Symbol.begin(); it != temp_Symbol.end(); it++)
+		{
+			double rand = 1.0;
+			double probability = 0.0;
+			// add the random here
+
+			while ( rand <= probability ) 
+			{
+				probability += temp_GNode -> prob;
+				temp_GNode ++;
+			}
+			//4) apply rule on the symbol by implement the function: vector< Symbol > apply_rule ( Symbol temp_Symbol, GNode rule );
+			GNode G = *temp_GNode;
+			child_Symbol = apply_rule ( *it, &G );
+	
+			//5) put the new created Symbol into the nTree, if there's no new Symbol( apply S, T, rename..) then keep the tree same.
+			for ( vector<Symbol> :: iterator c_it = child_Symbol.begin(); c_it != child_Symbol.end(); c_it ++)
+			{
+				derivTree.append_child ( it, *c_it );
+			}
+
+		}		
+	}
+
 	return derivTree;
 }
 

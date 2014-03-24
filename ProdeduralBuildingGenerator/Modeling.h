@@ -7,13 +7,14 @@
 #include	"Symbol.h"
 #include	"ntree.hpp"
 #include	"GNode.h"
+#include "tree.hh"
 
 
 using namespace std;
 
 
 //all your functions can be declared here
-stlplus::ntree<Symbol> modeling(Symbol&, vector< pair < string, vector<GNode>> >);
+tree<Symbol> modeling(Symbol&, vector< pair < string, vector<GNode>> >);
 vector<Symbol> apply_rule ( Symbol &, GNode *);
 
 //please do not write below this comment, thanks
