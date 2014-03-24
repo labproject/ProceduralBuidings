@@ -1,0 +1,12 @@
+lot->S(1r,building_height,1r)->Subdiv(”Z”,Scope.sz*rand(0.3,0.5),1r){ facades | sidewings }
+sidewings->Subdiv("X",Scope.sx*rand(0.2,0.6),1r){ sidewing | e }->Subdiv("X",1r,Scope.sx*rand(0.2,0.6)){ e | sidewing }
+sidewing->S(1r,1r,Scope.sz*rand(0.4,1.0)) facades : 0.5->S(1r,Scope.sy*rand(0.2,0.9),Scope.sz*rand(0.4,1.0))facades : 0.3->e : 0.2
+facades->Comp("sidefaces"){ facade }
+facade : Shape.visible("Street") == 0->Subdiv("Y",groundfloor_height,1r,top floor_height){ groundfloor | floors | topfloors } fireescape
+groundfloor->Subdiv("X",1r,entrance_width,1r){ groundtiles |entranceSnapLines("Y","entrancesnap") | groundtiles }
+facad->floors
+floors->Repeat("YS", floor_height){ floor_Snap("XZ") }
+floor->Repeat("XS",tile_width){ tile Snap("Y","tilesnap") }
+wall : Shape.visible("Street")->I("frontwall.obj")
+fireescape->Subdiv("XS",1r,2*tile width,7r,"tilesnap"){ epsilon | escapestairs | e }
+escapestairs->S(1r,1r, fireescape_depth)->T(0,0,- fireescape_depth)->Subdiv("YS",ground floor_height,1r){ e | Repeat("YS", floor_height){ I("fireescape.obj") } }
