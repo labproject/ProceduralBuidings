@@ -88,7 +88,7 @@ GLint loadTextures()
 	//Textures for Environment
 			for(int i = 0; i < 11; i++){
 				filename = "textures/ground" + to_string(static_cast<long long>(i)) + ".jpg";
-				cout << "loading " << filename << endl;
+//				cout << "loading " << filename << endl;
 				tex_env[i] = SOIL_load_OGL_texture(filename.c_str(),SOIL_LOAD_AUTO,SOIL_CREATE_NEW_ID,SOIL_FLAG_INVERT_Y);
 				if (tex_env[i] == 0 ) cout << "ERROR loading texture " << filename << endl;
 			}
@@ -98,7 +98,7 @@ GLint loadTextures()
 	//Textures for Wall
 			for(int i = 0; i < 12; i++){
 				filename = "textures/brick" + to_string(static_cast<long long>(i)) + ".jpg";
-				cout << "loading " << filename << endl;
+//				cout << "loading " << filename << endl;
 				tex_wall[i] = SOIL_load_OGL_texture(filename.c_str(),SOIL_LOAD_AUTO,SOIL_CREATE_NEW_ID,SOIL_FLAG_INVERT_Y);
 				if (tex_wall[i] == 0 ) cout << "ERROR loading texture " << filename << endl;
 			}
@@ -109,7 +109,7 @@ GLint loadTextures()
 
 			for(int i = 0; i < 9; i++){
 				filename = "textures/glass" + to_string(static_cast<long long>(i)) + ".jpg";
-				cout << "loading " << filename << endl;
+//				cout << "loading " << filename << endl;
 				tex_glass[i] = SOIL_load_OGL_texture(filename.c_str(),SOIL_LOAD_AUTO,SOIL_CREATE_NEW_ID,SOIL_FLAG_INVERT_Y);
 				if (tex_glass[i] == 0 ) cout << "ERROR loading texture " << i << endl;
 			}
@@ -123,14 +123,14 @@ GLint loadTextures()
 
 			for(int i = 0; i < 8; i++){
 				filename = "textures/roof" + to_string(static_cast<long long>(i)) + ".jpg";
-				cout << "loading " << filename << endl;
+//				cout << "loading " << filename << endl;
 				tex_roof[i] = SOIL_load_OGL_texture(filename.c_str(),SOIL_LOAD_AUTO,SOIL_CREATE_NEW_ID,SOIL_FLAG_INVERT_Y);
 				if (tex_roof[i] == 0 ) cout << "ERROR loading texture " << i << endl;
 			}
 
 			prob4 = rand() % 9;
 
-			cout << prob1 << prob2 << prob3 << prob4;
+//			cout << prob1 << prob2 << prob3 << prob4;
 
  
     return true;                                        
@@ -501,16 +501,16 @@ void initTestTree(){
 
 	tree<Symbol>::leaf_iterator leaf = derivTree.begin_leaf();
 
-	cout << "leaf nodes: " << endl;
+//	cout << "leaf nodes: " << endl;
 	while (leaf != derivTree.end_leaf()){
 		//if(leaf != derivTree.begin())
-			cout << "			" << (*leaf).getName() << endl;
+//			cout << "			" << (*leaf).getName() << endl;
 		leaf++;
 	}
 
 	Tree = derivTree;
 
-	cout << "test, first leaf:	" << (*Tree.begin_leaf()).getName() << endl;
+	//cout << "test, first leaf:	" << (*Tree.begin_leaf()).getName() << endl;
 
 
 

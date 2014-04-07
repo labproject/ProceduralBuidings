@@ -3,7 +3,5 @@
 //Scale
 //Trans
 //Rename
-//
-
-start->scale(building_width,building_height,building_depth){box}
-box->(){epsilon}
+start->comp(){top|top|top|top|top|top}
+top->scale(5,5,5){}
