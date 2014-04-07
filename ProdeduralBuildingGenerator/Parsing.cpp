@@ -56,6 +56,7 @@ vector<pair<string,vector<GNode>>> parsing()
 				cout<<*sym+" ";
 			}
 			cout<<"}";
+			cout<<" Pr["<<node->prob<<"]";
 		}
 		cout <<endl;
 	}
@@ -300,8 +301,8 @@ vector<pair<float,float>>proceedPARAM(string str)
 		}else if(confIT!=config.end()){					//CHECK IF MAP config RETURNS A VALUE
 			//QUERY IF GLOBAL VARIABLE IS FOUND
 			parameterType="GLOBALVALUE:	";
-			first = config.at(par);						//look up global variable and save it as first
-			second = 1;									//set second to 1 because both values are multiplied
+			first = 1;						//set second to 1 because both values are multiplied
+			second = config.at(par);		//look up global variable and save it as first
 
 		}else if(mult!=-1){								//CHECK IF PARAMETER DESCRIBES MULTIPLICATION
 			//QUERY IF MULTIPLICATION IS FOUND
@@ -395,6 +396,8 @@ CONVERT string OF PROBABILITY INTO float
 float proceedPROB(string str)
 {
 	string num =str;
+	if (str=="None")
+		return 1;
 	float val = (float)atof(num.c_str());
 	//cout<<"Pr["<<val<<"]"<<endl<<endl;		//PRINT
 	return val;
