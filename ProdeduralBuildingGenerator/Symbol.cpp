@@ -20,6 +20,16 @@
 		scale = s;
 		name = n;
 	}
+	Symbol::Symbol(double posX,double posY,double posZ,double scaleX,double scaleY,double scaleZ,string n){
+		name = n;
+
+		position.push_back(posX);
+		position.push_back(posY);
+		position.push_back(posZ);
+		scale.push_back(scaleX);
+		scale.push_back(scaleY);
+		scale.push_back(scaleZ);
+	}
 
 	/*
 	================
