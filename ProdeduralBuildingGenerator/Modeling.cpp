@@ -216,6 +216,15 @@ vector<Symbol> apply_rule ( Symbol &node_parent, GNode *rule )
 	return node_child;
 }
 
+void show_tree ( tree<Symbol> T )
+{
+	for ( tree<Symbol> :: iterator it_of_tree = T.begin(); it_of_tree != T.end(); it_of_tree ++ )
+	{
+		cout << it_of_tree -> name << endl;
+	}
+
+}
+
 tree <Symbol> modeling ( vector< pair < string, vector<GNode>> > grammar )
 	// Symbol S is the first symbol we start our modelling.
 	//  map< string symbol_ID, vector<Gnode> rule_set > is the datastructure got from Parsing =======> is no longer used! _by Li,Ruotong @ 19.03.2014
@@ -231,7 +240,7 @@ tree <Symbol> modeling ( vector< pair < string, vector<GNode>> > grammar )
 	tree<Symbol> derivTree;			// create the tree
 	tree<Symbol>::iterator top;		// the root iterator
 
-	// initialize the start symbol S
+	// initialize the start symbol S  
 	Symbol S( 0.0, 0.0, 0.0, 1.0, 1.0, 1.0, "start");		// initialize the start symbol 
 
 	derivTree.insert(top, S);		// push S into the tree as initialize
@@ -245,7 +254,7 @@ tree <Symbol> modeling ( vector< pair < string, vector<GNode>> > grammar )
 		vector< tree<Symbol> :: iterator > temp_Symbol;		
 		for ( tree<Symbol> :: iterator it = derivTree.begin(); it != derivTree.end(); it ++)
 		{
-			if ( it -> name == g_it -> first )
+			if ( it -> name == g_it -> first && it -> active )
 				temp_Symbol.push_back( it );
 			else
 				continue;
@@ -270,15 +279,22 @@ tree <Symbol> modeling ( vector< pair < string, vector<GNode>> > grammar )
 			//Symbol temp_parent = *p_it;			
 			
 			child_Symbol = apply_rule ( *p_it, &G );	// child_Symbol is the result for each parent node.
+			p_it -> active = false;
 	
 			//5) put the new created Symbol into the nTree, if there's no new Symbol( apply S, T, rename..) then keep the tree same.
 			for ( vector<Symbol> :: iterator c_it = child_Symbol.begin(); c_it != child_Symbol.end(); c_it ++)
 			{
-				derivTree.append_child ( p_it, *c_it );
+				if ( c_it -> name != "epsilon" )
+					derivTree.append_child ( p_it, *c_it );
+				else
+					c_it -> active = false;
+
 			}
 
 		}		
 	}
+
+	show_tree ( derivTree );
 
 	return derivTree;
 }
