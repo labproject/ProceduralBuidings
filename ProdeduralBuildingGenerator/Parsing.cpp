@@ -32,7 +32,7 @@ vector<pair<string,vector<GNode>>> parsing()
 	//Read Rule Set Line by Line
 	string line;
 	ifstream infile;			
-	infile.open("Office Building.txt");         
+	infile.open("testing.txt");         
 	while(!infile.eof()){
 		while(getline(infile,line)){			//post Line in line
 			//THE FUN STARTS HERE!
@@ -58,7 +58,7 @@ vector<pair<string,vector<GNode>>> parsing()
 			cout<<"}";
 			cout<<" Pr["<<node->prob<<"]";
 		}
-		cout <<endl;
+		cout <<endl<<endl;
 	}
 	//RETURN RULE SET;
 	return ruleSet;
