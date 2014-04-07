@@ -330,7 +330,6 @@ vector<pair<float,float>>proceedPARAM(string str)
 			The Line above Checks:
 				is the String found a Valid float number?
 			*/
-			
 			parameterType="ABSOLUTE:	";
 			first = 1;
 			second = (float)atof(par.c_str());

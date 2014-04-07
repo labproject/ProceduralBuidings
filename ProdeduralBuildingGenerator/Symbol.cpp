@@ -11,7 +11,12 @@
 */
 
 	//Standard Comstructor
-	Symbol::Symbol(){}
+	Symbol::Symbol()
+	{
+		terminal=false;
+		drawable=true;
+		active=true;
+	}
 	
 	//constructor creating a Symbol with position, scale and name.
 	Symbol::Symbol(vector<double> p,vector<double> s,string n)
@@ -19,6 +24,10 @@
 		position = p;
 		scale = s;
 		name = n;
+
+		terminal=false;
+		drawable=true;
+		active=true;
 	}
 	Symbol::Symbol(double posX,double posY,double posZ,double scaleX,double scaleY,double scaleZ,string n){
 		name = n;
@@ -29,6 +38,10 @@
 		scale.push_back(scaleX);
 		scale.push_back(scaleY);
 		scale.push_back(scaleZ);
+
+		terminal=false;
+		drawable=true;
+		active=true;
 	}
 
 	/*
@@ -45,8 +58,9 @@
 		position[0] += x;
 		position[1] += y;
 		position[2] += z;
-	}
 
+	}
+	
 	//Scale
 	void Symbol::S(double x, double y, double z)
 	{
