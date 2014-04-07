@@ -38,23 +38,32 @@
 	*/
 
 	//translation
-	void Symbol::T(double x, double y, double z)
+	Symbol Symbol::T(double x, double y, double z, string n)
 	{ 
 		// 14.03.14_by Ruotong Li
 		// when do the translating, we only need to move the position of symbol to the new place, other parameters don't change
-		position[0] += x;
-		position[1] += y;
-		position[2] += z;
+		
+		Symbol *deriv_Element = new Symbol( position, scale, n);
+		
+		deriv_Element -> position[0] = position[0] + x;
+		deriv_Element -> position[1] = position[1] + y;
+		deriv_Element -> position[2] = position[2] + z;
+
+		return *deriv_Element;
 	}
 
 	//Scale
-	void Symbol::S(double x, double y, double z)
+	Symbol Symbol::S(double x, double y, double z, string n)
 	{
 		// 14.03.14_by Ruotong Li
 		// when do the scaling, nothing but the scale of the symbol has changed.
-		scale[0] *= x;
-		scale[1] *= y;
-		scale[2] *= z;
+		Symbol *deriv_Element = new Symbol( position, scale, n);
+
+		deriv_Element -> scale[0] = scale[0] * x;
+		deriv_Element -> scale[1] = scale[1] * y;
+		deriv_Element -> scale[2] = scale[2] * z;
+
+		return *deriv_Element;
 	}
 
 	//rotation around y Axis
@@ -64,12 +73,18 @@
 	}
 
 	// rename the Symbol with a new name
-	void Symbol:: rename ( string symbolName )
+	vector<Symbol> Symbol:: rename ( string symbolName )
 	{
+		Symbol deriv_Element( position, scale, symbolName);
+
 		if ( symbolName == "epsilon" )
-			active = 0;
+			deriv_Element.active = false;
 		else
-			name = symbolName;
+			deriv_Element.name = symbolName;
+
+		vector<Symbol> deriv;
+		deriv.push_back( deriv_Element );
+		return deriv;
 	}
 	
 	/*
@@ -99,13 +114,13 @@
 			// scale
 			vector<double> scale_p (3, 1.0);				// create a vector to store the scale parameter
 			scale_p[d] = splits[i] / scale[d];			// calculate the scale parameter
-			deriv_Element.S ( scale_p[0], scale_p[1], scale_p[2]);	// call the S function do calculation
+			deriv_Element = deriv_Element.S ( scale_p[0], scale_p[1], scale_p[2], symbols[i]);	// call the S function do calculation
 
 			// translation
 			vector<double> trans_p (3, 0.0);				// create a vector to store the translation parameter
 			for ( int j = 0; j < i; j ++)				// calculate the position of the new symbol
 				position[d] += splits[i];
-			deriv_Element.T (trans_p[0], trans_p[1], trans_p[2]);	// Translate the new symbol
+			deriv_Element = deriv_Element.T (trans_p[0], trans_p[1], trans_p[2], symbols[i]);	// Translate the new symbol
 
 			// push_back
 			derivatives.push_back (deriv_Element);
@@ -132,40 +147,40 @@
 		int i = 0;	// use as the index of the namelist
 		// 1) splict bottom
 		Symbol deriv_Element_01( position, scale, symbols[i]);	// create new symbol
-		deriv_Element_01.S ( 1.0, 0.0, 1.0);										// remove the Y dimention
+		deriv_Element_01 = deriv_Element_01.S ( 1.0, 0.0, 1.0, symbols[i]);										// remove the Y dimention
 		derivatives.push_back (deriv_Element_01);							// push_back
 		i ++;
 
 		// 2) splict top
 		Symbol deriv_Element_02( position, scale, symbols[i]);	// create new symbol
-		deriv_Element_02.S ( 1.0, 0.0, 1.0);										// remove the Y dimention
-		deriv_Element_02.T ( 0.0, position[1], 0.0);							// tanslate it to the right position
+		deriv_Element_02 = deriv_Element_02.S ( 1.0, 0.0, 1.0, symbols[i]);										// remove the Y dimention
+		deriv_Element_02 = deriv_Element_02.T ( 0.0, position[1], 0.0, symbols[i]);							// tanslate it to the right position
 		derivatives.push_back (deriv_Element_02);							// push_back
 		i++;
 
 		// 3) splict side_face_1 XY at front
 		Symbol deriv_Element_03( position, scale, symbols[i]);	// create new symbol
-		deriv_Element_03.S ( 1.0, 1.0, 0.0);										// remove the Y dimention
+		deriv_Element_03 = deriv_Element_03.S ( 1.0, 1.0, 0.0, symbols[i]);										// remove the Y dimention
 		derivatives.push_back (deriv_Element_03);							// push_back
 		i++;
 
 		// 4) splict side_face_1 YZ at right
 		Symbol deriv_Element_04( position, scale, symbols[i]);	// create new symbol
-		deriv_Element_04.S ( 0.0, 1.0, 1.0);										// remove the Y dimention
-		deriv_Element_04.T ( position[0], 0.0, 0.0);							// tanslate it to the right position
+		deriv_Element_04 = deriv_Element_04.S ( 0.0, 1.0, 1.0, symbols[i]);										// remove the Y dimention
+		deriv_Element_04 = deriv_Element_04.T ( position[0], 0.0, 0.0, symbols[i]);							// tanslate it to the right position
 		derivatives.push_back (deriv_Element_04);							// push_back
 		i++;
 
 		// 5) splict side_face_3 XY at back
 		Symbol deriv_Element_05( position, scale, symbols[i]);	// create new symbol
-		deriv_Element_05.S ( 1.0, 1.0, 0.0);										// remove the Y dimention
-		deriv_Element_05.T ( 0.0, 0.0, position[2]);							// tanslate it to the right position
+		deriv_Element_05 = deriv_Element_05.S ( 1.0, 1.0, 0.0, symbols[i]);										// remove the Y dimention
+		deriv_Element_05 = deriv_Element_05.T ( 0.0, 0.0, position[2], symbols[i]);							// tanslate it to the right position
 		derivatives.push_back (deriv_Element_05);							// push_back
 		i++;
 
 		// 6) splict side_face_1 YZ at left
 		Symbol deriv_Element_06( position, scale, symbols[i]);	// create new symbol
-		deriv_Element_06.S ( 0.0, 1.0, 1.0);										// remove the Y dimention
+		deriv_Element_06 = deriv_Element_06.S ( 0.0, 1.0, 1.0, symbols[i]);										// remove the Y dimention
 		derivatives.push_back (deriv_Element_06);							// push_back
 		i++;
 
@@ -196,7 +211,7 @@
 			// 2) tanslaton to the right place
 			vector<double> trans_p ( 3, 0 );
 			trans_p[dim] = size * ( i - 1 );
-			deriv_Element.T ( trans_p[0], trans_p[1], trans_p[2] );
+			deriv_Element = deriv_Element.T ( trans_p[0], trans_p[1], trans_p[2], symbol );
 
 			// 3) push_back and repeat
 			derivatives.push_back (deriv_Element);
@@ -211,7 +226,7 @@
 			Symbol deriv_Element( position, scale_p, "remaind");
 			vector<double> trans_p ( 3, 0 );
 			trans_p[dim] = size * ( i );
-			deriv_Element.T ( trans_p[0], trans_p[1], trans_p[2] );
+			deriv_Element = deriv_Element.T ( trans_p[0], trans_p[1], trans_p[2], deriv_Element.name );
 			derivatives.push_back (deriv_Element);
 		}
 

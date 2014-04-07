@@ -102,7 +102,8 @@ vector<Symbol> apply_rule ( Symbol &node_parent, GNode *rule )
 			else
 				p.push_back ( ( it -> first ) * ( it -> second ) );
 		}
-		node_parent.S ( p[0], p[1], p[2]);
+		node_child.push_back ( node_parent.S ( p[0], p[1], p[2], rule -> symbolNames[0]));
+		
 	} // no return value
 
 	// "Trans" => void Symbol::T(double x, double y, double z);
@@ -120,7 +121,8 @@ vector<Symbol> apply_rule ( Symbol &node_parent, GNode *rule )
 			else
 				p.push_back ( ( it -> first ) * ( it -> second ) );
 		}
-		node_parent.T ( p[0], p[1], p[2]);
+		node_child.push_back ( node_parent.T ( p[0], p[1], p[2], rule -> symbolNames[0]) );
+		
 	}	// no return value
 
 	//	"Rotate" => not valid at the moment
@@ -128,7 +130,7 @@ vector<Symbol> apply_rule ( Symbol &node_parent, GNode *rule )
 	//	"Rename" => rename ( string symbolName ); // if name = "epsilon", then active = 0; else change the name
 	else if ( rule -> function == "rename" )
 	{
-		node_parent.rename ( rule -> symbolNames[0] );
+		node_child = node_parent.rename ( rule -> symbolNames[0] );
 	}
 
 	//	"Subdiv" => vector<Symbol>Symbol::subDiv( int d, vector<double>&splits, vector<string> &symbols);	// 0-x, 1-y, 2-z; splits are absolute value
@@ -150,17 +152,17 @@ vector<Symbol> apply_rule ( Symbol &node_parent, GNode *rule )
 			if ( it -> first == -1 )		
 			{
 				splits.push_back ( node_parent.scale[0] * ( it -> second ) );
-				sum_absolute += *splits.end();
+				sum_absolute += * (splits.end() - 1);
 			}
 			else if ( it -> first == -2 )
 			{
 				splits.push_back ( node_parent.scale[1] * ( it -> second ) );
-				sum_absolute += *splits.end();
+				sum_absolute += * (splits.end() - 1);
 			}
 			else if ( it -> first == -3 )
 			{
 				splits.push_back ( node_parent.scale[2] * ( it -> second ) );
-				sum_absolute += *splits.end();
+				sum_absolute += * (splits.end() - 1);
 			}
 			else if ( it -> first == -4 )
 			{
@@ -171,15 +173,17 @@ vector<Symbol> apply_rule ( Symbol &node_parent, GNode *rule )
 			else
 			{
 				splits.push_back ( ( it -> first ) * ( it -> second ) );
-				sum_absolute += *splits.end();
+				sum_absolute += * ( splits.end() -1);
 			}
 			i ++;
+			it ++;
 		}
 		double r = ( node_parent.scale[d] - sum_absolute ) / r_count;
 		for ( int it = 0; it < idx.size(); it ++)
-			splits [ idx[i] ] *= r;
+			splits [ idx[it] ] *= r;
 
 		node_child = node_parent.subDiv ( d, splits, rule -> symbolNames );
+		
 	}
 
 	//	"Component_split" => vector<Symbol>Symbol::comp( vector<string> symbols);	// s gives us the name of the new Symbol
@@ -209,6 +213,7 @@ vector<Symbol> apply_rule ( Symbol &node_parent, GNode *rule )
 
 		// pass parameter to the Symbol functions
 		node_child = node_parent.repeat ( d, size, name );
+		
 	}
 
 	//	"Occlusion" => 
@@ -220,7 +225,10 @@ void show_tree ( tree<Symbol> T )
 {
 	for ( tree<Symbol> :: iterator it_of_tree = T.begin(); it_of_tree != T.end(); it_of_tree ++ )
 	{
-		cout << it_of_tree -> name << endl;
+		cout << it_of_tree -> name ;
+		cout << "	P:(" << it_of_tree -> position[0] << ", "<< it_of_tree -> position[1] << ", " << it_of_tree -> position[2] << ") ";
+		cout << "	S:(" << it_of_tree -> scale[0] << ", " << it_of_tree -> scale[1] << ", " << it_of_tree -> scale[0] << ") ";
+		cout << endl;
 	}
 
 }
@@ -288,7 +296,6 @@ tree <Symbol> modeling ( vector< pair < string, vector<GNode>> > grammar )
 					derivTree.append_child ( p_it, *c_it );
 				else
 					c_it -> active = false;
-
 			}
 
 		}		

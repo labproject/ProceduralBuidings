@@ -34,12 +34,12 @@ public:
 	//new constructors can be created here!
 
 	//SCOPERULES
-	void T(double,double,double);		//What is better, 3 single values or a vector of three values?
-	void S(double,double,double);		//What is better, 3 single values or a vector of three values?
+	Symbol T(double,double,double,string);		//What is better, 3 single values or a vector of three values?
+	Symbol S(double,double,double, string);		//What is better, 3 single values or a vector of three values?
 	void R(double);
 
 	// RENAME
-	void rename ( string);
+	vector<Symbol> rename ( string);
 
 	//PRODUCTIONRULES
 	vector<Symbol>		subDiv( int, vector<double>&, vector<string>&);

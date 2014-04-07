@@ -23,9 +23,9 @@ void testENV()
 	cout<<"Create:		Symbol a"<<endl;
 	Symbol *a = new Symbol(sVec,sVec,"test");
 	cout<<"Scale:		Symbol a"<<endl;
-	a->S(1,1,3);
+	a = & a->S(1,1,3, a -> name );
 	cout<<"Translate:	Symbol a"<<endl;
-	a->T(1,2,3);
+	a = & a->T(1,2,3, a -> name);
 	//a->subDiv(...)
 	//a->repeat(...)
 	//...
@@ -37,7 +37,7 @@ void testENV()
 	
 
 	
-	a->T(2,3,0.4);
+	a = & a->T(2,3,0.4, a->name);
 	vector<Symbol> testVec = a->test();
 	string out =testVec.at(0).getName();
 	cout<<out<<endl;
