@@ -55,6 +55,7 @@
 	{ 
 		// 14.03.14_by Ruotong Li
 		// when do the translating, we only need to move the position of symbol to the new place, other parameters don't change
+<<<<<<< HEAD
 		
 		Symbol *deriv_Element = new Symbol( position, scale, n);
 		
@@ -63,6 +64,13 @@
 		deriv_Element -> position[2] = position[2] + z;
 
 		return *deriv_Element;
+	}
+=======
+		position[0] += x;
+		position[1] += y;
+		position[2] += z;
+>>>>>>> 93f37e2d95ab6dae1870c90c463f879b0ffddeab
+
 	}
 	
 	//Scale

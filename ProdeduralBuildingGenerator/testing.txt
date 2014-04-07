@@ -1,3 +1,7 @@
 //PRIORITY 1
-start->scale(1,2,5){box1}
-box1->subDiv(Z,Scope.sz*rand[0.3-0.5],1r){facades|sidewings}
+//WORKS:
+//Scale
+//Trans
+//Rename
+start->comp(){top|top|top|top|top|top}
+top->scale(5,5,5){}
