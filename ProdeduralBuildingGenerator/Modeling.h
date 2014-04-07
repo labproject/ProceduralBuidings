@@ -8,6 +8,11 @@
 #include	"ntree.hpp"
 #include	"GNode.h"
 #include	"tree.hh"
+#include	<time.h>
+#include	<stdio.h>
+#include	<stdlib.h>
+#include	<Windows.h>
+
 
 
 using namespace std;

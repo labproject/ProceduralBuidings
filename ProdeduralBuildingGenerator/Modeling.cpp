@@ -1,8 +1,4 @@
 #include "Modeling.h"
-#include <time.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <Windows.h>
 
 using namespace std;
 

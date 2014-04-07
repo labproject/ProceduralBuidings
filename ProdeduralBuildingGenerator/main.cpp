@@ -10,7 +10,7 @@ int main(int argc, char **argv)
 	Symbol start;
 	vector< pair < string, vector<GNode>> > parse = parsing();
 	modeling(start,parse);
-	visualization(argc, argv);
+	//visualization(argc, argv);
 	
 
 	return 0;
