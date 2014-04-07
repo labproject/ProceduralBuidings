@@ -1,0 +1,2 @@
+//PRIORITY 1
+start->scale(1,building_height,1){box}

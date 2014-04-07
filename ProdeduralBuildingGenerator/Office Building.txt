@@ -1,5 +1,4 @@
 //PRIORITY 1
-->start(){}
 start->scale(1,building_height,1){box}
 box->subDiv(Z,Scope.sz*rand[0.3-0.5],1r){facades|sidewings}
 sidewings->subDiv(X,Scope.sy*rand[0.2-0.6],1r){sidewing|epsilon}
