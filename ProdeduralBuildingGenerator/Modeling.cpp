@@ -87,7 +87,8 @@ vector<Symbol> apply_rule ( Symbol &node_parent, GNode *rule )
 	// 2) compare the rule -> function with the function name and decide the function we will apply
 
 	// "Scale" => void Symbol::S(double x, double y, double z);
-	if ( rule -> function == "Scale" )
+
+	if ( rule -> function == "scale" )
 	{
 		vector< double > p;
 		for ( vector< pair< float, float > > :: iterator it = rule -> parameters.begin(); it != rule -> parameters.end(); it ++ )
@@ -105,7 +106,7 @@ vector<Symbol> apply_rule ( Symbol &node_parent, GNode *rule )
 	} // no return value
 
 	// "Trans" => void Symbol::T(double x, double y, double z);
-	else if ( rule -> function == "Trans" )
+	else if ( rule -> function == "trans" )
 	{
 		vector< double > p;
 		for ( vector< pair< float, float > > :: iterator it = rule -> parameters.begin(); it != rule -> parameters.end(); it ++ )
@@ -125,13 +126,13 @@ vector<Symbol> apply_rule ( Symbol &node_parent, GNode *rule )
 	//	"Rotate" => not valid at the moment
 
 	//	"Rename" => rename ( string symbolName ); // if name = "epsilon", then active = 0; else change the name
-	else if ( rule -> function == "Rename" )
+	else if ( rule -> function == "rename" )
 	{
 		node_parent.rename ( rule -> symbolNames[0] );
 	}
 
 	//	"Subdiv" => vector<Symbol>Symbol::subDiv( int d, vector<double>&splits, vector<string> &symbols);	// 0-x, 1-y, 2-z; splits are absolute value
-	else if ( rule -> function == "Subdiv" )
+	else if ( rule -> function == "subDiv" )
 	{
 		vector< pair< float, float > > :: iterator it = rule -> parameters.begin();
 		int d;					// parameter shows the cordinate we Subdiv along
@@ -182,13 +183,13 @@ vector<Symbol> apply_rule ( Symbol &node_parent, GNode *rule )
 	}
 
 	//	"Component_split" => vector<Symbol>Symbol::comp( vector<string> symbols);	// s gives us the name of the new Symbol
-	else if ( rule -> function == "Component_split" )
+	else if ( rule -> function == "comp" )
 	{
 		node_child = node_parent.comp ( rule -> symbolNames );
 	}
 	
 	//	"Repeat" => vector<Symbol>Symbol::repeat( int dim, double size, string symbol);	// 0-x, 1-y, 2-z;
-	else if ( rule -> function == "Repeat" )
+	else if ( rule -> function == "repeat" )
 	{
 		// take the parameters and symbol_IDs of the result
 		vector< pair< float, float > > :: iterator it = rule -> parameters.begin();
@@ -215,7 +216,7 @@ vector<Symbol> apply_rule ( Symbol &node_parent, GNode *rule )
 	return node_child;
 }
 
-tree <Symbol> modeling ( Symbol &S, vector< pair < string, vector<GNode>> > grammar )
+tree <Symbol> modeling ( vector< pair < string, vector<GNode>> > grammar )
 	// Symbol S is the first symbol we start our modelling.
 	//  map< string symbol_ID, vector<Gnode> rule_set > is the datastructure got from Parsing =======> is no longer used! _by Li,Ruotong @ 19.03.2014
 	// !!!@19.03.2014 New datastructure: vector< pair < string symbol_ID, vector<Gnode> rule_set> >
@@ -229,6 +230,12 @@ tree <Symbol> modeling ( Symbol &S, vector< pair < string, vector<GNode>> > gram
 
 	tree<Symbol> derivTree;			// create the tree
 	tree<Symbol>::iterator top;		// the root iterator
+
+	// initialize the start symbol S
+	double start_para[6] = {0.0, 0.0, 0.0, 1.0, 1.0, 1.0};  
+	vector< double > start_p( start_para, start_para + 3);
+	vector< double > start_s( start_para+4, start_para + 6);
+	Symbol S( start_p, start_s, "start");		// initialize the start symbol 
 
 	derivTree.insert(top, S);		// push S into the tree as initialize
 
