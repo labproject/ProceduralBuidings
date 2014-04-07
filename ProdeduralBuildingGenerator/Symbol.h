@@ -30,6 +30,7 @@ public:
 	//CONSTRUCTORS
 	Symbol();
 	Symbol(vector<double>,vector<double>,string);
+	Symbol(double,double,double,double,double,double,string);
 	//new constructors can be created here!
 
 	//SCOPERULES

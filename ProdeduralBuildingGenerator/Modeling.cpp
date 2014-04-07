@@ -232,10 +232,7 @@ tree <Symbol> modeling ( vector< pair < string, vector<GNode>> > grammar )
 	tree<Symbol>::iterator top;		// the root iterator
 
 	// initialize the start symbol S
-	double start_para[6] = {0.0, 0.0, 0.0, 1.0, 1.0, 1.0};  
-	vector< double > start_p( start_para, start_para + 3);
-	vector< double > start_s( start_para+4, start_para + 6);
-	Symbol S( start_p, start_s, "start");		// initialize the start symbol 
+	Symbol S( 0.0, 0.0, 0.0, 1.0, 1.0, 1.0, "start");		// initialize the start symbol 
 
 	derivTree.insert(top, S);		// push S into the tree as initialize
 

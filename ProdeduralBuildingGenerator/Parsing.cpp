@@ -348,8 +348,8 @@ vector<pair<float,float>>proceedPARAM(string str)
 		
 		}else{				//ANY OTHER CASE WILL REPORT AN ERROR!
 			parameterType=par+"					";
-			drawRed("ERROR!");cout<<endl;
-			first	= 0;
+			//drawRed("ERROR!");cout<<endl;
+			first	= 1;
 			second	= 0;
 
 		}

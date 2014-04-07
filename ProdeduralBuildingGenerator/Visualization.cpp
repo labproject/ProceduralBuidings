@@ -653,7 +653,7 @@ void createMenu(){
 	glutAttachMenu(GLUT_RIGHT_BUTTON);
 }
 
-void visualization(int argc, char **argv){
+void visualization(int argc, char **argv,tree<Symbol> devTree){
 
 	cout<<"-----------------------"<<endl<<"VISUALIZATION"<<endl<<"-----------------------"<<endl<<endl<<endl;
 
@@ -666,6 +666,7 @@ void visualization(int argc, char **argv){
 
 	init();
 	initTestTree();
+	Tree = devTree;
 	createMenu();
 	glutReshapeFunc(reshape);
 	glutDisplayFunc(display); 
