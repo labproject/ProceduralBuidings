@@ -9,7 +9,7 @@ int main(int argc, char **argv)
 	//testENV();
 	Symbol start;
 	vector< pair < string, vector<GNode>> > parse = parsing();
-	modeling(start,parse);
+	modeling( parse);
 	//visualization(argc, argv);
 	
 
