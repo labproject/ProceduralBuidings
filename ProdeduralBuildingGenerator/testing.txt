@@ -1,2 +1,3 @@
 //PRIORITY 1
 start->scale(1,building_height,1){box}
+box->trans(1,50,1){trans}
