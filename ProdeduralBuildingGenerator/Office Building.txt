@@ -14,4 +14,3 @@ floors->repeat(Y,floor_height){floor}
 floor->repeat(X,tiles_width){tiles}
 tiles->subDiv(X,1r,window_width,1r){wall|tile|wall}
 tile->subDiv(Y,window_position,window_height,1r){wall|window|wall}
-//wall->subDiv(X,rand[0-12]*29.5,window_position*rand[0.2-0.6],window_height*0.4,4,55r){brick1|brick2|brick3|brick4|brick5}
