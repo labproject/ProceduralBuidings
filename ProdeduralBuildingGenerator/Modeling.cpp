@@ -229,6 +229,7 @@ void show_tree ( tree<Symbol> T )
 		cout << it_of_tree -> name ;
 		cout << "	P:(" << it_of_tree -> position[0] << ", "<< it_of_tree -> position[1] << ", " << it_of_tree -> position[2] << ") ";
 		cout << "	S:(" << it_of_tree -> scale[0] << ", " << it_of_tree -> scale[1] << ", " << it_of_tree -> scale[0] << ") ";
+		cout << "	active: " << it_of_tree -> active << "	drawable: " << it_of_tree -> drawable;
 		cout << endl;
 	}
 
