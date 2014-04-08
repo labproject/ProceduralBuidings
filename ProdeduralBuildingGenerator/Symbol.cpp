@@ -128,11 +128,11 @@
 			vector<double> scale_p (3, 1.0);				// create a vector to store the scale parameter
 			scale_p[d] = splits[i] / scale[d];			// calculate the scale parameter
 			deriv_Element = deriv_Element.S ( scale_p[0], scale_p[1], scale_p[2], symbols[i]);	// call the S function do calculation
-
+			
 			// translation
 			vector<double> trans_p (3, 0.0);				// create a vector to store the translation parameter
 			for ( int j = 0; j < i; j ++)				// calculate the position of the new symbol
-				position[d] += splits[i];
+				trans_p [d] += splits[i];
 			deriv_Element = deriv_Element.T (trans_p[0], trans_p[1], trans_p[2], symbols[i]);	// Translate the new symbol
 
 			// push_back
