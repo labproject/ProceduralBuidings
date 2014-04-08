@@ -208,6 +208,17 @@ void display() {
 
 		glPushMatrix();
 		
+		//coloooors red, blue, green, yellow
+
+		if((*leaf).getName() == "red")
+			glColor3d(1,0,0);
+		if((*leaf).getName() == "blue")
+			glColor3d(0,0,1);
+		if((*leaf).getName() == "green")
+			glColor3d(0,1,0);
+		if((*leaf).getName() == "yellow")
+			glColor3d(0,1,1);
+
 
 		//cout << node.name << endl;
 		if((*leaf).getName() == "front" || (*leaf).getName() == "floor"){
