@@ -131,12 +131,13 @@ GLint loadTextures()
 
 			prob4 = rand() % 8;
 
+<<<<<<< HEAD
 			
 	//Textures for Groundfloor
 
 			for(int i = 0; i < 4; i++){
 				filename = "textures/groundfloor" + to_string(static_cast<long long>(i)) + ".jpg";
-				//cout << "loading " << filename << endl;
+				cout << "loading " << filename << endl;
 				tex_groundfloor[i] = SOIL_load_OGL_texture(filename.c_str(),SOIL_LOAD_AUTO,SOIL_CREATE_NEW_ID,SOIL_FLAG_INVERT_Y);
 				if (tex_groundfloor[i] == 0 ) cout << "ERROR loading texture " << i << endl;
 			}
@@ -147,7 +148,7 @@ GLint loadTextures()
 
 			for(int i = 0; i < 7; i++){
 				filename = "textures/topfloor" + to_string(static_cast<long long>(i)) + ".jpg";
-				//cout << "loading " << filename << endl;
+				cout << "loading " << filename << endl;
 				tex_topfloor[i] = SOIL_load_OGL_texture(filename.c_str(),SOIL_LOAD_AUTO,SOIL_CREATE_NEW_ID,SOIL_FLAG_INVERT_Y);
 				if (tex_topfloor[i] == 0 ) cout << "ERROR loading texture " << i << endl;
 			}
@@ -157,7 +158,9 @@ GLint loadTextures()
 
 
 			
-			//cout << prob1 << prob2 << prob3 << prob4;
+=======
+//			cout << prob1 << prob2 << prob3 << prob4;
+>>>>>>> origin/master
 
  
     return true;                                        
@@ -208,17 +211,6 @@ void display() {
 
 		glPushMatrix();
 		
-		//coloooors red, blue, green, yellow
-
-		if((*leaf).getName() == "red")
-			glColor3d(1,0,0);
-		if((*leaf).getName() == "blue")
-			glColor3d(0,0,1);
-		if((*leaf).getName() == "green")
-			glColor3d(0,1,0);
-		if((*leaf).getName() == "yellow")
-			glColor3d(0,1,1);
-
 
 		//cout << node.name << endl;
 		if((*leaf).getName() == "front" || (*leaf).getName() == "floor"){
@@ -733,11 +725,21 @@ void createMenu(){
 	glutAttachMenu(GLUT_RIGHT_BUTTON);
 }
 
-void visualization(int argc, char **argv, tree<Symbol> devTree){
+<<<<<<< HEAD
+void visualization(int argc, char **argv, tree<Symbol> Tree){
+=======
+void visualization(int argc, char **argv,tree<Symbol> devTree){
+>>>>>>> origin/master
 
 	cout<<"-----------------------"<<endl<<"VISUALIZATION"<<endl<<"-----------------------"<<endl<<endl<<endl;
 	tree<Symbol>::leaf_iterator leaf = Tree.begin_leaf();
 
+	cout << "leaf nodes: " << endl;
+	while (leaf != Tree.end_leaf()){
+		//if(leaf != derivTree.begin())
+			cout << "			" << (*leaf).getName() << endl;
+		leaf++;
+	}
 
 	glutInit(&argc, argv); // Initialize GLUT
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH); 
