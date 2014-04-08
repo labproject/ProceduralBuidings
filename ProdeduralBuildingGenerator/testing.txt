@@ -4,14 +4,14 @@
 //Trans
 //Rename
 start->(){box}
-box->scale(building_width,building_height,building_depth){box2}
+box->scale(5,5,5){box2}
 box2->comp(){bottom|top|side|side|side|side}
-side->(){facade}
-facade->repeat(Y,5){tiles}
+side->subDiv(Y,4,1r){left|right}
 END
 //After END no line will be evaluated!
 
 Stuff Todo: 
 SUBDIV translations
 RENAME epsilon -> .inactive does not work
-REPEAT infinit loop ?? 
+REPEAT infinit loop ??
+SUBDIV does not take parameters (absolute, relative, absolute)... does it only take 2 parameters?? 
