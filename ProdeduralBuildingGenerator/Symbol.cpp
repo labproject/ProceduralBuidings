@@ -219,8 +219,8 @@
 		*/
 		
 		int i = 1;							// use as count the number of new crated symbols
-		vector<double> scale_p( 3, 1 );		// creat a parameter shows the new symbols scale vector
-		scale_p[dim] = size / scale[dim];
+		vector<double> scale_p( scale );		// creat a parameter shows the new symbols scale vector
+		scale_p[dim] = size;
 
 		while ( size * i < scale[dim] )
 		{
@@ -239,10 +239,11 @@
 		}
 
 		// consider about the remaining part
-		i --;
-		if ( size * i < scale[dim] )
+		
+		if ( size * i > scale[dim] )
 		{
-			scale_p[dim] = ( scale[dim]- i * size ) / scale[dim];
+			i --;
+			scale_p[dim] = scale[dim]- i * size;
 			Symbol deriv_Element( position, scale_p, "remaind");
 			vector<double> trans_p ( 3, 0 );
 			trans_p[dim] = size * ( i );
