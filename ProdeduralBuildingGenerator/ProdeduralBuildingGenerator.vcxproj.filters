@@ -36,6 +36,9 @@
     <ClCompile Include="Modeling.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
+    <ClCompile Include="Global.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GNode.h">
@@ -56,10 +59,25 @@
     <ClInclude Include="Integration.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
+    <ClInclude Include="Global.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Config.txt">
+      <Filter>Ressourcendateien</Filter>
+    </None>
+    <None Include="Office Building.txt">
+      <Filter>Ressourcendateien</Filter>
+    </None>
+    <None Include="Simple Building.txt">
+      <Filter>Ressourcendateien</Filter>
+    </None>
     <None Include="freeglut.dll">
-      <Filter>Quelldateien</Filter>
+      <Filter>Ressourcendateien</Filter>
+    </None>
+    <None Include="testing.txt">
+      <Filter>Ressourcendateien</Filter>
     </None>
   </ItemGroup>
 </Project>

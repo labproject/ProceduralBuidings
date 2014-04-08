@@ -80,6 +80,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Global.cpp" />
     <ClCompile Include="GNode.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Modeling.cpp" />
@@ -89,6 +90,7 @@
     <ClCompile Include="integration.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Global.h" />
     <ClInclude Include="GNode.h" />
     <ClInclude Include="Modeling.h" />
     <ClInclude Include="Parsing.h" />
@@ -97,7 +99,11 @@
     <ClInclude Include="Visualization.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Config.txt" />
     <None Include="freeglut.dll" />
+    <None Include="Office Building.txt" />
+    <None Include="Simple Building.txt" />
+    <None Include="testing.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

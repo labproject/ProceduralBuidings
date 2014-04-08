@@ -131,6 +131,7 @@ GLint loadTextures()
 
 			prob4 = rand() % 8;
 
+<<<<<<< HEAD
 			
 	//Textures for Groundfloor
 
@@ -157,7 +158,9 @@ GLint loadTextures()
 
 
 			
-			cout << prob1 << prob2 << prob3 << prob4;
+=======
+//			cout << prob1 << prob2 << prob3 << prob4;
+>>>>>>> origin/master
 
  
     return true;                                        
@@ -722,7 +725,11 @@ void createMenu(){
 	glutAttachMenu(GLUT_RIGHT_BUTTON);
 }
 
-void visualization(int argc, char **argv){
+<<<<<<< HEAD
+void visualization(int argc, char **argv, tree<Symbol> Tree){
+=======
+void visualization(int argc, char **argv,tree<Symbol> devTree){
+>>>>>>> origin/master
 
 	cout<<"-----------------------"<<endl<<"VISUALIZATION"<<endl<<"-----------------------"<<endl<<endl<<endl;
 	tree<Symbol>::leaf_iterator leaf = Tree.begin_leaf();

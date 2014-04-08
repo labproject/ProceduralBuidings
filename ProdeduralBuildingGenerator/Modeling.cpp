@@ -1,5 +1,20 @@
 #include "Modeling.h"
 
+using namespace std;
+
+float random (float a, float b)
+{
+    float result;
+    float low = min(a,b);
+    float diff = abs(a-b);
+    float tmp;
+
+    srand(time(NULL));
+    tmp = rand()%10;
+    tmp = (tmp/10);
+    result = low+tmp*diff;
+    return result;
+}
 
 // 16.03.14_by Ruotong Li
 	/*--------------- Algorithms 1 -----------------*/ // turns out not right!! _by Li,Ruotong@19.03.2014
@@ -72,7 +87,8 @@ vector<Symbol> apply_rule ( Symbol &node_parent, GNode *rule )
 	// 2) compare the rule -> function with the function name and decide the function we will apply
 
 	// "Scale" => void Symbol::S(double x, double y, double z);
-	if ( rule -> function == "Scale" )
+
+	if ( rule -> function == "scale" )
 	{
 		vector< double > p;
 		for ( vector< pair< float, float > > :: iterator it = rule -> parameters.begin(); it != rule -> parameters.end(); it ++ )
@@ -86,11 +102,12 @@ vector<Symbol> apply_rule ( Symbol &node_parent, GNode *rule )
 			else
 				p.push_back ( ( it -> first ) * ( it -> second ) );
 		}
-		node_parent.S ( p[0], p[1], p[2]);
+		node_child.push_back ( node_parent.S ( p[0], p[1], p[2], rule -> symbolNames[0]));
+		
 	} // no return value
 
 	// "Trans" => void Symbol::T(double x, double y, double z);
-	else if ( rule -> function == "Trans" )
+	else if ( rule -> function == "trans" )
 	{
 		vector< double > p;
 		for ( vector< pair< float, float > > :: iterator it = rule -> parameters.begin(); it != rule -> parameters.end(); it ++ )
@@ -104,19 +121,20 @@ vector<Symbol> apply_rule ( Symbol &node_parent, GNode *rule )
 			else
 				p.push_back ( ( it -> first ) * ( it -> second ) );
 		}
-		node_parent.T ( p[0], p[1], p[2]);
+		node_child.push_back ( node_parent.T ( p[0], p[1], p[2], rule -> symbolNames[0]) );
+		
 	}	// no return value
 
 	//	"Rotate" => not valid at the moment
 
 	//	"Rename" => rename ( string symbolName ); // if name = "epsilon", then active = 0; else change the name
-	else if ( rule -> function == "Rename" )
+	else if ( rule -> function == "rename" )
 	{
-		node_parent.rename ( rule -> symbolNames[0] );
+		node_child = node_parent.rename ( rule -> symbolNames[0] );
 	}
 
 	//	"Subdiv" => vector<Symbol>Symbol::subDiv( int d, vector<double>&splits, vector<string> &symbols);	// 0-x, 1-y, 2-z; splits are absolute value
-	else if ( rule -> function == "Subdiv" )
+	else if ( rule -> function == "subDiv" )
 	{
 		vector< pair< float, float > > :: iterator it = rule -> parameters.begin();
 		int d;					// parameter shows the cordinate we Subdiv along
@@ -134,17 +152,17 @@ vector<Symbol> apply_rule ( Symbol &node_parent, GNode *rule )
 			if ( it -> first == -1 )		
 			{
 				splits.push_back ( node_parent.scale[0] * ( it -> second ) );
-				sum_absolute += *splits.end();
+				sum_absolute += * (splits.end() - 1);
 			}
 			else if ( it -> first == -2 )
 			{
 				splits.push_back ( node_parent.scale[1] * ( it -> second ) );
-				sum_absolute += *splits.end();
+				sum_absolute += * (splits.end() - 1);
 			}
 			else if ( it -> first == -3 )
 			{
 				splits.push_back ( node_parent.scale[2] * ( it -> second ) );
-				sum_absolute += *splits.end();
+				sum_absolute += * (splits.end() - 1);
 			}
 			else if ( it -> first == -4 )
 			{
@@ -155,25 +173,27 @@ vector<Symbol> apply_rule ( Symbol &node_parent, GNode *rule )
 			else
 			{
 				splits.push_back ( ( it -> first ) * ( it -> second ) );
-				sum_absolute += *splits.end();
+				sum_absolute += * ( splits.end() -1);
 			}
 			i ++;
+			it ++;
 		}
 		double r = ( node_parent.scale[d] - sum_absolute ) / r_count;
 		for ( int it = 0; it < idx.size(); it ++)
-			splits [ idx[i] ] *= r;
+			splits [ idx[it] ] *= r;
 
 		node_child = node_parent.subDiv ( d, splits, rule -> symbolNames );
+		
 	}
 
 	//	"Component_split" => vector<Symbol>Symbol::comp( vector<string> symbols);	// s gives us the name of the new Symbol
-	else if ( rule -> function == "Component_split" )
+	else if ( rule -> function == "comp" )
 	{
 		node_child = node_parent.comp ( rule -> symbolNames );
 	}
 	
 	//	"Repeat" => vector<Symbol>Symbol::repeat( int dim, double size, string symbol);	// 0-x, 1-y, 2-z;
-	else if ( rule -> function == "Repeat" )
+	else if ( rule -> function == "repeat" )
 	{
 		// take the parameters and symbol_IDs of the result
 		vector< pair< float, float > > :: iterator it = rule -> parameters.begin();
@@ -193,6 +213,7 @@ vector<Symbol> apply_rule ( Symbol &node_parent, GNode *rule )
 
 		// pass parameter to the Symbol functions
 		node_child = node_parent.repeat ( d, size, name );
+		
 	}
 
 	//	"Occlusion" => 
@@ -200,7 +221,19 @@ vector<Symbol> apply_rule ( Symbol &node_parent, GNode *rule )
 	return node_child;
 }
 
-tree <Symbol> modeling ( Symbol &S, vector< pair < string, vector<GNode>> > grammar )
+void show_tree ( tree<Symbol> T )
+{
+	for ( tree<Symbol> :: iterator it_of_tree = T.begin(); it_of_tree != T.end(); it_of_tree ++ )
+	{
+		cout << it_of_tree -> name ;
+		cout << "	P:(" << it_of_tree -> position[0] << ", "<< it_of_tree -> position[1] << ", " << it_of_tree -> position[2] << ") ";
+		cout << "	S:(" << it_of_tree -> scale[0] << ", " << it_of_tree -> scale[1] << ", " << it_of_tree -> scale[0] << ") ";
+		cout << endl;
+	}
+
+}
+
+tree <Symbol> modeling ( vector< pair < string, vector<GNode>> > grammar )
 	// Symbol S is the first symbol we start our modelling.
 	//  map< string symbol_ID, vector<Gnode> rule_set > is the datastructure got from Parsing =======> is no longer used! _by Li,Ruotong @ 19.03.2014
 	// !!!@19.03.2014 New datastructure: vector< pair < string symbol_ID, vector<Gnode> rule_set> >
@@ -215,6 +248,9 @@ tree <Symbol> modeling ( Symbol &S, vector< pair < string, vector<GNode>> > gram
 	tree<Symbol> derivTree;			// create the tree
 	tree<Symbol>::iterator top;		// the root iterator
 
+	// initialize the start symbol S  
+	Symbol S( 0.0, 0.0, 0.0, 1.0, 1.0, 1.0, "start");		// initialize the start symbol 
+
 	derivTree.insert(top, S);		// push S into the tree as initialize
 
 	// 1) take the pair one by one to apply rules on the symbol 
@@ -223,22 +259,22 @@ tree <Symbol> modeling ( Symbol &S, vector< pair < string, vector<GNode>> > gram
 		vector<Symbol> child_Symbol;
 
 		// 2) go through the nTree and mark all the symbols with the symbol_ID same as the Symbol, put them into vector<Symbol> temp_Symbol
-		vector<Symbol> temp_Symbol;		
+		vector< tree<Symbol> :: iterator > temp_Symbol;		
 		for ( tree<Symbol> :: iterator it = derivTree.begin(); it != derivTree.end(); it ++)
 		{
-			if ( it -> name == g_it -> first )
-				temp_Symbol.push_back( *it );
+			if ( it -> name == g_it -> first && it -> active )
+				temp_Symbol.push_back( it );
 			else
 				continue;
 		}
 		
 		//3) for each Symbol in the temp_Symbol, create a random number and decided which rule to take from the vector<GNode> rules.
 		vector<GNode>::iterator temp_GNode = g_it -> second.begin();
-		for ( vector<Symbol> :: iterator it = temp_Symbol.begin(); it != temp_Symbol.end(); it++)
+		for ( vector< tree<Symbol> :: iterator > :: iterator it = temp_Symbol.begin(); it != temp_Symbol.end(); it++) 
+			// "it" is the iterator of the temp_Symbol which is a vector of the Symbols we need to apply rules.
 		{
-			double rand = 1.0;
+			float rand = random( 0.0, 1.0 );
 			double probability = 0.0;
-			// add the random here
 
 			while ( rand <= probability ) 
 			{
@@ -246,17 +282,26 @@ tree <Symbol> modeling ( Symbol &S, vector< pair < string, vector<GNode>> > gram
 				temp_GNode ++;
 			}
 			//4) apply rule on the symbol by implement the function: vector< Symbol > apply_rule ( Symbol temp_Symbol, GNode rule );
-			GNode G = *temp_GNode;
-			child_Symbol = apply_rule ( *it, &G );
+			GNode G = *temp_GNode;					// G denote the temp rule we want apply on the Symbol S
+			tree< Symbol >::iterator p_it = *it;	// S_p_it denote the loation of the tree parent
+			//Symbol temp_parent = *p_it;			
+			
+			child_Symbol = apply_rule ( *p_it, &G );	// child_Symbol is the result for each parent node.
+			p_it -> active = false;
 	
 			//5) put the new created Symbol into the nTree, if there's no new Symbol( apply S, T, rename..) then keep the tree same.
 			for ( vector<Symbol> :: iterator c_it = child_Symbol.begin(); c_it != child_Symbol.end(); c_it ++)
 			{
-			//	derivTree.append_child ( it, *c_it );
+				if ( c_it -> name != "epsilon" )
+					derivTree.append_child ( p_it, *c_it );
+				else
+					c_it -> active = false;
 			}
 
 		}		
 	}
+
+	show_tree ( derivTree );
 
 	return derivTree;
 }
