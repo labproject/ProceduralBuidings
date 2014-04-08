@@ -167,7 +167,7 @@
 		// 2) splict top
 		Symbol deriv_Element_02( position, scale, symbols[i]);	// create new symbol
 		deriv_Element_02 = deriv_Element_02.S ( 1.0, 0.0, 1.0, symbols[i]);										// remove the Y dimention
-		deriv_Element_02 = deriv_Element_02.T ( 0.0, position[1], 0.0, symbols[i]);							// tanslate it to the right position
+		deriv_Element_02 = deriv_Element_02.T ( 0.0, scale[1], 0.0, symbols[i]);							// tanslate it to the right position
 		derivatives.push_back (deriv_Element_02);							// push_back
 		i++;
 
@@ -180,14 +180,14 @@
 		// 4) splict side_face_1 YZ at right
 		Symbol deriv_Element_04( position, scale, symbols[i]);	// create new symbol
 		deriv_Element_04 = deriv_Element_04.S ( 0.0, 1.0, 1.0, symbols[i]);										// remove the Y dimention
-		deriv_Element_04 = deriv_Element_04.T ( position[0], 0.0, 0.0, symbols[i]);							// tanslate it to the right position
+		deriv_Element_04 = deriv_Element_04.T ( scale[0], 0.0, 0.0, symbols[i]);							// tanslate it to the right position
 		derivatives.push_back (deriv_Element_04);							// push_back
 		i++;
 
 		// 5) splict side_face_3 XY at back
 		Symbol deriv_Element_05( position, scale, symbols[i]);	// create new symbol
 		deriv_Element_05 = deriv_Element_05.S ( 1.0, 1.0, 0.0, symbols[i]);										// remove the Y dimention
-		deriv_Element_05 = deriv_Element_05.T ( 0.0, 0.0, position[2], symbols[i]);							// tanslate it to the right position
+		deriv_Element_05 = deriv_Element_05.T ( 0.0, 0.0, scale[2], symbols[i]);							// tanslate it to the right position
 		derivatives.push_back (deriv_Element_05);							// push_back
 		i++;
 
@@ -218,6 +218,7 @@
 
 		while ( size * i < scale[dim] )
 		{
+			cout<<i<<endl;
 			// 1) create new symbol ( repeat element )
 			Symbol deriv_Element( position, scale_p, symbol);	
 			

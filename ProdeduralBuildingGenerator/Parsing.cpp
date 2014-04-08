@@ -34,10 +34,9 @@ vector<pair<string,vector<GNode>>> parsing()
 	ifstream infile;			
 	infile.open("testing.txt");         
 	while(!infile.eof()){
-		while(getline(infile,line)){			//post Line in line
-			//THE FUN STARTS HERE!
-			split(line);						//Splint Line into Commands
-			//THAT WAS IT.. :)
+		while(getline(infile,line)){					//post Line in line
+			if(line.find("END")!=line.npos){break;}		//Break reading file if END is found
+			split(line);								//Splint Line into Commands
 		}
 		infile.close();
 		break;
@@ -98,6 +97,8 @@ void split(string str)
 	//RETURN IF COMMENTED OR EMPTY LINES ARE FOUND
 	if (str.find("//")!=str.npos)return;
 	else if(str=="")return;
+	else if(str.find("END")!=str.npos)return;
+
 	
 	//DECLARE VARIABLES FOR SEGMENTATION OF THE STRING
 	int pos = 0;

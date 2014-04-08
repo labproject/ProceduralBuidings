@@ -1,6 +1,7 @@
 #ifndef __SYMBOL_H_INCLUDED__
 #define __SYMBOL_H_INCLUDED__
 
+#include <iostream>
 #include <vector>
 #include <string>
 

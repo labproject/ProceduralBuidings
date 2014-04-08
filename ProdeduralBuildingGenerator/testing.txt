@@ -3,5 +3,15 @@
 //Scale
 //Trans
 //Rename
-start->comp(){top|top|top|top|top|top}
-top->scale(5,5,5){}
+start->(){box}
+box->scale(building_width,building_height,building_depth){box2}
+box2->comp(){bottom|top|side|side|side|side}
+side->(){facade}
+facade->repeat(Y,5){tiles}
+END
+//After END no line will be evaluated!
+
+Stuff Todo: 
+SUBDIV translations
+RENAME epsilon -> .inactive does not work
+REPEAT infinit loop ?? 
