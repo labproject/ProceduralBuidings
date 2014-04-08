@@ -217,7 +217,8 @@ void display() {
 		if((*leaf).getName() == "green")
 			glColor3d(0,1,0);
 		if((*leaf).getName() == "yellow")
-			glColor3d(0,1,1);
+			glColor3d(1,1,0);
+	
 
 
 		//cout << node.name << endl;

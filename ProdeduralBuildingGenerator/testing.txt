@@ -5,8 +5,8 @@
 //Rename
 start->(){complex}
 complex->scale(5,10,5){shape}
-shape->subDiv(Z,Scope.sz*rand[0.5-0.7],1r){left|right|}
-right->trans(2,0,0){right}
+//shape->subDiv(Z,Scope.sz*rand[0.5-0.7],1r){red|green|}
+//shape->subDiv(Y,1,2,3,4){red|green|blue|side}
 END
 //After END no line will be evaluated!
 
