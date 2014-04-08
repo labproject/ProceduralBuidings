@@ -1,12 +1,8 @@
 //PRIORITY 1
-//WORKS:
-//Scale
-//Trans
-//Rename
-start->(){complex}
-complex->scale(5,10,5){shape}
-//shape->subDiv(Z,Scope.sz*rand[0.5-0.7],1r){red|green|}
-//shape->subDiv(Y,1,2,3,4){red|green|blue|side}
+start->scale(building_width,building_height,building_depth){box}
+box->subDiv(X,1r,Scope.sx*rand[0.3-0.6]){facades|sidewings}
+sidewings->subDiv(Z,1r,Scope.sz*rand[0.4-0.7]){sidewing|epsilon}
+sidewing->scale(1,Scope.sy*rand[0.2-1.2],1){sidewing}
 END
 //After END no line will be evaluated!
 
@@ -14,4 +10,3 @@ Stuff Todo:
 SUBDIV translations
 RENAME epsilon -> .inactive does not work
 REPEAT infinit loop ??
-SUBDIV does not take parameters (absolute, relative, absolute)... does it only take 2 parameters?? 
