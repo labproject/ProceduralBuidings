@@ -109,7 +109,7 @@
 	vector<Symbol>Symbol::subDiv( int d, vector<double>&splits, vector<string> &symbols) // 0-x, 1-y, 2-z; splits are absolute value
 	{
 		vector<Symbol> derivatives;
-
+		double p_of_newSymbol = 0;
 		// 14.03.14_by Ruotong Li
 		/*--------------- Algorithms -----------------*/
 		/* 
@@ -122,7 +122,8 @@
 		for ( unsigned int i = 0; i < splits.size(); i++)
 		{
 			// create new symbol
-			// Symbol *deriv_Element = new Symbol( position, scale, symbols[i]);	
+			// Symbol *deriv_Element = new Symbol( position, scale, symbols[i]);
+			position[d] = p_of_newSymbol;
 			Symbol deriv_Element( position, scale, symbols[i]);	
 
 			// scale
@@ -130,18 +131,15 @@
 			scale_p[d] = splits[i] / scale[d];			// calculate the scale parameter
 			deriv_Element = deriv_Element.S ( scale_p[0], scale_p[1], scale_p[2], symbols[i]);	// call the S function do calculation
 			
+			p_of_newSymbol += splits[i];
 			// translation
+			/*
 			vector<double> trans_p (3, 0.0);				// create a vector to store the translation parameter
 			if ( i == 0 );
 			else 
-				trans_p [d] += splits[i];
-			/*
-				{
-					for ( int j = 0; j < i - 1 ; j ++)				// calculate the position of the new symbol
-						trans_p [d] += splits[i];
-				}
-				*/
+				trans_p [d] += splits[i];					// calculate the position of the new symbol
 			deriv_Element = deriv_Element.T (trans_p[0], trans_p[1], trans_p[2], symbols[i]);	// Translate the new symbol
+			*/
 
 			// push_back
 			derivatives.push_back ( deriv_Element);
