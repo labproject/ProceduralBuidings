@@ -1,6 +1,27 @@
 //PRIORITY 1
-start->scale(10,building_height,10){box}
-box->subDiv(Z,Scope.sz*rand[0.3-0.5],1r){facades|sidewings}
-sidewings->subDiv(X,Scope.sx*rand[0.2-0.6],1r){sidewing|epsilon}
-sidewing->scale(1,1.5,1){facades}:0.3->scale(1,0.0,1){facades}:0.7
-facades->comp(){red|blue|yellow|facade|red|front}
+start->scale(building_width,building_height*rand[0.0-3.0],building_depth){complex}
+complex->subDiv(Z,Scope.sz*rand[0.5-0.6],1r){facades|sidewings}
+sidewings->subDiv(X,1r,Scope.sx*rand[0.2-0.4],1r){sidewing1|epsilon|sidewing2}
+sidewing1->scale(1,Scope.sy*rand[0.5-1.5],Scope.sz*rand[0.2-1.0]){sidewing}
+sidewing2->scale(1,Scope.sy*rand[0.4-1-2],Scope.sz*rand[1.0-1.5]){sidewing}:0.5->(){epsilon}
+sidewing->comp(){bottom|roof|windowSide|windowSide|side|side}
+facades->comp(){bottom|roof|front|side|back|side}
+//PRIORITY 2
+front->subDiv(Y,3,1r,1){groundlevel|floors|topfloor}
+floors->repeat(Y,3){floor}
+floor->subDiv(Y,1r,20r,1r){strip|tile|strip}
+tile->subDiv(Y,1r,2r){strip|windowTile}
+windowTile->subDiv(X,1,1r,1){strip|panel|strip}
+panel->subDiv(X,1r,1,1r,1,1r){window|strip|window|strip|window}
+window->trans(0,0,0.2){floor}
+groundlevel->subDiv(X,1r,3,1r){groundfloor|floor|groundfloor}
+//PRIORITY 3
+strip->(){side}
+END
+
+
+TODO:
+Repeat-> REMAINDER! 
+
+
+

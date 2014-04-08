@@ -15,8 +15,8 @@ door_height=2.3
 //
 entrance_width=5
 //
-building_width=5
-building_height=8
-building_depth=5
+building_width=10
+building_height=20
+building_depth=15
 
 

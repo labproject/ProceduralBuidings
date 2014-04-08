@@ -109,7 +109,7 @@
 	vector<Symbol>Symbol::subDiv( int d, vector<double>&splits, vector<string> &symbols) // 0-x, 1-y, 2-z; splits are absolute value
 	{
 		vector<Symbol> derivatives;
-		double p_of_newSymbol = 0;
+		double p_of_newSymbol = position[d];
 		// 14.03.14_by Ruotong Li
 		/*--------------- Algorithms -----------------*/
 		/* 
