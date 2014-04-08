@@ -91,16 +91,18 @@ vector<Symbol> apply_rule ( Symbol &node_parent, GNode *rule )
 	if ( rule -> function == "scale" )
 	{
 		vector< double > p;
+		int dim = 0;
 		for ( vector< pair< float, float > > :: iterator it = rule -> parameters.begin(); it != rule -> parameters.end(); it ++ )
 		{
 			if ( it -> first == -1 )			// convert the dimention keyword from {-1,-2,-3} to {0,1,2}
-				p.push_back ( node_parent.scale[0] * ( it -> second ) );
+				p.push_back ( node_parent.scale[0] * ( it -> second ) / node_parent.scale[dim] );
 			else if ( it -> first == -2 )
-				p.push_back ( node_parent.scale[1] * ( it -> second ) );
+				p.push_back ( node_parent.scale[1] * ( it -> second ) / node_parent.scale[dim] );
 			else if ( it -> first == -3 )
-				p.push_back ( node_parent.scale[2] * ( it -> second ) );
+				p.push_back ( node_parent.scale[2] * ( it -> second ) / node_parent.scale[dim] );
 			else
 				p.push_back ( ( it -> first ) * ( it -> second ) );
+			dim ++;
 		}
 		node_child.push_back ( node_parent.S ( p[0], p[1], p[2], rule -> symbolNames[0]));
 		
