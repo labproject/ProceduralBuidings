@@ -175,12 +175,12 @@ vector<Symbol> apply_rule ( Symbol &node_parent, GNode *rule )
 				splits.push_back ( ( it -> first ) * ( it -> second ) );
 				sum_absolute += * ( splits.end() -1);
 			}
-			i ++;
+			i ++;		// index of the relative value
 			it ++;
 		}
 		double r = ( node_parent.scale[d] - sum_absolute ) / r_count;
-		for ( int it = 0; it < idx.size(); it ++)
-			splits [ idx[it] ] *= r;
+		for ( int it_of_idx = 0; it_of_idx < idx.size(); it_of_idx ++)
+			splits [ idx[ it_of_idx ] ] *= r;
 
 		node_child = node_parent.subDiv ( d, splits, rule -> symbolNames );
 		

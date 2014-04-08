@@ -131,8 +131,12 @@
 			
 			// translation
 			vector<double> trans_p (3, 0.0);				// create a vector to store the translation parameter
-			for ( int j = 0; j < i; j ++)				// calculate the position of the new symbol
-				trans_p [d] += splits[i];
+			if ( i == 0 );
+			else 
+				{
+					for ( int j = 0; j < i - 1 ; j ++)				// calculate the position of the new symbol
+						trans_p [d] += splits[i];
+				}
 			deriv_Element = deriv_Element.T (trans_p[0], trans_p[1], trans_p[2], symbols[i]);	// Translate the new symbol
 
 			// push_back
