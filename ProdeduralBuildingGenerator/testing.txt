@@ -3,13 +3,10 @@
 //Scale
 //Trans
 //Rename
-start->(){box}
-box->scale(5,10,5){box2}
-//box2->trans(1,5,1){trans}
-box2->comp(){bottom|top|side|side|side|side}
-side->subDiv(Y,2,1r,2){two|six|two}
-two->trans(10,0,0){two}
-
+start->(){complex}
+complex->scale(5,10,5){shape}
+shape->subDiv(Z,Scope.sz*rand[0.5-0.7],1r){left|right|}
+right->trans(2,0,0){right}
 END
 //After END no line will be evaluated!
 
