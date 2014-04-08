@@ -9,8 +9,9 @@ static GLfloat spin = 0.0, aspectRatio, n = 20.0f;
 GLuint cube, shape;
 //movement in scene:
 static GLdouble xRef = 0.0, yRef = -10.0, zRef = 0.0, zoom = 1.0, horizontal = 0.0, vertical = 0.0, angle = 0.0;
-GLuint	tex_wall[12], tex_window[10], tex_glass[10], tex_roof[10], tex_floor[10], tex_env[11], t_size = 10;
-int prob1, prob2, prob3, prob4, prob5;
+GLuint	tex_wall[12], tex_window[10], tex_glass[10], tex_roof[10], tex_floor[10], tex_groundfloor[10], tex_topfloor[10], tex_env[11];
+int prob1, prob2, prob3, prob4, prob5, prob6;
+int depth = 0;
 //Tree
 tree<Symbol> Tree;
 
@@ -128,9 +129,34 @@ GLint loadTextures()
 				if (tex_roof[i] == 0 ) cout << "ERROR loading texture " << i << endl;
 			}
 
-			prob4 = rand() % 9;
+			prob4 = rand() % 8;
 
-			cout << prob1 << prob2 << prob3 << prob4;
+			
+	//Textures for Groundfloor
+
+			for(int i = 0; i < 4; i++){
+				filename = "textures/groundfloor" + to_string(static_cast<long long>(i)) + ".jpg";
+				cout << "loading " << filename << endl;
+				tex_groundfloor[i] = SOIL_load_OGL_texture(filename.c_str(),SOIL_LOAD_AUTO,SOIL_CREATE_NEW_ID,SOIL_FLAG_INVERT_Y);
+				if (tex_groundfloor[i] == 0 ) cout << "ERROR loading texture " << i << endl;
+			}
+
+			prob5 = rand() % 4;
+
+	//Textures for topfloor
+
+			for(int i = 0; i < 7; i++){
+				filename = "textures/topfloor" + to_string(static_cast<long long>(i)) + ".jpg";
+				cout << "loading " << filename << endl;
+				tex_topfloor[i] = SOIL_load_OGL_texture(filename.c_str(),SOIL_LOAD_AUTO,SOIL_CREATE_NEW_ID,SOIL_FLAG_INVERT_Y);
+				if (tex_topfloor[i] == 0 ) cout << "ERROR loading texture " << i << endl;
+			}
+
+			prob6 = rand() % 7;
+
+
+
+			
 
  
     return true;                                        
@@ -183,13 +209,19 @@ void display() {
 		
 
 		//cout << node.name << endl;
-		if((*leaf).getName() == "front"){
+		if((*leaf).getName() == "front" || (*leaf).getName() == "floor"){
 			//glColor4d(1,0, 0, 0.9); 
 			glBindTexture(GL_TEXTURE_2D, tex_glass[prob3]);
-
 		}
-		else if((*leaf).getName() == "top")
-			glBindTexture(GL_TEXTURE_2D, tex_wall[prob4]);
+		else if ((*leaf).getName() == "groundfloor")
+			glBindTexture(GL_TEXTURE_2D, tex_groundfloor[prob5]);
+		else if ((*leaf).getName() == "topfloor")
+			glBindTexture(GL_TEXTURE_2D, tex_topfloor[prob6]);
+
+		else if((*leaf).getName() == "top"){
+			//glColor4d(0.7,0, 0, 0.9); 
+			glBindTexture(GL_TEXTURE_2D, tex_roof[prob4]);
+		}
 		else if ((*leaf).getName() == "side"){
 			
 			glBindTexture(GL_TEXTURE_2D, tex_wall[prob5]);
@@ -350,6 +382,39 @@ void initTestTree(){
 
 	Symbol *front = new Symbol(pos,scale, "front");
 
+	pos[0] = 0; 
+	pos[1] = 0; 
+	pos[2] = 0;
+	
+	scale[0] = 10;
+	scale[1] = 1;
+	scale[2] = 0;
+
+	Symbol *groundfloor = new Symbol(pos,scale, "groundfloor");
+
+
+	pos[0] = 0; 
+	pos[1] = 1; 
+	pos[2] = 0;
+	
+	scale[0] = 10;
+	scale[1] = 8;
+	scale[2] = 0;
+
+	Symbol *floor = new Symbol(pos,scale, "floor");
+
+	pos[0] = 0; 
+	pos[1] = 9; 
+	pos[2] = 0;
+	
+	scale[0] = 10;
+	scale[1] = 1;
+	scale[2] = 0;
+
+	Symbol *topfloor = new Symbol(pos,scale, "topfloor");
+
+
+
 	pos[0] = 10; 
 	pos[1] = 0; 
 	pos[2] = 0;
@@ -475,13 +540,16 @@ void initTestTree(){
 	Symbol *sidewback1 = new Symbol(pos,scale, "back");
 
 	tree<Symbol> derivTree;
-	tree<Symbol>::iterator root, one, two, three;
+	tree<Symbol>::iterator root, one, two, three, street;
 
 	root = derivTree.begin();
 
 	one = derivTree.insert(root, *start);
 		two = derivTree.append_child(one, *facade);
-			derivTree.append_child(two, *front);
+			street = derivTree.append_child(two, *front);
+				derivTree.append_child(street, *groundfloor);
+				derivTree.append_child(street, *floor);
+				derivTree.append_child(street, *topfloor);
 			derivTree.append_child(two, *side1);
 			derivTree.append_child(two, *side2);
 			derivTree.append_child(two, *top);
@@ -653,10 +721,17 @@ void createMenu(){
 	glutAttachMenu(GLUT_RIGHT_BUTTON);
 }
 
-void visualization(int argc, char **argv){
+void visualization(int argc, char **argv, tree<Symbol> Tree){
 
 	cout<<"-----------------------"<<endl<<"VISUALIZATION"<<endl<<"-----------------------"<<endl<<endl<<endl;
+	tree<Symbol>::leaf_iterator leaf = Tree.begin_leaf();
 
+	cout << "leaf nodes: " << endl;
+	while (leaf != Tree.end_leaf()){
+		//if(leaf != derivTree.begin())
+			cout << "			" << (*leaf).getName() << endl;
+		leaf++;
+	}
 
 	glutInit(&argc, argv); // Initialize GLUT
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH); 

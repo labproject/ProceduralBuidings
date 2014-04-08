@@ -25,7 +25,7 @@ GLvoid keyboard( GLubyte key, GLint x, GLint y );
 GLvoid specialkeys( GLint key, GLint x, GLint y );
 GLvoid mousewheel(GLint wheel, GLint direction, GLint x, GLint y);
 GLvoid mouse(GLint button, GLint state, GLint x, GLint y);
-void visualization(int argc, char **argv);
+void visualization(int argc, char **argv, tree<Symbol>);
 
 
 
