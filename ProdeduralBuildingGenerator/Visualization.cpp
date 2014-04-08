@@ -212,13 +212,15 @@ void display() {
 
 		if((*leaf).getName() == "red")
 			glColor3d(1,0,0);
-		if((*leaf).getName() == "blue")
+		else if((*leaf).getName() == "blue")
 			glColor3d(0,0,1);
-		if((*leaf).getName() == "green")
+		else if((*leaf).getName() == "green")
 			glColor3d(0,1,0);
-		if((*leaf).getName() == "yellow")
+		else if((*leaf).getName() == "yellow")
 			glColor3d(1,1,0);
-	
+		else {
+			glColor3d(1,1,1);
+		}
 
 
 		//cout << node.name << endl;
