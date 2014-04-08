@@ -5,15 +5,13 @@
 #include	<iostream>
 #include	<string>
 #include	"Symbol.h"
-#include	"ntree.hpp"
+#include	"Global.h"
 #include	"GNode.h"
 #include	"tree.hh"
 #include	<time.h>
 #include	<stdio.h>
 #include	<stdlib.h>
 #include	<Windows.h>
-
-
 
 using namespace std;
 
@@ -24,3 +22,4 @@ vector<Symbol> apply_rule ( Symbol &, GNode *);
 
 //please do not write below this comment, thanks
 #endif
+

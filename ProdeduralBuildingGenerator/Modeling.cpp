@@ -226,10 +226,11 @@ void show_tree ( tree<Symbol> T )
 {
 	for ( tree<Symbol> :: iterator it_of_tree = T.begin(); it_of_tree != T.end(); it_of_tree ++ )
 	{
-		cout << it_of_tree -> name ;
-		cout << "	P:(" << it_of_tree -> position[0] << ", "<< it_of_tree -> position[1] << ", " << it_of_tree -> position[2] << ") ";
-		cout << "	S:(" << it_of_tree -> scale[0] << ", " << it_of_tree -> scale[1] << ", " << it_of_tree -> scale[0] << ") ";
-		cout << "	active: " << it_of_tree -> active << "	drawable: " << it_of_tree -> drawable;
+		drawRed( it_of_tree -> name);
+		cout<<endl;
+		cout << "	P:(" << it_of_tree -> position[0] << ", "<< it_of_tree -> position[1] << ", " << it_of_tree -> position[2] << ") "<<endl;
+		cout << "	S:(" << it_of_tree -> scale[0] << ", " << it_of_tree -> scale[1] << ", " << it_of_tree -> scale[0] << ") "<<endl;
+		cout << "	active: " << it_of_tree -> active <<endl<< "	drawable: " << it_of_tree -> drawable<<endl;
 		cout << endl;
 	}
 
