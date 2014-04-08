@@ -199,6 +199,7 @@ vector<Symbol> apply_rule ( Symbol &node_parent, GNode *rule )
 		vector< pair< float, float > > :: iterator it = rule -> parameters.begin();
 		int d = ( it -> first ) * ( -1 ) - 1; // convert the dimention keyword from {-1,-2,-3} to {0,1,2}
 		
+		it ++;
 		double size;
 		if ( it -> first == -1 )			// convert the dimention keyword from {-1,-2,-3} to {0,1,2}
 			size = node_parent.scale[0] * ( it -> second );
