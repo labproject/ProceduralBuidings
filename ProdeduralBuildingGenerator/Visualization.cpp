@@ -136,7 +136,7 @@ GLint loadTextures()
 
 			for(int i = 0; i < 4; i++){
 				filename = "textures/groundfloor" + to_string(static_cast<long long>(i)) + ".jpg";
-				cout << "loading " << filename << endl;
+				//cout << "loading " << filename << endl;
 				tex_groundfloor[i] = SOIL_load_OGL_texture(filename.c_str(),SOIL_LOAD_AUTO,SOIL_CREATE_NEW_ID,SOIL_FLAG_INVERT_Y);
 				if (tex_groundfloor[i] == 0 ) cout << "ERROR loading texture " << i << endl;
 			}
@@ -147,7 +147,7 @@ GLint loadTextures()
 
 			for(int i = 0; i < 7; i++){
 				filename = "textures/topfloor" + to_string(static_cast<long long>(i)) + ".jpg";
-				cout << "loading " << filename << endl;
+				//cout << "loading " << filename << endl;
 				tex_topfloor[i] = SOIL_load_OGL_texture(filename.c_str(),SOIL_LOAD_AUTO,SOIL_CREATE_NEW_ID,SOIL_FLAG_INVERT_Y);
 				if (tex_topfloor[i] == 0 ) cout << "ERROR loading texture " << i << endl;
 			}
@@ -157,7 +157,7 @@ GLint loadTextures()
 
 
 			
-			cout << prob1 << prob2 << prob3 << prob4;
+			//cout << prob1 << prob2 << prob3 << prob4;
 
  
     return true;                                        
@@ -722,17 +722,11 @@ void createMenu(){
 	glutAttachMenu(GLUT_RIGHT_BUTTON);
 }
 
-void visualization(int argc, char **argv){
+void visualization(int argc, char **argv, tree<Symbol> devTree){
 
 	cout<<"-----------------------"<<endl<<"VISUALIZATION"<<endl<<"-----------------------"<<endl<<endl<<endl;
 	tree<Symbol>::leaf_iterator leaf = Tree.begin_leaf();
 
-	cout << "leaf nodes: " << endl;
-	while (leaf != Tree.end_leaf()){
-		//if(leaf != derivTree.begin())
-			cout << "			" << (*leaf).getName() << endl;
-		leaf++;
-	}
 
 	glutInit(&argc, argv); // Initialize GLUT
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH); 
