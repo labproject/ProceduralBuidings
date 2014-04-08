@@ -1,4 +1,4 @@
-//config
+//config.txt
 groundFloor_height=7
 topFloor_height=7
 floor_height=6
@@ -15,8 +15,8 @@ door_height=2.3
 //
 entrance_width=5
 //
-building_width=10
-building_height=4
-building_depth=6
+building_width=60
+building_height=120
+building_depth=80
 
 

@@ -4,9 +4,10 @@
 //Trans
 //Rename
 start->(){box}
-box->scale(5,5,5){box2}
-box2->comp(){bottom|top|side|side|side|side}
-side->subDiv(Y,4,1r){left|right}
+box->scale(5,building_height,5){box2}
+box2->trans(1,5,1){trans}
+trans->comp(){bottom|top|side|side|side|side}
+//side->subDiv(Y,1,1r){left|right}
 END
 //After END no line will be evaluated!
 
