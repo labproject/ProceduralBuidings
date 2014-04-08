@@ -1,8 +1,8 @@
 //PRIORITY 1
 start->scale(building_width,building_height,building_depth){box}
 box->subDiv(X,1r,Scope.sx*rand[0.3-0.6]){facades|sidewings}
-sidewings->subDiv(Z,1r,Scope.sz*rand[0.4-0.7]){sidewing|epsilon}
-sidewing->scale(1,Scope.sy*rand[0.2-1.2],1){sidewing}
+sdws->subDiv(Z,1r,Scope.sz*rand[0.4-0.7]){sidewing|epsilon}
+sdw->scale(1,Scope.sy*rand[0.2-1.2],1){sidewing}
 END
 //After END no line will be evaluated!
 
@@ -10,3 +10,19 @@ Stuff Todo:
 SUBDIV translations
 RENAME epsilon -> .inactive does not work
 REPEAT infinit loop ??
+
+Sehr geehrte Frau .....,
+heute morgen habe ich bemerkt, dass der Abfluss meiner Dusche verstopft ist.
+Können Sie mir helfen, oder jemanden schicken, der sich darum kümmern kann? 
+
+Mit freundlichen Grüßen
+Ruotong Li
+Zimmer: 
+
+Dear mrs. ....
+this morning i realised that the suer of my shower is "verstofpt".
+Could you help me, or send somebody who can take care of this?
+
+Kind regards,
+Ruotong Li
+Room nr: 
