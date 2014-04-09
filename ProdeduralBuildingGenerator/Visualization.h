@@ -9,6 +9,7 @@
 #include <GL/freeglut.h>
 #include "SOIL.h"
 #include "tree.hh"
+#include "Global.h"
 using namespace std;
 
 

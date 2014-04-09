@@ -1,5 +1,5 @@
 //PRIORITY 1
-start->scale(building_width,building_height*rand[0.0-3.0],building_depth){complex}
+start->scale(building_width,building_height*rand[0.3-1.5],building_depth){complex}
 complex->subDiv(Z,Scope.sz*rand[0.5-0.6],1r){facades|sidewings}
 sidewings->subDiv(X,1r,Scope.sx*rand[0.2-0.4],1r){sidewing1|epsilon|sidewing2}
 sidewing1->scale(1,Scope.sy*rand[0.5-1.5],Scope.sz*rand[0.2-1.0]){sidewing}

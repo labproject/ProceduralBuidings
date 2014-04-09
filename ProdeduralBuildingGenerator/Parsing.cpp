@@ -1,7 +1,7 @@
 #include "Parsing.h"
 
 
-static map<string,float> config;
+
 vector<pair<string,vector<GNode>>> ruleSet;
 
 /*

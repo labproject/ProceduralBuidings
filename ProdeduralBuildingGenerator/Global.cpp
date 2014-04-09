@@ -1,7 +1,6 @@
 #include "Global.h"
 
 using namespace std;
-
 float rand(float a, float b)
 {
 	float result;

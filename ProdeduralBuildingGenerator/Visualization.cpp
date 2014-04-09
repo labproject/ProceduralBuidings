@@ -749,7 +749,8 @@ void visualization(int argc, char **argv, tree<Symbol> devTree){
 
 
 	glutInit(&argc, argv); // Initialize GLUT
-	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH); 
+	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH | GLUT_MULTISAMPLE);
+	glEnable(GLUT_MULTISAMPLE);
 	glutInitWindowSize(800, 600); // Set the width and height of the window
 	glutInitWindowPosition(100, 100); // Set the position of the window
 	glutCreateWindow("Buildings"); // Set the title for the window
