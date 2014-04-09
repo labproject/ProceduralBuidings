@@ -12,9 +12,12 @@
 
 using namespace std;
 
+//VARIABLES
+static map<string,float> config;
+
+//FUNCTIONS
 float rand(float,float);
 void drawRed(string);
-static map<string,float> config;
 
 //please do not write below this comment, thanks
 #endif

@@ -224,7 +224,6 @@
 
 		while ( size * i < scale[dim] )
 		{
-			cout<<i<<endl;
 			// 1) create new symbol ( repeat element )
 			Symbol deriv_Element( position, scale_p, symbol);	
 			

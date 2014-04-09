@@ -306,7 +306,7 @@ tree <Symbol> modeling ( vector< pair < string, vector<GNode>> > grammar )
 		}		
 	}
 
-	show_tree ( derivTree );
+	//show_tree ( derivTree );
 
 	return derivTree;
 }

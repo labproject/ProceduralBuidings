@@ -17,6 +17,7 @@ vector<pair<string,vector<GNode>>> parsing()
 {
 	cout<<"-----------------------"<<endl<<"PARSING"<<endl<<"-----------------------"<<endl<<endl<<endl;
 	
+	
 	//Read Config File and save parameters to map<string,float>config;
 	string cLine;
 	ifstream cStream;
@@ -77,10 +78,10 @@ void readConfig(string str)
 	int pos = str.find("=");
 	string ID = str.substr(0,pos);
 	str.erase(0,pos+1);
-	//convert string to float
+		//convert string to float
 	string num = str;
 	float val = (float)atof(num.c_str());
-	//Save in Global congig map<string,float>
+		//Save in Global congig map<string,float>
 	config.insert(pair<string,float>(ID,val));
 }
 

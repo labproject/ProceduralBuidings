@@ -12,12 +12,13 @@
 
 using namespace std;
 
-
+//VARIABLES
 vector<pair<string,vector<GNode>>> parsing();
+
+//FUNCTIONS
 void readConfig(string);
 void split(string);
 void writeGNode(string,vector<string>,vector<string>,vector<string>,vector<string>);
-
 
 float proceedPROB(string);
 float interpret(string);
