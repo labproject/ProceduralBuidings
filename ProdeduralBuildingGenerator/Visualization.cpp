@@ -5,7 +5,7 @@
 #define TEXTURES 4
 
 bool start = false, boxes = true, facades = true, textures = true;
-static GLfloat spin = 0.0, aspectRatio, n = 20.0f;
+static GLfloat spin = 0.0, aspectRatio, n = 80.0f;
 GLuint cube, shape;
 //movement in scene:
 static GLdouble xRef = 0.0, yRef = -10.0, zRef = 0.0, zoom = 1.0, horizontal = 0.0, vertical = 0.0, angle = 0.0;
@@ -183,6 +183,7 @@ void display() {
 	//glScaled(zoom,zoom,zoom);
 	glTranslated(0,-10,0);
 	glRotated(angle,0,1,0);
+
 	//draw ground
 	GLfloat x = 2048.0f/512.0f;//test size
 	
@@ -206,57 +207,62 @@ void display() {
 
 	while (leaf != Tree.end_leaf()){
 
-		glPushMatrix();
-		
-		//coloooors red, blue, green, yellow
-
-		if((*leaf).getName() == "red")
-			glColor3d(1,0,0);
-		if((*leaf).getName() == "blue")
-			glColor3d(0,0,1);
-		if((*leaf).getName() == "green")
-			glColor3d(0,1,0);
-		if((*leaf).getName() == "yellow")
-			glColor3d(0,1,1);
-
-
-		//cout << node.name << endl;
-		if((*leaf).getName() == "front" || (*leaf).getName() == "floor"){
-			//glColor4d(1,0, 0, 0.9); 
-			glBindTexture(GL_TEXTURE_2D, tex_glass[prob3]);
-		}
-		else if ((*leaf).getName() == "groundfloor")
-			glBindTexture(GL_TEXTURE_2D, tex_groundfloor[prob5]);
-		else if ((*leaf).getName() == "topfloor")
-			glBindTexture(GL_TEXTURE_2D, tex_topfloor[prob6]);
-
-		else if((*leaf).getName() == "top"){
-			//glColor4d(0.7,0, 0, 0.9); 
-			glBindTexture(GL_TEXTURE_2D, tex_roof[prob4]);
-		}
-		else if ((*leaf).getName() == "side"){
+		if((*leaf).drawable){
 			
-			glBindTexture(GL_TEXTURE_2D, tex_wall[prob5]);
-		}
-		else if ((*leaf).getName() == "back")
-			glBindTexture(GL_TEXTURE_2D, tex_wall[prob2]);
-		else
-			glBindTexture(GL_TEXTURE_2D, tex_wall[prob2]);
+			glPushMatrix();
+		
+			//coloooors red, blue, green, yellow
+
+			if((*leaf).getName() == "red")
+				glColor3d(1,0,0);
+			if((*leaf).getName() == "blue")
+				glColor3d(0,0,1);
+			if((*leaf).getName() == "green")
+				glColor3d(0,1,0);
+			if((*leaf).getName() == "yellow")
+				glColor3d(0,1,1);
+
+
+			//cout << node.name << endl;
+			if((*leaf).getName() == "front" || (*leaf).getName() == "floor"){
+				//glColor4d(1,0, 0, 0.9); 
+				glBindTexture(GL_TEXTURE_2D, tex_glass[prob3]);
+			}
+			else if ((*leaf).getName() == "groundfloor")
+				glBindTexture(GL_TEXTURE_2D, tex_groundfloor[prob5]);
+			else if ((*leaf).getName() == "topfloor")
+				glBindTexture(GL_TEXTURE_2D, tex_topfloor[prob6]);
+
+			else if((*leaf).getName() == "top"){
+				//glColor4d(0.7,0, 0, 0.9); 
+				glBindTexture(GL_TEXTURE_2D, tex_roof[prob4]);
+			}
+			else if ((*leaf).getName() == "side"){
+			
+				glBindTexture(GL_TEXTURE_2D, tex_wall[prob5]);
+			}
+			else if ((*leaf).getName() == "back")
+				glBindTexture(GL_TEXTURE_2D, tex_wall[prob2]);
+			else
+				glBindTexture(GL_TEXTURE_2D, tex_wall[prob2]);
 
 		
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-		//glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
-		//glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
-		GLfloat mat_specular[] = { 1.0, 1.0, 1.0, 1.0 };
-		GLfloat mat_shininess[] = { 50.0 };
-		glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
-		glMaterialfv(GL_FRONT, GL_SHININESS, mat_shininess);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+			//glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
+			//glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
+			GLfloat mat_specular[] = { 1.0, 1.0, 1.0, 1.0 };
+			GLfloat mat_shininess[] = { 50.0 };
+			glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
+			glMaterialfv(GL_FRONT, GL_SHININESS, mat_shininess);
 
-		glTranslated((*leaf).position[0], (*leaf).position[1], (*leaf).position[2]);
-		glScaled((*leaf).scale[0], (*leaf).scale[1], (*leaf).scale[2]);
-		glCallList(cube);
-		glPopMatrix();
+			glTranslated((*leaf).position[0], (*leaf).position[1], (*leaf).position[2]);
+			glScaled((*leaf).scale[0], (*leaf).scale[1], (*leaf).scale[2]);
+
+			glCallList(cube);
+			glPopMatrix();
+		}
+
 		leaf++;
 	}
 
