@@ -3,13 +3,13 @@
 
 #include	<iostream>
 #include	<string>
-#include <time.h>
-#include "symbol.h"
-#include "ntree.hpp"
-#include <GL/freeglut.h>
-#include "SOIL.h"
-#include "tree.hh"
-#include "Global.h"
+#include	<time.h>
+#include	"symbol.h"
+#include	<GL/freeglut.h>
+#include	"SOIL.h"
+#include	"tree.hh"
+#include	"Global.h"
+
 using namespace std;
 
 
