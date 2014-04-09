@@ -91,16 +91,18 @@ vector<Symbol> apply_rule ( Symbol &node_parent, GNode *rule )
 	if ( rule -> function == "scale" )
 	{
 		vector< double > p;
+		int dim = 0;
 		for ( vector< pair< float, float > > :: iterator it = rule -> parameters.begin(); it != rule -> parameters.end(); it ++ )
 		{
 			if ( it -> first == -1 )			// convert the dimention keyword from {-1,-2,-3} to {0,1,2}
-				p.push_back ( node_parent.scale[0] * ( it -> second ) );
+				p.push_back ( node_parent.scale[0] * ( it -> second ) / node_parent.scale[dim] );
 			else if ( it -> first == -2 )
-				p.push_back ( node_parent.scale[1] * ( it -> second ) );
+				p.push_back ( node_parent.scale[1] * ( it -> second ) / node_parent.scale[dim] );
 			else if ( it -> first == -3 )
-				p.push_back ( node_parent.scale[2] * ( it -> second ) );
+				p.push_back ( node_parent.scale[2] * ( it -> second ) / node_parent.scale[dim] );
 			else
 				p.push_back ( ( it -> first ) * ( it -> second ) );
+			dim ++;
 		}
 		node_child.push_back ( node_parent.S ( p[0], p[1], p[2], rule -> symbolNames[0]));
 		
@@ -175,12 +177,12 @@ vector<Symbol> apply_rule ( Symbol &node_parent, GNode *rule )
 				splits.push_back ( ( it -> first ) * ( it -> second ) );
 				sum_absolute += * ( splits.end() -1);
 			}
-			i ++;
+			i ++;		// index of the relative value
 			it ++;
 		}
 		double r = ( node_parent.scale[d] - sum_absolute ) / r_count;
-		for ( int it = 0; it < idx.size(); it ++)
-			splits [ idx[it] ] *= r;
+		for ( int it_of_idx = 0; it_of_idx < idx.size(); it_of_idx ++)
+			splits [ idx[ it_of_idx ] ] *= r;
 
 		node_child = node_parent.subDiv ( d, splits, rule -> symbolNames );
 		
@@ -199,6 +201,7 @@ vector<Symbol> apply_rule ( Symbol &node_parent, GNode *rule )
 		vector< pair< float, float > > :: iterator it = rule -> parameters.begin();
 		int d = ( it -> first ) * ( -1 ) - 1; // convert the dimention keyword from {-1,-2,-3} to {0,1,2}
 		
+		it ++;
 		double size;
 		if ( it -> first == -1 )			// convert the dimention keyword from {-1,-2,-3} to {0,1,2}
 			size = node_parent.scale[0] * ( it -> second );
@@ -225,9 +228,11 @@ void show_tree ( tree<Symbol> T )
 {
 	for ( tree<Symbol> :: iterator it_of_tree = T.begin(); it_of_tree != T.end(); it_of_tree ++ )
 	{
-		cout << it_of_tree -> name ;
-		cout << "	P:(" << it_of_tree -> position[0] << ", "<< it_of_tree -> position[1] << ", " << it_of_tree -> position[2] << ") ";
-		cout << "	S:(" << it_of_tree -> scale[0] << ", " << it_of_tree -> scale[1] << ", " << it_of_tree -> scale[0] << ") ";
+		drawRed( it_of_tree -> name);
+		cout<<endl;
+		cout << "	P:(" << it_of_tree -> position[0] << ", "<< it_of_tree -> position[1] << ", " << it_of_tree -> position[2] << ") "<<endl;
+		cout << "	S:(" << it_of_tree -> scale[0] << ", " << it_of_tree -> scale[1] << ", " << it_of_tree -> scale[0] << ") "<<endl;
+		cout << "	active: " << it_of_tree -> active <<endl<< "	drawable: " << it_of_tree -> drawable<<endl;
 		cout << endl;
 	}
 

@@ -1,20 +1,27 @@
 //PRIORITY 1
-//WORKS:
-//Scale
-//Trans
-//Rename
-start->(){box}
-box->scale(5,10,5){box2}
-//box2->trans(1,5,1){trans}
-box2->comp(){bottom|top|side|side|side|side}
-side->subDiv(Y,2,1r,2){two|six|two}
-two->trans(10,0,0){two}
-
+start->scale(building_width,building_height*rand[0.0-3.0],building_depth){complex}
+complex->subDiv(Z,Scope.sz*rand[0.5-0.6],1r){facades|sidewings}
+sidewings->subDiv(X,1r,Scope.sx*rand[0.2-0.4],1r){sidewing1|epsilon|sidewing2}
+sidewing1->scale(1,Scope.sy*rand[0.5-1.5],Scope.sz*rand[0.2-1.0]){sidewing}
+sidewing2->scale(1,Scope.sy*rand[0.4-1-2],Scope.sz*rand[1.0-1.5]){sidewing}:0.5->(){epsilon}
+sidewing->comp(){bottom|roof|windowSide|windowSide|side|side}
+facades->comp(){bottom|roof|front|side|back|side}
+//PRIORITY 2
+front->subDiv(Y,3,1r,1){groundlevel|floors|topfloor}
+floors->repeat(Y,3){floor}
+floor->subDiv(Y,1r,20r,1r){strip|tile|strip}
+tile->subDiv(Y,1r,2r){strip|windowTile}
+windowTile->subDiv(X,1,1r,1){strip|panel|strip}
+panel->subDiv(X,1r,1,1r,1,1r){window|strip|window|strip|window}
+window->trans(0,0,0.2){floor}
+groundlevel->subDiv(X,1r,3,1r){groundfloor|floor|groundfloor}
+//PRIORITY 3
+strip->(){side}
 END
-//After END no line will be evaluated!
 
-Stuff Todo: 
-SUBDIV translations
-RENAME epsilon -> .inactive does not work
-REPEAT infinit loop ??
-SUBDIV does not take parameters (absolute, relative, absolute)... does it only take 2 parameters?? 
+
+TODO:
+Repeat-> REMAINDER! 
+
+
+
