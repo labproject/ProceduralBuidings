@@ -279,13 +279,14 @@ tree <Symbol> modeling ( vector< pair < string, vector<GNode>> > grammar )
 			// "it" is the iterator of the temp_Symbol which is a vector of the Symbols we need to apply rules.
 		{
 			float rand = random( 0.0, 1.0 );
-			double probability = 0.0;
+			double probability = temp_GNode -> prob;
 
-			while ( rand <= probability ) 
+			while ( probability < rand ) 
 			{
-				probability += temp_GNode -> prob;
 				temp_GNode ++;
+				probability += temp_GNode -> prob;
 			}
+
 			//4) apply rule on the symbol by implement the function: vector< Symbol > apply_rule ( Symbol temp_Symbol, GNode rule );
 			GNode G = *temp_GNode;					// G denote the temp rule we want apply on the Symbol S
 			tree< Symbol >::iterator p_it = *it;	// S_p_it denote the loation of the tree parent
@@ -297,10 +298,10 @@ tree <Symbol> modeling ( vector< pair < string, vector<GNode>> > grammar )
 			//5) put the new created Symbol into the nTree, if there's no new Symbol( apply S, T, rename..) then keep the tree same.
 			for ( vector<Symbol> :: iterator c_it = child_Symbol.begin(); c_it != child_Symbol.end(); c_it ++)
 			{
-				if ( c_it -> name != "epsilon" )
-					derivTree.append_child ( p_it, *c_it );
+				if ( c_it -> name != "epsilon" );
 				else
 					c_it -> active = false;
+				derivTree.append_child ( p_it, *c_it );
 			}
 
 		}		

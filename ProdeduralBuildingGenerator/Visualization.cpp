@@ -191,7 +191,7 @@ void display() {
 
 	//draw ground
 	GLfloat x = 2048.0f/512.0f;//test size
-	glColor3d(0,0,0);
+	//glColor3d(0,0,0);
 	glBindTexture(GL_TEXTURE_2D, tex_env[prob1]);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
@@ -215,11 +215,43 @@ void display() {
 
 	if(history){
 		while(pre != Tree.end()){
-			glColor3d(1,0,0);
+			//glColor3d(1,0,0);
 			if (Tree.depth(pre) == depth )
 				pre.skip_children();
 			if((Tree.depth(pre) < depth) && (pre.number_of_children() == 0) || (Tree.depth(pre) == depth)){
 				glPushMatrix();
+
+				if((*pre).getName() == "window" || (*pre).getName() == "floor"){
+					//glColor4d(1,0, 0, 0.9); 
+					glBindTexture(GL_TEXTURE_2D, tex_glass[prob3]);
+				}
+				else if ((*pre).getName() == "groundfloor")
+					glBindTexture(GL_TEXTURE_2D, tex_groundfloor[prob5]);
+				else if ((*pre).getName() == "topfloor")
+					glBindTexture(GL_TEXTURE_2D, tex_topfloor[prob6]);
+
+				else if((*pre).getName() == "roof"){
+					//glColor4d(0.7,0, 0, 0.9); 
+					glBindTexture(GL_TEXTURE_2D, tex_roof[prob4]);
+				}
+				else if ((*pre).getName() == "side"){
+			
+					glBindTexture(GL_TEXTURE_2D, tex_wall[prob5]);
+				}
+				else if ((*pre).getName() == "back")
+					glBindTexture(GL_TEXTURE_2D, tex_wall[prob2]);
+				else
+					glBindTexture(GL_TEXTURE_2D, tex_wall[prob2]);
+
+		
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+				//glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
+				//glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
+				GLfloat mat_specular[] = { 1.0, 1.0, 1.0, 1.0 };
+				GLfloat mat_shininess[] = { 50.0 };
+				glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
+				glMaterialfv(GL_FRONT, GL_SHININESS, mat_shininess);
 				glTranslated((*pre).position[0], (*pre).position[1], (*pre).position[2]);
 				glScaled((*pre).scale[0], (*pre).scale[1], (*pre).scale[2]);
 
@@ -265,7 +297,7 @@ void display() {
 				else if ((*leaf).getName() == "topfloor")
 					glBindTexture(GL_TEXTURE_2D, tex_topfloor[prob6]);
 
-				else if((*leaf).getName() == "top"){
+				else if((*leaf).getName() == "roof"){
 					//glColor4d(0.7,0, 0, 0.9); 
 					glBindTexture(GL_TEXTURE_2D, tex_roof[prob4]);
 				}
@@ -405,6 +437,7 @@ GLvoid keyboard( GLubyte key, GLint x, GLint y )
 
 	case 50: //increment depth
 		depth++;
+		//cout << Tree.max_depth() << endl;
 		if(depth > Tree.max_depth())
 			depth = Tree.max_depth();
 		glutPostRedisplay();
