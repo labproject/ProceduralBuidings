@@ -1,5 +1,5 @@
 //PRIORITY 1
-start->scale(building_width,building_height*rand[0.3-1.5],building_depth){complex}
+start->scale(building_width,building_height,building_depth){complex}
 complex->subDiv(Z,Scope.sz*rand[0.5-0.6],1r){facades|sidewings}
 sidewings->subDiv(X,1r,Scope.sx*rand[0.2-0.4],1r){sidewing1|epsilon|sidewing2}
 sidewing1->scale(1,Scope.sy*rand[0.5-1.5],Scope.sz*rand[0.2-1.0]){sidewing}
@@ -14,7 +14,7 @@ tile->subDiv(Y,1r,2r){strip|windowTile}
 windowTile->subDiv(X,1,1r,1){strip|panel|strip}
 panel->subDiv(X,1r,1,1r,1,1r){window|strip|window|strip|window}
 window->trans(0,0,0.2){floor}
-groundlevel->subDiv(X,1r,3,1r){groundfloor|floor|groundfloor}
+groundlevel->subDiv(X,1r,3,1r){groundfloor|door|groundfloor}
 //PRIORITY 3
 strip->(){side}
 END
@@ -23,5 +23,19 @@ END
 TODO:
 Repeat-> REMAINDER! 
 
+TEXTUREN_:
+
+floor
+groundfloor
+topfloor
+roof
+side
+back
+front
+-----
+wall
+window
+entrance
+door
 
 

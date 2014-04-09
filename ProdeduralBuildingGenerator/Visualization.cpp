@@ -3,15 +3,17 @@
 #define BOXES 2
 #define FACADES 3
 #define TEXTURES 4
+#define HISTORY 5
 
 bool start = false, boxes = true, facades = true, textures = true;
-static GLfloat spin = 0.0, aspectRatio, n = 80.0f;
+static GLfloat spin = 0.0, aspectRatio, n = 80.0f; //N = **Koordinatensystem**
 GLuint cube, shape;
 //movement in scene:
 static GLdouble xRef = 0.0, yRef = -10.0, zRef = 0.0, zoom = 1.0, horizontal = 0.0, vertical = 0.0, angle = 0.0;
 GLuint	tex_wall[12], tex_window[10], tex_glass[10], tex_roof[10], tex_floor[10], tex_groundfloor[10], tex_topfloor[10], tex_env[11];
 int prob1, prob2, prob3, prob4, prob5, prob6;
 int depth = 0;
+bool history = false;
 //Tree
 tree<Symbol> Tree;
 
@@ -23,7 +25,8 @@ GLfloat LightPosition[]= { 0.0f, 10.0f, -20.0f, 1.0f };
 
 void buildCube(){
 	//build a rectangular cube, which can be scaled and rotated
-	GLfloat x = 2048.0f/512.0f;
+	//REPEATPARAMETER
+	GLfloat x = 2048.0f/512.0f; //**verhältnis**
 
 	glBegin(GL_QUADS);
 		
@@ -186,7 +189,7 @@ void display() {
 
 	//draw ground
 	GLfloat x = 2048.0f/512.0f;//test size
-	
+	glColor3d(0,0,0);
 	glBindTexture(GL_TEXTURE_2D, tex_env[prob1]);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
@@ -203,70 +206,95 @@ void display() {
 	//Iterate over Tree
 	
 	tree<Symbol>::leaf_iterator leaf = Tree.begin_leaf();
+	tree<Symbol>::pre_order_iterator pre = Tree.begin(); 
 	Symbol *child;
+	
+	
 
-	while (leaf != Tree.end_leaf()){
+	if(history){
+		while(pre != Tree.end()){
+			glColor3d(1,0,0);
+			if (Tree.depth(pre) == depth )
+				pre.skip_children();
+			if((Tree.depth(pre) < depth) && (pre.number_of_children() == 0) || (Tree.depth(pre) == depth)){
+				glPushMatrix();
+				glTranslated((*pre).position[0], (*pre).position[1], (*pre).position[2]);
+				glScaled((*pre).scale[0], (*pre).scale[1], (*pre).scale[2]);
 
-		if((*leaf).drawable){
-			
-			glPushMatrix();
-		
-			//coloooors red, blue, green, yellow
+				glCallList(cube);
+				glPopMatrix();
+			}
 
-			if((*leaf).getName() == "red")
-				glColor3d(1,0,0);
-		else if((*leaf).getName() == "blue")
-				glColor3d(0,0,1);
-		else if((*leaf).getName() == "green")
-				glColor3d(0,1,0);
-		else if((*leaf).getName() == "yellow")
-			glColor3d(1,1,0);
-		else {
-			glColor3d(1,1,1);
+			pre++;
 		}
+	}
+	else{		
 
 
-			//cout << node.name << endl;
-			if((*leaf).getName() == "front" || (*leaf).getName() == "floor"){
-				//glColor4d(1,0, 0, 0.9); 
-				glBindTexture(GL_TEXTURE_2D, tex_glass[prob3]);
-			}
-			else if ((*leaf).getName() == "groundfloor")
-				glBindTexture(GL_TEXTURE_2D, tex_groundfloor[prob5]);
-			else if ((*leaf).getName() == "topfloor")
-				glBindTexture(GL_TEXTURE_2D, tex_topfloor[prob6]);
 
-			else if((*leaf).getName() == "top"){
-				//glColor4d(0.7,0, 0, 0.9); 
-				glBindTexture(GL_TEXTURE_2D, tex_roof[prob4]);
-			}
-			else if ((*leaf).getName() == "side"){
+		while (leaf != Tree.end_leaf()){
+
+			if((*leaf).drawable){
 			
-				glBindTexture(GL_TEXTURE_2D, tex_wall[prob5]);
+				glPushMatrix();
+		
+				//coloooors red, blue, green, yellow
+
+				if((*leaf).getName() == "red")
+					glColor3d(1,0,0);
+			else if((*leaf).getName() == "blue")
+					glColor3d(0,0,1);
+			else if((*leaf).getName() == "green")
+					glColor3d(0,1,0);
+			else if((*leaf).getName() == "yellow")
+				glColor3d(1,1,0);
+			else {
+				glColor3d(1,1,1);
 			}
-			else if ((*leaf).getName() == "back")
-				glBindTexture(GL_TEXTURE_2D, tex_wall[prob2]);
-			else
-				glBindTexture(GL_TEXTURE_2D, tex_wall[prob2]);
+
+
+				//cout << node.name << endl;
+				if((*leaf).getName() == "front" || (*leaf).getName() == "floor"){
+					//glColor4d(1,0, 0, 0.9); 
+					glBindTexture(GL_TEXTURE_2D, tex_glass[prob3]);
+				}
+				else if ((*leaf).getName() == "groundfloor")
+					glBindTexture(GL_TEXTURE_2D, tex_groundfloor[prob5]);
+				else if ((*leaf).getName() == "topfloor")
+					glBindTexture(GL_TEXTURE_2D, tex_topfloor[prob6]);
+
+				else if((*leaf).getName() == "top"){
+					//glColor4d(0.7,0, 0, 0.9); 
+					glBindTexture(GL_TEXTURE_2D, tex_roof[prob4]);
+				}
+				else if ((*leaf).getName() == "side"){
+			
+					glBindTexture(GL_TEXTURE_2D, tex_wall[prob5]);
+				}
+				else if ((*leaf).getName() == "back")
+					glBindTexture(GL_TEXTURE_2D, tex_wall[prob2]);
+				else
+					glBindTexture(GL_TEXTURE_2D, tex_wall[prob2]);
 
 		
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-			//glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
-			//glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
-			GLfloat mat_specular[] = { 1.0, 1.0, 1.0, 1.0 };
-			GLfloat mat_shininess[] = { 50.0 };
-			glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
-			glMaterialfv(GL_FRONT, GL_SHININESS, mat_shininess);
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+				//glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
+				//glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
+				GLfloat mat_specular[] = { 1.0, 1.0, 1.0, 1.0 };
+				GLfloat mat_shininess[] = { 50.0 };
+				glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
+				glMaterialfv(GL_FRONT, GL_SHININESS, mat_shininess);
 
-			glTranslated((*leaf).position[0], (*leaf).position[1], (*leaf).position[2]);
-			glScaled((*leaf).scale[0], (*leaf).scale[1], (*leaf).scale[2]);
+				glTranslated((*leaf).position[0], (*leaf).position[1], (*leaf).position[2]);
+				glScaled((*leaf).scale[0], (*leaf).scale[1], (*leaf).scale[2]);
 
-			glCallList(cube);
-			glPopMatrix();
+				glCallList(cube);
+				glPopMatrix();
+			}
+
+			leaf++;
 		}
-
-		leaf++;
 	}
 
 
@@ -293,12 +321,12 @@ void reshape(GLsizei w, GLsizei h){
     aspectRatio = (GLfloat) w / (GLfloat) h;
 
 	if(w <= h)
-		glOrtho(-n, n, -n / aspectRatio, n / aspectRatio, n, -n); 
+		glOrtho(-n, n, -n / aspectRatio, n / aspectRatio, 20, -20); 
 	else
-		glOrtho(-n * aspectRatio, n * aspectRatio, -n, n, n, -n);
+		glOrtho(-n * aspectRatio, n * aspectRatio, -n, n, 20, -20);
 
 	
-	gluPerspective(4, aspectRatio, 1, 10);
+	gluPerspective(2, aspectRatio, 1, 10);
 
  
     glMatrixMode(GL_MODELVIEW);                     // Select The Modelview Matrix
@@ -632,6 +660,20 @@ GLvoid keyboard( GLubyte key, GLint x, GLint y )
 		horizontal -= 0.5;
 		glutPostRedisplay();
 		break;
+
+	case 49: // decrement depth
+		depth --;
+		if(depth < 0)
+			depth = 0;
+		glutPostRedisplay();
+		break;
+
+	case 50: //increment depth
+		depth++;
+		if(depth > Tree.max_depth())
+			depth = Tree.max_depth();
+		glutPostRedisplay();
+		break;
 	
 	} 
 }
@@ -724,6 +766,11 @@ void menuEvents(int opt){
 		textures = true;
 		glutPostRedisplay();
 		break;
+	case HISTORY:
+		if(history) history = false;
+		else history = true;
+		glutPostRedisplay();
+		break;
 	}
 }
 
@@ -734,10 +781,7 @@ void createMenu(){
 
 	//add entries to menu
 	glutAddMenuEntry("Light",START);
-	glutAddMenuEntry("Draw simple Boxes",BOXES);
-	glutAddMenuEntry("Draw Facades",FACADES);
-	glutAddMenuEntry("Draw Textures",TEXTURES);
-
+	glutAddMenuEntry("Enable History", HISTORY);
 	//attach menu to right mouse button
 	glutAttachMenu(GLUT_RIGHT_BUTTON);
 }
