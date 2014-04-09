@@ -6,7 +6,7 @@
 #define HISTORY 5
 
 bool start = false, boxes = true, facades = true, textures = true;
-static GLfloat spin = 0.0, aspectRatio, n = 80.0f;
+static GLfloat spin = 0.0, aspectRatio, n = 80.0f; //N = **Koordinatensystem**
 GLuint cube, shape;
 //movement in scene:
 static GLdouble xRef = 0.0, yRef = -10.0, zRef = 0.0, zoom = 1.0, horizontal = 0.0, vertical = 0.0, angle = 0.0;
@@ -25,7 +25,8 @@ GLfloat LightPosition[]= { 0.0f, 10.0f, -20.0f, 1.0f };
 
 void buildCube(){
 	//build a rectangular cube, which can be scaled and rotated
-	GLfloat x = 2048.0f/512.0f;
+	//REPEATPARAMETER
+	GLfloat x = 2048.0f/512.0f; //**verhältnis**
 
 	glBegin(GL_QUADS);
 		
