@@ -12,7 +12,7 @@ GLubyte *tex_pointer;
 //movement in scene:
 //static GLdouble xRef = 0.0, yRef = 60.0, zRef = 0.0, zoom = 1, horizontal = config.at("building_height")+30, vertical = -2*config.at("building_height"), angle = 0.0;
 static GLdouble xRef = 0.0, yRef = 60.0, zRef = 0.0, move_z = 1, move_x = 0, move_y = -10, horizontal = 150, vertical = -300, angle = 0.0, zoom_look = 1;
-GLuint	tex_wall[12], tex_window[10], tex_glass[10], tex_roof[10], tex_floor[10], tex_groundfloor[10], tex_topfloor[10], tex_env[11], tex_entrance[11], tex_door[11];
+GLuint	tex_wall[12], tex_window[10], tex_glass[10], tex_roof[10], tex_floor[10], tex_groundfloor[10], tex_topfloor[10], tex_env[11], tex_entrance[11], tex_door[11], tex_back[11];
 int prob_set, prob_window;
 int depth = 0;
 bool history = false;
@@ -185,6 +185,14 @@ GLint loadTextures()
 		if (tex_door[i] == 0 ) cout << "ERROR loading texture " << filename << endl;
 	}
 
+	//Tex back
+	for(int i = 0; i < number_textures; i++){
+		filename = "textures/back" + to_string(static_cast<long long>(i)) + ".jpg";
+		tex_back[i] = SOIL_load_OGL_texture(filename.c_str(),SOIL_LOAD_AUTO,SOIL_CREATE_NEW_ID,SOIL_FLAG_MIPMAPS);
+		if (tex_back[i] == 0 ) cout << "ERROR loading texture " << filename << endl;
+	}
+
+
 
 
 	return true;                                        
@@ -260,6 +268,10 @@ void display() {
 					glBindTexture(GL_TEXTURE_2D, tex_roof[prob_set]);
 				}
 				
+				//Back side
+				else if ((*pre).getName() == "back")
+					glBindTexture(GL_TEXTURE_2D, tex_back[prob_set]);
+
 				//Objects with floor textures
 				else if ((*pre).getName() == "groundfloor" || (*pre).getName() == "groundlevel")
 					glBindTexture(GL_TEXTURE_2D, tex_groundfloor[prob_set]);
@@ -278,6 +290,7 @@ void display() {
 				}
 				else if ((*pre).getName() == "entrance")
 					glBindTexture(GL_TEXTURE_2D, tex_entrance[prob_set]);
+
 
 				
 				//DEBUG COLORS
