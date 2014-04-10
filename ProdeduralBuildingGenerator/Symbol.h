@@ -39,6 +39,9 @@ public:
 	Symbol S(double,double,double, string);		//What is better, 3 single values or a vector of three values?
 	void R(double);
 
+	//EXTRUDE
+	Symbol extrude ( vector<double> v, string n);
+
 	// RENAME
 	vector<Symbol> rename ( string);
 

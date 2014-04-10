@@ -85,6 +85,30 @@
 		//Your code here...
 	}
 
+	// 10.04.2014 by Li,Ruotong ++add new function
+	Symbol Symbol::extrude ( vector<double> v, string n)
+	{
+		// 10.04.14_by Ruotong Li
+		// when do the extrude, check the "0" scale value and replace it.
+		Symbol *deriv_Element = new Symbol( position, scale, n);
+		vector<double> :: iterator it_v = v.begin();
+
+		// check the scale vector, and when find the value equals 0, replace it by the double value of v
+		for ( int i = 0; i < 3; i ++)
+		{
+			if ( deriv_Element -> scale[i] == 0 )
+			{
+				deriv_Element -> scale[i] = *it_v;
+				it_v ++;
+			}
+			else
+				continue;
+		}
+
+		return *deriv_Element;
+	}
+
+
 	// rename the Symbol with a new name
 	vector<Symbol> Symbol:: rename ( string symbolName )
 	{

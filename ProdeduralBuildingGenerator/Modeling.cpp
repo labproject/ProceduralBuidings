@@ -127,6 +127,25 @@ vector<Symbol> apply_rule ( Symbol &node_parent, GNode *rule )
 		
 	}	// no return value
 
+	// "extrude" => Symbol extrude ( vector<double> p, string n) // extrude the 2D or 1D Symbol into 3D.
+	// give pair or pairs of parameter and extrude the Symbol
+	if ( rule -> function == "extrude" )
+	{
+		vector< double > p;
+		for ( vector< pair< float, float > > :: iterator it = rule -> parameters.begin(); it != rule -> parameters.end(); it ++ )
+		{
+			if ( it -> first == -1 )			// convert the dimention keyword from {-1,-2,-3} to {0,1,2}
+				p.push_back ( node_parent.scale[0] * ( it -> second ) );
+			else if ( it -> first == -2 )
+				p.push_back ( node_parent.scale[1] * ( it -> second ) );
+			else if ( it -> first == -3 )
+				p.push_back ( node_parent.scale[2] * ( it -> second ) );
+			else
+				p.push_back ( ( it -> first ) * ( it -> second ) );
+		}
+		node_child.push_back ( node_parent.extrude ( p, rule -> symbolNames[0]));
+		
+	}
 	//	"Rotate" => not valid at the moment
 
 	//	"Rename" => rename ( string symbolName ); // if name = "epsilon", then active = 0; else change the name
