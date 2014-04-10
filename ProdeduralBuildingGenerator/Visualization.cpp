@@ -16,6 +16,8 @@ GLuint	tex_wall[12], tex_window[10], tex_glass[10], tex_roof[10], tex_floor[10],
 int prob_set, prob_window;
 int depth = 0;
 bool history = false;
+
+GLfloat x = 4;
 //Tree
 tree<Symbol> Tree;
 
@@ -28,7 +30,7 @@ GLfloat LightPosition[]= { 0.0f, 120.0f, -120, 1.0f };
 void buildCube(){
 	//build a rectangular cube, which can be scaled and rotated
 	//REPEATPARAMETER
-	GLfloat x = 2048.0f/512.0f; //**verhältnis**
+	//GLfloat x = 4; //**verhältnis**
 
 	glBegin(GL_QUADS);
 
@@ -176,7 +178,7 @@ GLint loadTextures()
 
 	//Tex door
 	for(int i = 0; i < number_textures; i++){
-		filename = "textures/topfloor" + to_string(static_cast<long long>(i)) + ".jpg";
+		filename = "textures/door" + to_string(static_cast<long long>(i)) + ".jpg";
 		tex_door[i] = SOIL_load_OGL_texture(filename.c_str(),SOIL_LOAD_AUTO,SOIL_CREATE_NEW_ID,SOIL_FLAG_MIPMAPS);
 		if (tex_door[i] == 0 ) cout << "ERROR loading texture " << i << endl;
 	}
@@ -263,8 +265,13 @@ void display() {
 				//Objects like windows, doors, entrance
 				else if ((*pre).getName() == "window")
 					glBindTexture(GL_TEXTURE_2D, tex_window[prob_window]);
-				else if ((*pre).getName() == "door")
+				else if ((*pre).getName() == "door"){
+					x = 1;
 					glBindTexture(GL_TEXTURE_2D, tex_door[prob_set]);
+	
+					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+				}
 				else if ((*pre).getName() == "entrance")
 					glBindTexture(GL_TEXTURE_2D, tex_entrance[prob_set]);
 				else
@@ -284,6 +291,7 @@ void display() {
 				glScaled((*pre).scale[0], (*pre).scale[1], (*pre).scale[2]);
 
 				glCallList(cube);
+				//buildCube(x);
 				glPopMatrix();
 			}
 
@@ -314,8 +322,13 @@ void display() {
 				//Objects like windows, doors, entrance
 				else if ((*leaf).getName() == "window")
 					glBindTexture(GL_TEXTURE_2D, tex_window[prob_window]);
-				else if ((*leaf).getName() == "door")
+				else if ((*leaf).getName() == "door"){
+					x = 1;
 					glBindTexture(GL_TEXTURE_2D, tex_door[prob_set]);
+	
+					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+				}
 				else if ((*leaf).getName() == "entrance")
 					glBindTexture(GL_TEXTURE_2D, tex_entrance[prob_set]);
 				else
@@ -334,6 +347,8 @@ void display() {
 				glScaled((*leaf).scale[0], (*leaf).scale[1], (*leaf).scale[2]);
 
 				glCallList(cube);
+				//buildCube(x);
+				
 				glPopMatrix();
 			}
 
