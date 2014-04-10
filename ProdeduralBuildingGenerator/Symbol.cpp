@@ -209,6 +209,18 @@
 	vector<Symbol>Symbol::repeat( int dim, double size, string symbol)	// 0-x, 1-y, 2-z;
 	{
 		vector<Symbol> derivatives;
+
+		//10.04.2014 by Jonas Abert
+		int number = (int)(scale[dim]/size);
+		double total = number*size;
+		double rest = scale[dim]-(number*size);
+		double add = rest/number;
+		
+		cout<< "size: "<<size<<" total: "<<total<<"rest :" << rest<< " anzahl repetitions: "<<number<< " add Per repetition: "<<add<<endl;
+		size= size+add;
+		cout<<"new Size"<<size<<endl;
+		
+
 		
 		// 15.03.14_by Ruotong Li
 		/*--------------- Algorithms -----------------*/
@@ -222,7 +234,7 @@
 		vector<double> scale_p( scale );		// creat a parameter shows the new symbols scale vector
 		scale_p[dim] = size;
 
-		while ( size * i < scale[dim] )
+		while ( size * i <= scale[dim] )
 		{
 			// 1) create new symbol ( repeat element )
 			Symbol deriv_Element( position, scale_p, symbol);	

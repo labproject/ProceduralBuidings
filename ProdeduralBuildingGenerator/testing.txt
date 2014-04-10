@@ -1,22 +1,5 @@
 //PRIORITY 1
-start->scale(building_width,building_height,building_depth){complex}
-complex->trans(building_width*-0.5,0,building_depth*-0.5){complex}
-complex->subDiv(Z,1r,Scope.sz*0.5){facades|sidewing}
-sidewing->scale(1,Scope.sy*rand[0.5-0.9],1){sidewing}
-facades->subDiv(Y,building_height*0.95,1r){facades|roof}
-roof->trans(0,0,Scope.sz*-0.2){roof}
-roof->scale(1,1,1.2){top}
-facades->comp(){epsilon|epsilon|front|side|back|side}
-sidewing->comp(){epsilon|top|epsilon|side|floors|side}
-front->subDiv(Y,groundFloor_height,1r,topFloor_height){groundfloor|floors|topfloor}
-floors->repeat(Y,12){floor}
-floor->repeat(X,15){panel}
-panel->subDiv(Y,1r,4r,2r){top|slot|tile}
-slot->subDiv(X,1r,4r,1r){right|window|left}
-window->trans(0,0,1){window}
-END
-
-
+start->scale(building_width,120,building_depth){complex}
 complex->trans(building_width*-0.5,0,building_depth*-0.5){complex}
 complex->subDiv(Z,Scope.sz*rand[0.5-0.6],1r){facades|sidewings}
 sidewings->subDiv(X,1r,building_width*0.2,1r){sidewing1|epsilon|sidewing2}
@@ -38,9 +21,32 @@ topfloor->repeat(X,Scope.sy*1.0){topfloor}
 strip->(){side}
 END
 
+//PRIORITY 1
+start->scale(building_width,120,building_depth){complex}
+complex->trans(Scope.sx*-0.5,0,Scope.sz*-0.5){complex}
+//PRIORITY 2
+complex->subDiv(Z,1r,Scope.sz*0.5){facades|sidewing}
+sidewing->scale(1,Scope.sy*rand[0.5-0.9],1){sidewing}
+sidewing->subDiv(Y,15r,1r){sidewing|roof1}
+facades->subDiv(Y,15r,1r){facades|roof2}
+facades->comp(){epsilon|epsilon|front|side|back|side}
+sidewing->comp(){epsilon|top|epsilon|side|backSide|side}
+front->subDiv(Y,groundFloor_height,1r,topFloor_height){groundfloor|floors|topfloor}
+groundfloor->subDiv(X,1r,20,1r){groundfloor|yellow|groundfloor}
+backSide->subDiv(Y,groundFloor_height,1r,topFloor_height){groundfloor|floors|topfloor}
+floors->repeat(Y,12){floor}
+floor->repeat(X,15){panel}
+panel->subDiv(Y,1r,4r,2r){top|slot|tile}
+slot->subDiv(X,1r,4r,1r){right|blue|left}
+blue->trans(0,0,1){blue}
+groundfloor->repeat(X,groundFloor_height){groundfloor}
+roof->scale(1,1,1.2){top}
+remaind->(){red}
+END
 
-TODO:
-Repeat-> REMAINDER! 
+
+
+
 
 TEXTUREN_:
 
