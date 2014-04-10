@@ -12,8 +12,8 @@ front->subDiv(Y,groundFloor_height,1r,topFloor_height){groundfloor|floors|topflo
 floors->repeat(Y,12){floor}
 floor->repeat(X,15){panel}
 panel->subDiv(Y,1r,4r,2r){top|slot|tile}
-slot->subDiv(X,1r,4r,1r){right|blue|left}
-blue->trans(0,0,1){blue}
+slot->subDiv(X,1r,4r,1r){right|window|left}
+window->trans(0,0,1){window}
 END
 
 
