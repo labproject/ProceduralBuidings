@@ -1,7 +1,7 @@
 //config.txt
 groundFloor_height=10.5
 topFloor_height=7
-floor_height=6
+floor_height=10
 tiles_width=6
 //
 window_width=1
