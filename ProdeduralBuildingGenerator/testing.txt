@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 start->scale(building_width,building_height,building_depth){complex}
 complex->trans(Scope.sx*-0.5,0,Scope.sz*-0.5){complex}
 complex->subDiv(Z,Scope.sz*rand[0.5-0.6],1r){facades|sidewings}
@@ -21,23 +20,6 @@ slot->subDiv(X,1r,4r,1r){right|window|left}
 ground->(){red}
 back->(){yellow}
 side->(){green}
-=======
-//PRIORITY 1
-start->scale(building_width,40,building_depth){complex}
-complex->trans(building_width*-0.5,0,building_depth*-0.5){complex}
-complex->comp(){bottom|roof|front|back|side|side}
-//PRIORITY 2
-front->subDiv(Y,10,1r,10){groundlevel|floors|topfloor}
-floors->repeat(Y,20){floor}
-floor->subDiv(Y,1r,20r,1r){strip|tile|strip}
-tile->subDiv(Y,1r,2r){strip|windowTile}
-windowTile->subDiv(X,1,1r,1){strip|panel|strip}
-panel->subDiv(X,1r,1,1r,1,1r){window|strip|window|strip|window}
-groundlevel->subDiv(X,1r,20,1r){groundfloor|door|groundfloor}
-topfloor->repeat(X,Scope.sy*1.0){topfloor}
-//PRIORITY 3
-strip->(){side}
->>>>>>> f80a9e450e608cf04c809571881df234f4537c3c
 END
 
 //PRIORITY 1
