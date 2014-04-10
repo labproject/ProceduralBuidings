@@ -199,7 +199,7 @@ GLint loadTextures()
 }
 
 void display() {
-
+	glColor3d(1,1,1);
 
 	if(start){
 		glEnable(GL_LIGHT1); 
@@ -256,6 +256,7 @@ void display() {
 			if((Tree.depth(pre) < depth) && (pre.number_of_children() == 0) || (Tree.depth(pre) == depth)){
 				glPushMatrix();
 
+				glColor3d(1,1,1);
 
 				//Objects with wall texture
 				//if((*pre).getName() == "start" || (*pre).getName() == "complex" || (*pre).getName() == "facades" || (*pre).getName() == "sidewing" || (*pre).getName() == "back" || (*pre).getName() == "side" || (*pre).getName() == "floors"
