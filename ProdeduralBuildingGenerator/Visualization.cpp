@@ -17,7 +17,7 @@ int prob_set, prob_window;
 int depth = 0;
 bool history = false;
 
-GLfloat x = 4;
+//GLfloat x = 4;
 //Tree
 tree<Symbol> Tree;
 
@@ -27,7 +27,7 @@ GLfloat LightDiffuse[]= { 1.0f, 1.0f, 1.0f, 1.0f };
 GLfloat LightPosition[]= { 0.0f, 120.0f, -120, 1.0f }; 
 
 
-void buildCube(){
+void buildCube(GLfloat x){
 	//build a rectangular cube, which can be scaled and rotated
 	//REPEATPARAMETER
 	//GLfloat x = 4; //**verhältnis**
@@ -274,6 +274,17 @@ void display() {
 				}
 				else if ((*pre).getName() == "entrance")
 					glBindTexture(GL_TEXTURE_2D, tex_entrance[prob_set]);
+
+				
+				//DEBUG COLORS
+				else if ((*pre).getName() == "red")
+					glColor3d(1,0,0);
+				else if ((*pre).getName() == "blue")
+					glColor3d(0,0,1);
+				else if ((*pre).getName() == "green")
+					glColor3d(0,1,0);
+				else if ((*pre).getName() == "yellow")
+					glColor3d(1,1,0);
 				else
 					glBindTexture(GL_TEXTURE_2D, tex_wall[prob_set]);
 
@@ -290,8 +301,8 @@ void display() {
 				glTranslated((*pre).position[0], (*pre).position[1], (*pre).position[2]);
 				glScaled((*pre).scale[0], (*pre).scale[1], (*pre).scale[2]);
 
-				glCallList(cube);
-				//buildCube(x);
+				//glCallList(cube);
+				buildCube(x);
 				glPopMatrix();
 			}
 
@@ -307,7 +318,7 @@ void display() {
 			if((*leaf).drawable){
 
 				glPushMatrix();
-
+				glColor3d(1,1,1);
 				//Objects with roof texture
 				if((*leaf).getName() == "roof"){
 					glBindTexture(GL_TEXTURE_2D, tex_roof[prob_set]);
@@ -331,6 +342,18 @@ void display() {
 				}
 				else if ((*leaf).getName() == "entrance")
 					glBindTexture(GL_TEXTURE_2D, tex_entrance[prob_set]);
+
+
+
+				//DEBUG COLORS
+				else if ((*leaf).getName() == "red")
+					glColor3d(1,0,0);
+				else if ((*leaf).getName() == "blue")
+					glColor3d(0,0,1);
+				else if ((*leaf).getName() == "green")
+					glColor3d(0,1,0);
+				else if ((*leaf).getName() == "yellow")
+					glColor3d(1,1,0);
 				else
 					glBindTexture(GL_TEXTURE_2D, tex_wall[prob_set]);
 
@@ -346,8 +369,8 @@ void display() {
 				glTranslated((*leaf).position[0], (*leaf).position[1], (*leaf).position[2]);
 				glScaled((*leaf).scale[0], (*leaf).scale[1], (*leaf).scale[2]);
 
-				glCallList(cube);
-				//buildCube(x);
+				//glCallList(cube);
+				buildCube(x);
 				
 				glPopMatrix();
 			}
@@ -415,15 +438,15 @@ void init(){
 
 	loadTextures();
 
-	cube = glGenLists (1);
-	glNewList(cube, GL_COMPILE);
-	buildCube();
-	glEndList();
+	//cube = glGenLists (1);
+	//glNewList(cube, GL_COMPILE);
+	//buildCube();
+	//glEndList();
 
-	shape = glGenLists(1);
-	glNewList(shape, GL_COMPILE);
-	buildShape();
-	glEndList();
+	//shape = glGenLists(1);
+	//glNewList(shape, GL_COMPILE);
+	//buildShape();
+	//glEndList();
 }
 
 GLvoid keyboard( GLubyte key, GLint x, GLint y )
@@ -488,12 +511,12 @@ GLvoid keyboard( GLubyte key, GLint x, GLint y )
 		glutPostRedisplay();
 		break;
 
-	case 102: //move in y up
+	case 118: //move in y up
 		move_y += 4.0;
 		glutPostRedisplay();
 		break;
 
-	case 118: //move in y down
+	case 102: //move in y down
 		move_y -= 4.0;
 		glutPostRedisplay();
 		break;

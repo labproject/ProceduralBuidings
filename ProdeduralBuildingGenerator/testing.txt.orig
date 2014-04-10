@@ -1,7 +1,33 @@
 //PRIORITY 1
-start->scale(building_width,40,building_depth){complex}
+<<<<<<< HEAD
+start->scale(building_width,building_height,building_depth){complex}
 complex->trans(building_width*-0.5,0,building_depth*-0.5){complex}
-complex->comp(){bottom|roof|front|back|side|side}
+complex->subDiv(Z,1r,Scope.sz*0.5){facades|sidewing}
+sidewing->scale(1,Scope.sy*rand[0.5-0.9],1){sidewing}
+facades->subDiv(Y,building_height*0.95,1r){facades|roof}
+roof->trans(0,0,Scope.sz*-0.2){roof}
+roof->scale(1,1,1.2){top}
+facades->comp(){epsilon|epsilon|front|side|back|side}
+sidewing->comp(){epsilon|top|epsilon|side|floors|side}
+front->subDiv(Y,groundFloor_height,1r,topFloor_height){groundfloor|floors|topfloor}
+floors->repeat(Y,12){floor}
+floor->repeat(X,15){panel}
+panel->subDiv(Y,1r,4r,2r){top|slot|tile}
+slot->subDiv(X,1r,4r,1r){right|window|left}
+window->trans(0,0,1){window}
+END
+
+
+=======
+start->scale(building_width,120,building_depth){complex}
+>>>>>>> 525d18cbe46dcb615761dacbec1a8d8789b155ac
+complex->trans(building_width*-0.5,0,building_depth*-0.5){complex}
+complex->subDiv(Z,Scope.sz*rand[0.5-0.6],1r){facades|sidewings}
+sidewings->subDiv(X,1r,building_width*0.2,1r){sidewing1|epsilon|sidewing2}
+sidewing1->scale(1,Scope.sy*rand[0.5-1.5],building_width){sidewing}
+sidewing2->scale(1,Scope.sy*rand[0.4-1-2],building_depth*0.5){sidewing}
+sidewing->comp(){bottom|roof|windowSide|windowSide|side|side}
+facades->comp(){bottom|roof|front|side|back|side}
 //PRIORITY 2
 front->subDiv(Y,10,1r,10){groundlevel|floors|topfloor}
 floors->repeat(Y,20){floor}
@@ -9,7 +35,8 @@ floor->subDiv(Y,1r,20r,1r){strip|tile|strip}
 tile->subDiv(Y,1r,2r){strip|windowTile}
 windowTile->subDiv(X,1,1r,1){strip|panel|strip}
 panel->subDiv(X,1r,1,1r,1,1r){window|strip|window|strip|window}
-groundlevel->subDiv(X,1r,20,1r){groundfloor|door|groundfloor}
+window->trans(0,0,0.2){floor}
+groundlevel->subDiv(X,1r,3,1r){groundfloor|door|groundfloor}
 topfloor->repeat(X,Scope.sy*1.0){topfloor}
 //PRIORITY 3
 strip->(){side}
