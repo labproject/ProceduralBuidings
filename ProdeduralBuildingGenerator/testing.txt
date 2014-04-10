@@ -5,21 +5,23 @@ sidewings->subDiv(X,Scope.sx*0.5,1r){sidewingA|erase}:0.5->subDiv(X,Scope.sx*0.5
 erase->scale(0,0,0){erase}
 sidewingA->scale(1,Scope.sy*rand[0.5-1.2],1.0*rand[3.0-3.0]){sidewingA}
 sidewingB->scale(1,Scope.sy*rand[0.5-1.2],1.0*rand[3.0-3.0]){sidewingB}
-facades->comp(){bottom|top|front|facade|back|facade}
-sidewingA->comp(){bottom|top|facade|back|facade|facade}
-sidewingB->comp(){bottom|top|facade|facade|facade|back}
-side->subDiv(Y,groundFloor_height,1r){ground|side}
-back->subDiv(Y,groundFloor_height,1r){ground|back}
-facade->subDiv(Y,groundFloor_height,1r,topFloor_height){ground|floors|topfloor}
+facades->comp(){bottom|roof|front|facade|back|facade}
+sidewingA->comp(){bottom|roof|facade|back|facade|facade}
+sidewingB->comp(){bottom|roof|facade|facade|facade|back}
 front->subDiv(Y,groundFloor_height,1r,topFloor_height){groundfloor|floors|topfloor}
+groundfloor->subDiv(X,1r,entrance_width,1r){groundfloor|entrance|groundfloor}
 floors->repeat(Y,floor_height){floor}
-floor->subDiv(Y,5,window_height,1r){tile|yellow|green}
-tile->repeat(X,6){panel}
+floor->repeat(X,20){panel}
 panel->subDiv(Y,1r,4r,2r){top|slot|tile}
 slot->subDiv(X,1r,4r,1r){right|window|left}
-ground->(){red}
-back->(){yellow}
-side->(){green}
+window->trans(0,0,1){window}
+//PRIORITY 3
+facade->subDiv(Y,groundFloor_height,1r,topFloor_height){red|floors|topfloor}
+floors->repeat(Y,floor_height){floor}
+floor->repeat(Z,20){panel}
+panel->subDiv(Y,1r,4r,2r){top|slot|tile}
+slot->subDiv(Z,1r,4r,1r){floor|window|floor}
+topfloor->repeat(X,Scope.sy*1.0){topfloor}
 END
 
 //PRIORITY 1
@@ -42,7 +44,6 @@ slot->subDiv(X,1r,4r,1r){right|blue|left}
 blue->trans(0,0,1){blue}
 groundfloor->repeat(X,groundFloor_height){groundfloor}
 roof->scale(1,1,1.2){top}
-remaind->(){red}
 END
 
 
