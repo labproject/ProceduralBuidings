@@ -301,22 +301,22 @@ void display() {
 				glPushMatrix();
 
 				//Objects with roof texture
-				if((*pre).getName() == "roof"){
+				if((*leaf).getName() == "roof"){
 					glBindTexture(GL_TEXTURE_2D, tex_roof[prob_set]);
 				}
 				
 				//Objects with floor textures
-				else if ((*pre).getName() == "groundfloor" || (*pre).getName() == "groundlevel")
+				else if ((*leaf).getName() == "groundfloor" || (*leaf).getName() == "groundlevel")
 					glBindTexture(GL_TEXTURE_2D, tex_groundfloor[prob_set]);
-				else if ((*pre).getName() == "topfloor")
+				else if ((*leaf).getName() == "topfloor")
 					glBindTexture(GL_TEXTURE_2D, tex_topfloor[prob_set]);
 
 				//Objects like windows, doors, entrance
-				else if ((*pre).getName() == "window")
+				else if ((*leaf).getName() == "window")
 					glBindTexture(GL_TEXTURE_2D, tex_window[prob_window]);
-				else if ((*pre).getName() == "door")
+				else if ((*leaf).getName() == "door")
 					glBindTexture(GL_TEXTURE_2D, tex_door[prob_set]);
-				else if ((*pre).getName() == "entrance")
+				else if ((*leaf).getName() == "entrance")
 					glBindTexture(GL_TEXTURE_2D, tex_entrance[prob_set]);
 				else
 					glBindTexture(GL_TEXTURE_2D, tex_wall[prob_set]);
