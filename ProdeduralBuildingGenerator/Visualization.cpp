@@ -98,6 +98,8 @@ GLint loadTextures()
 	//probability for choosing a texture set and windowset:
 	prob_set = rand() % 5;
 	prob_window = rand() % 5;
+
+	cout << prob_set << "  " << prob_window << endl;
 	//Textures for Environment
 	for(int i = 0; i < number_textures; i++){
 		filename = "textures/ground" + to_string(static_cast<long long>(i)) + ".jpg";
@@ -121,7 +123,7 @@ GLint loadTextures()
 	for(int i = 0; i < number_textures; i++){
 		filename = "textures/glass" + to_string(static_cast<long long>(i)) + ".jpg";
 		tex_glass[i] = SOIL_load_OGL_texture(filename.c_str(),SOIL_LOAD_AUTO,SOIL_CREATE_NEW_ID,SOIL_FLAG_MIPMAPS);
-		if (tex_glass[i] == 0 ) cout << "ERROR loading texture " << i << endl;
+		if (tex_glass[i] == 0 ) cout << "ERROR loading texture " << filename << endl;
 	}
 
 
@@ -131,7 +133,7 @@ GLint loadTextures()
 	for(int i = 0; i < number_textures; i++){
 		filename = "textures/roof" + to_string(static_cast<long long>(i)) + ".jpg";
 		tex_roof[i] = SOIL_load_OGL_texture(filename.c_str(),SOIL_LOAD_AUTO,SOIL_CREATE_NEW_ID,SOIL_FLAG_MIPMAPS);
-		if (tex_roof[i] == 0 ) cout << "ERROR loading texture " << i << endl;
+		if (tex_roof[i] == 0 ) cout << "ERROR loading texture " << filename << endl;
 	}
 
 
@@ -142,7 +144,7 @@ GLint loadTextures()
 	for(int i = 0; i < number_textures; i++){
 		filename = "textures/groundfloor" + to_string(static_cast<long long>(i)) + ".jpg";
 		tex_groundfloor[i] = SOIL_load_OGL_texture(filename.c_str(),SOIL_LOAD_AUTO,SOIL_CREATE_NEW_ID,SOIL_FLAG_MIPMAPS);
-		if (tex_groundfloor[i] == 0 ) cout << "ERROR loading texture " << i << endl;
+		if (tex_groundfloor[i] == 0 ) cout << "ERROR loading texture " << filename << endl;
 	}
 
 
@@ -152,36 +154,38 @@ GLint loadTextures()
 	for(int i = 0; i < number_textures; i++){
 		filename = "textures/topfloor" + to_string(static_cast<long long>(i)) + ".jpg";
 		tex_topfloor[i] = SOIL_load_OGL_texture(filename.c_str(),SOIL_LOAD_AUTO,SOIL_CREATE_NEW_ID,SOIL_FLAG_MIPMAPS);
-		if (tex_topfloor[i] == 0 ) cout << "ERROR loading texture " << i << endl;
+		if (tex_topfloor[i] == 0 ) cout << "ERROR loading texture " << filename << endl;
 	}
 
 	//Tex floor
 	for(int i = 0; i < number_textures; i++){
 		filename = "textures/floor" + to_string(static_cast<long long>(i)) + ".jpg";
 		tex_floor[i] = SOIL_load_OGL_texture(filename.c_str(),SOIL_LOAD_AUTO,SOIL_CREATE_NEW_ID,SOIL_FLAG_MIPMAPS);
-		if (tex_floor[i] == 0 ) cout << "ERROR loading texture " << i << endl;
+		if (tex_floor[i] == 0 ) cout << "ERROR loading texture " << filename << endl;
 	}
 
 	//Tex window
 	for(int i = 0; i < number_textures; i++){
 		filename = "textures/window" + to_string(static_cast<long long>(i)) + ".jpg";
 		tex_window[i] = SOIL_load_OGL_texture(filename.c_str(),SOIL_LOAD_AUTO,SOIL_CREATE_NEW_ID,SOIL_FLAG_MIPMAPS);
-		if (tex_window[i] == 0 ) cout << "ERROR loading texture " << i << endl;
+		if (tex_window[i] == 0 ) cout << "ERROR loading texture " << filename << endl;
 	}
 
 	//Tex entrance
 	for(int i = 0; i < number_textures; i++){
 		filename = "textures/entrance" + to_string(static_cast<long long>(i)) + ".jpg";
 		tex_entrance[i] = SOIL_load_OGL_texture(filename.c_str(),SOIL_LOAD_AUTO,SOIL_CREATE_NEW_ID,SOIL_FLAG_MIPMAPS);
-		if (tex_entrance[i] == 0 ) cout << "ERROR loading texture " << i << endl;
+		if (tex_entrance[i] == 0 ) cout << "ERROR loading texture " << filename << endl;
 	}
 
 	//Tex door
 	for(int i = 0; i < number_textures; i++){
 		filename = "textures/door" + to_string(static_cast<long long>(i)) + ".jpg";
 		tex_door[i] = SOIL_load_OGL_texture(filename.c_str(),SOIL_LOAD_AUTO,SOIL_CREATE_NEW_ID,SOIL_FLAG_MIPMAPS);
-		if (tex_door[i] == 0 ) cout << "ERROR loading texture " << i << endl;
+		if (tex_door[i] == 0 ) cout << "ERROR loading texture " << filename << endl;
 	}
+
+
 
 	return true;                                        
 }
