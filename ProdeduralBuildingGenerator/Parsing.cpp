@@ -30,10 +30,12 @@ vector<pair<string,vector<GNode>>> parsing()
 		break;
 	}
 
+
+
 	//Read Rule Set Line by Line
 	string line;
 	ifstream infile;			
-	infile.open("EmpireState.txt");         
+	infile.open("testing.txt");         
 	while(!infile.eof()){
 		while(getline(infile,line)){					//post Line in line
 			if(line.find("END")!=line.npos){break;}		//Break reading file if END is found
