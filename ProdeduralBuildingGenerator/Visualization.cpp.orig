@@ -1,67 +1,91 @@
 #include "visualization.h"
-#define START 1
+#define LIGHT 1
 #define BOXES 2
 #define FACADES 3
 #define TEXTURES 4
+#define HISTORY 5
 
-bool start = false, boxes = true, facades = true, textures = true;
-static GLfloat spin = 0.0, aspectRatio, n = 80.0f;
+bool light = false, boxes = true, facades = true, textures = true;
+static GLfloat spin = 0.0, aspectRatio, n = 20; //N = **Koordinatensystem**
 GLuint cube, shape;
+GLubyte *tex_pointer;
 //movement in scene:
-static GLdouble xRef = 0.0, yRef = -10.0, zRef = 0.0, zoom = 1.0, horizontal = 0.0, vertical = 0.0, angle = 0.0;
-GLuint	tex_wall[12], tex_window[10], tex_glass[10], tex_roof[10], tex_floor[10], tex_groundfloor[10], tex_topfloor[10], tex_env[11];
-int prob1, prob2, prob3, prob4, prob5, prob6;
+//static GLdouble xRef = 0.0, yRef = 60.0, zRef = 0.0, zoom = 1, horizontal = config.at("building_height")+30, vertical = -2*config.at("building_height"), angle = 0.0;
+static GLdouble xRef = 0.0, yRef = 60.0, zRef = 0.0, move_z = 1, move_x = 0, move_y = -10, horizontal = 150, vertical = -300, angle = 0.0, zoom_look = 1;
+GLuint	tex_wall[12], tex_window[10], tex_glass[10], tex_roof[10], tex_floor[10], tex_groundfloor[10], tex_topfloor[10], tex_env[11], tex_entrance[11], tex_door[11], tex_back[11];
+int prob_set, prob_window;
 int depth = 0;
+bool history = false;
+
+//GLfloat x = 4;
 //Tree
 tree<Symbol> Tree;
 
 //set up light
-GLfloat LightAmbient[]= { 0.8,0.8, 0.8, 1 };    
-GLfloat LightDiffuse[]= { 1.0f, 1.0f, 1.0f, 1.0f }; 	
-GLfloat LightPosition[]= { 0.0f, 10.0f, -20.0f, 1.0f }; 
+<<<<<<< HEAD
+GLfloat LightAmbient[]= {0.0 ,0.0, 0.0, 1.0f };    
+GLfloat LightDiffuse[]= {100.0f, 100.0f, 100.0f, 1.0f }; 	
+GLfloat LightPosition[]= { 0, 400, 300, 100 }; 
+=======
+GLfloat LightAmbient[] = { 0.5,0.5, 0.5, 1 };    
+GLfloat LightDiffuse[] = { 1.0f, 1.0f, 1.0f, 1.0f }; 
+GLfloat LightColor1[] = {0.5f, 0.5f, 0.5f, 1.0f};
+
+GLfloat lightColor0[] = {0.7f, 0.7f, 0.7f, 1.0f}; 
+GLfloat lightPosition0[] = {-50.0f, 160.5f, -300.5f, 1.0f};
+GLfloat LightPosition1[]= { 0.0f, 100.0f, -400, 1.0f }; 
+GLfloat lightPosition2[] = {200.0f, 100.5f, 0.0f, 1.0f};
+GLfloat lightPosition3[] = {0.0f, 100.5f, 300.0f, 1.0f};
+GLfloat lightPosition4[] = {-200.0f, 100.5f, -0.0f, 1.0f};
 
 
-void buildCube(){
+>>>>>>> 56715c0cb1cb857aa3950423bc4c9ef3b7996b92
+
+
+void buildCube(GLfloat x){
 	//build a rectangular cube, which can be scaled and rotated
-	GLfloat x = 2048.0f/512.0f;
+	//REPEATPARAMETER
+	//GLfloat x = 4; //**verhältnis**
 
 	glBegin(GL_QUADS);
-		
-		//Top
-		glTexCoord2f(x, 0.0f); glVertex3d( 1.0, 1.0,0.0);          
-		glTexCoord2f(0, 0.0f); glVertex3d(0.0, 1.0,0.0);          
-		glTexCoord2f(0, x); glVertex3d(0.0, 1.0, 1.0);          
-		glTexCoord2f(x, x); glVertex3d( 1.0, 1.0, 1.0);
 
-		//Bottom
-		glTexCoord2f(x, 0.0f); glVertex3d( 1.0,0.0, 1.0);        
-		glTexCoord2f(x, x); glVertex3d(0.0,0.0, 1.0);          
-		glTexCoord2f(0.0f, x); glVertex3d(0.0,0.0,0.0);         
-		glTexCoord2f(0.0f, 0.0f); glVertex3d( 1.0,0.0,0.0);          
+	//Top
+	glNormal3d(0.0,1.0,0.0);	glTexCoord2f(x, 0.0f);	glVertex3d( 1.0, 1.0,0.0);          
+	glNormal3d(0.0,1.0,0.0);	glTexCoord2f(0, 0.0f);	glVertex3d(0.0, 1.0,0.0);          
+	glNormal3d(0.0,1.0,0.0);	glTexCoord2f(0, x);	glVertex3d(0.0, 1.0, 1.0);          
+	glNormal3d(0.0,1.0,0.0);	glTexCoord2f(x, x);		glVertex3d( 1.0, 1.0, 1.0);
 
-		//Back
-		glTexCoord2f(0.0f, 0.0f); glVertex3d( 1.0, 1.0, 1.0);          
-		glTexCoord2f(x, 0); glVertex3d(0.0, 1.0, 1.0);         
-		glTexCoord2f(x,x); glVertex3d(0.0,0.0, 1.0);         
-		glTexCoord2f(0.0f, x); glVertex3d( 1.0,0.0, 1.0);         
+	//Bottom
+	glNormal3d(0.0,-1.0,0.0);	glTexCoord2f(x, 0.0f); glVertex3d( 1.0,0.0, 1.0);        
+	glNormal3d(0.0,-1.0,0.0);	glTexCoord2f(x, x); glVertex3d(0.0,0.0, 1.0);          
+	glNormal3d(0.0,-1.0,0.0);	glTexCoord2f(0.0f, x); glVertex3d(0.0,0.0,0.0);         
+	glNormal3d(0.0,-1.0,0.0);	glTexCoord2f(0.0f, 0.0f); glVertex3d( 1.0,0.0,0.0);          
 
-		//Front
-		glTexCoord2f(x, x); glVertex3d( 1.0,0.0,0.0);        
-		glTexCoord2f(0.0f, x); glVertex3d(0.0,0.0,0.0);          
-		glTexCoord2f(0.0f, 0.0f); glVertex3d(0.0, 1.0,0.0);         
-		glTexCoord2f(x, 0.0f); glVertex3d( 1.0, 1.0,0.0);   
+	//Back
+	
+	glNormal3d(0.0,0.0,1.0);	glTexCoord2f(0.0f, 0.0f); glVertex3d( 1.0, 1.0, 1.0);          
+	glNormal3d(0.0,0.0,1.0);	glTexCoord2f(x, 0); glVertex3d(0.0, 1.0, 1.0);         
+	glNormal3d(0.0,0.0,1.0);	glTexCoord2f(x,x); glVertex3d(0.0,0.0, 1.0);         
+	glNormal3d(0.0,0.0,1.0);	glTexCoord2f(0.0f, x); glVertex3d( 1.0,0.0, 1.0);         
 
-		//Left
-		glTexCoord2f(0, 0.0f); glVertex3d(0.0, 1.0, 1.0);          
-		glTexCoord2f(x, 0); glVertex3d(0.0, 1.0,0.0);       
-		glTexCoord2f(x, x); glVertex3d(0.0,0.0,0.0);         
-		glTexCoord2f(0.0f, x); glVertex3d(0.0,0.0, 1.0);         
+	//Front
+	glNormal3d(0.0,0.0,-1.0);	glTexCoord2f(x, x); glVertex3d( 1.0,0.0,0.0);        
+	glNormal3d(0.0,0.0,-1.0);	glTexCoord2f(0.0f, x); glVertex3d(0.0,0.0,0.0);          
+	glNormal3d(0.0,0.0,-1.0);	glTexCoord2f(0.0f, 0.0f); glVertex3d(0.0, 1.0,0.0);         
+	glNormal3d(0.0,0.0,-1.0);	glTexCoord2f(x, 0.0f); glVertex3d( 1.0, 1.0,0.0);   
 
-		//Right
-		glTexCoord2f(0.0f, 0.0f); glVertex3d( 1.0, 1.0,0.0);        
-		glTexCoord2f(x, 0.0f); glVertex3d( 1.0, 1.0, 1.0);         
-		glTexCoord2f(x, x); glVertex3d( 1.0,0.0, 1.0);         
-		glTexCoord2f(0.0f, x); glVertex3d( 1.0,0.0,0.0);          
+	//Left
+
+	glNormal3d(-1.0,0.0,0.0);	glTexCoord2f(0, 0.0f); glVertex3d(0.0, 1.0, 1.0);          
+	glNormal3d(-1.0,0.0,0.0);	glTexCoord2f(x, 0); glVertex3d(0.0, 1.0,0.0);       
+	glNormal3d(-1.0,0.0,0.0);	glTexCoord2f(x, x); glVertex3d(0.0,0.0,0.0);         
+	glNormal3d(-1.0,0.0,0.0);	glTexCoord2f(0.0f, x); glVertex3d(0.0,0.0, 1.0);         
+
+	//Right
+	glNormal3d(1.0,0.0,0.0);	glTexCoord2f(0.0f, 0.0f); glVertex3d( 1.0, 1.0,0.0);        
+	glNormal3d(1.0,0.0,0.0);	glTexCoord2f(x, 0.0f); glVertex3d( 1.0, 1.0, 1.0);         
+	glNormal3d(1.0,0.0,0.0);	glTexCoord2f(x, x); glVertex3d( 1.0,0.0, 1.0);         
+	glNormal3d(1.0,0.0,0.0);	glTexCoord2f(0.0f, x); glVertex3d( 1.0,0.0,0.0);          
 
 	glEnd();                       
 }
@@ -70,11 +94,11 @@ void buildShape(){
 	//build a rectangular, which can be scaled and rotated
 
 	glBegin(GL_QUADS);       
-
-		glVertex3d( 1.0,0.0,0.0);        
-		glVertex3d(0.0,0.0,0.0);          
-		glVertex3d(0.0, 1.0,0.0);         
-		glVertex3d( 1.0, 1.0,0.0);   		       
+	
+	glVertex3d( 1.0,0.0,0.0);        
+	glVertex3d(0.0,0.0,0.0);          
+	glVertex3d(0.0, 1.0,0.0);         
+	glVertex3d( 1.0, 1.0,0.0);   		       
 
 	glEnd();                       
 }
@@ -85,218 +109,327 @@ GLint loadTextures()
 	srand (time(NULL));
 
 	string filename;
+	int number_textures = 5;
 
+
+	//probability for choosing a texture set and windowset:
+	prob_set = rand() % 5;
+	prob_window = rand() % 5;
+
+	cout << prob_set << "  " << prob_window << endl;
 	//Textures for Environment
-			for(int i = 0; i < 11; i++){
-				filename = "textures/ground" + to_string(static_cast<long long>(i)) + ".jpg";
-//				cout << "loading " << filename << endl;
-				tex_env[i] = SOIL_load_OGL_texture(filename.c_str(),SOIL_LOAD_AUTO,SOIL_CREATE_NEW_ID,SOIL_FLAG_INVERT_Y);
-				if (tex_env[i] == 0 ) cout << "ERROR loading texture " << filename << endl;
-			}
-				
-				prob1 = rand() % 11;
+	for(int i = 0; i < number_textures; i++){
+		filename = "textures/ground" + to_string(static_cast<long long>(i)) + ".jpg";
+		tex_env[i] = SOIL_load_OGL_texture(filename.c_str(),SOIL_LOAD_AUTO,SOIL_CREATE_NEW_ID,SOIL_FLAG_MIPMAPS);
+		if (tex_env[i] == 0 ) cout << "ERROR loading texture " << filename << endl;
+	}
+
+
 
 	//Textures for Wall
-			for(int i = 0; i < 12; i++){
-				filename = "textures/brick" + to_string(static_cast<long long>(i)) + ".jpg";
-//				cout << "loading " << filename << endl;
-				tex_wall[i] = SOIL_load_OGL_texture(filename.c_str(),SOIL_LOAD_AUTO,SOIL_CREATE_NEW_ID,SOIL_FLAG_INVERT_Y);
-				if (tex_wall[i] == 0 ) cout << "ERROR loading texture " << filename << endl;
-			}
+	for(int i = 0; i < number_textures; i++){
+		filename = "textures/brick" + to_string(static_cast<long long>(i)) + ".jpg";
+		tex_wall[i] = SOIL_load_OGL_texture(filename.c_str(),SOIL_LOAD_AUTO,SOIL_CREATE_NEW_ID,SOIL_FLAG_MIPMAPS);
+		if (tex_wall[i] == 0 ) cout << "ERROR loading texture " << filename << endl;
+	}
 
-			prob2 = rand() % 12;
+
 
 	//Textures Glass
 
-			for(int i = 0; i < 9; i++){
-				filename = "textures/glass" + to_string(static_cast<long long>(i)) + ".jpg";
-//				cout << "loading " << filename << endl;
-				tex_glass[i] = SOIL_load_OGL_texture(filename.c_str(),SOIL_LOAD_AUTO,SOIL_CREATE_NEW_ID,SOIL_FLAG_INVERT_Y);
-				if (tex_glass[i] == 0 ) cout << "ERROR loading texture " << i << endl;
-			}
+	for(int i = 0; i < number_textures; i++){
+		filename = "textures/glass" + to_string(static_cast<long long>(i)) + ".jpg";
+		tex_glass[i] = SOIL_load_OGL_texture(filename.c_str(),SOIL_LOAD_AUTO,SOIL_CREATE_NEW_ID,SOIL_FLAG_MIPMAPS);
+		if (tex_glass[i] == 0 ) cout << "ERROR loading texture " << filename << endl;
+	}
 
-			prob3 = rand() % 9;
 
-			prob5 = rand() % 9 + 1;
-			if (prob5 == 9 ) prob5 = 0;
 
 	//Textures for Roof
 
-			for(int i = 0; i < 8; i++){
-				filename = "textures/roof" + to_string(static_cast<long long>(i)) + ".jpg";
-//				cout << "loading " << filename << endl;
-				tex_roof[i] = SOIL_load_OGL_texture(filename.c_str(),SOIL_LOAD_AUTO,SOIL_CREATE_NEW_ID,SOIL_FLAG_INVERT_Y);
-				if (tex_roof[i] == 0 ) cout << "ERROR loading texture " << i << endl;
-			}
+	for(int i = 0; i < number_textures; i++){
+		filename = "textures/roof" + to_string(static_cast<long long>(i)) + ".jpg";
+		tex_roof[i] = SOIL_load_OGL_texture(filename.c_str(),SOIL_LOAD_AUTO,SOIL_CREATE_NEW_ID,SOIL_FLAG_MIPMAPS);
+		if (tex_roof[i] == 0 ) cout << "ERROR loading texture " << filename << endl;
+	}
 
-			prob4 = rand() % 8;
 
-			
+
+
 	//Textures for Groundfloor
 
-			for(int i = 0; i < 4; i++){
-				filename = "textures/groundfloor" + to_string(static_cast<long long>(i)) + ".jpg";
-				//cout << "loading " << filename << endl;
-				tex_groundfloor[i] = SOIL_load_OGL_texture(filename.c_str(),SOIL_LOAD_AUTO,SOIL_CREATE_NEW_ID,SOIL_FLAG_INVERT_Y);
-				if (tex_groundfloor[i] == 0 ) cout << "ERROR loading texture " << i << endl;
-			}
+	for(int i = 0; i < number_textures; i++){
+		filename = "textures/groundfloor" + to_string(static_cast<long long>(i)) + ".jpg";
+		tex_groundfloor[i] = SOIL_load_OGL_texture(filename.c_str(),SOIL_LOAD_AUTO,SOIL_CREATE_NEW_ID,SOIL_FLAG_MIPMAPS);
+		if (tex_groundfloor[i] == 0 ) cout << "ERROR loading texture " << filename << endl;
+	}
 
-			prob5 = rand() % 4;
+
 
 	//Textures for topfloor
 
-			for(int i = 0; i < 7; i++){
-				filename = "textures/topfloor" + to_string(static_cast<long long>(i)) + ".jpg";
-				//cout << "loading " << filename << endl;
-				tex_topfloor[i] = SOIL_load_OGL_texture(filename.c_str(),SOIL_LOAD_AUTO,SOIL_CREATE_NEW_ID,SOIL_FLAG_INVERT_Y);
-				if (tex_topfloor[i] == 0 ) cout << "ERROR loading texture " << i << endl;
-			}
+	for(int i = 0; i < number_textures; i++){
+		filename = "textures/topfloor" + to_string(static_cast<long long>(i)) + ".jpg";
+		tex_topfloor[i] = SOIL_load_OGL_texture(filename.c_str(),SOIL_LOAD_AUTO,SOIL_CREATE_NEW_ID,SOIL_FLAG_MIPMAPS);
+		if (tex_topfloor[i] == 0 ) cout << "ERROR loading texture " << filename << endl;
+	}
 
-			prob6 = rand() % 7;
+	//Tex floor
+	for(int i = 0; i < number_textures; i++){
+		filename = "textures/floor" + to_string(static_cast<long long>(i)) + ".jpg";
+		tex_floor[i] = SOIL_load_OGL_texture(filename.c_str(),SOIL_LOAD_AUTO,SOIL_CREATE_NEW_ID,SOIL_FLAG_MIPMAPS);
+		if (tex_floor[i] == 0 ) cout << "ERROR loading texture " << filename << endl;
+	}
+
+	//Tex window
+	for(int i = 0; i < number_textures; i++){
+		filename = "textures/window" + to_string(static_cast<long long>(i)) + ".jpg";
+		tex_window[i] = SOIL_load_OGL_texture(filename.c_str(),SOIL_LOAD_AUTO,SOIL_CREATE_NEW_ID,SOIL_FLAG_MIPMAPS);
+		if (tex_window[i] == 0 ) cout << "ERROR loading texture " << filename << endl;
+	}
+
+	//Tex entrance
+	for(int i = 0; i < number_textures; i++){
+		filename = "textures/entrance" + to_string(static_cast<long long>(i)) + ".jpg";
+		tex_entrance[i] = SOIL_load_OGL_texture(filename.c_str(),SOIL_LOAD_AUTO,SOIL_CREATE_NEW_ID,SOIL_FLAG_MIPMAPS);
+		if (tex_entrance[i] == 0 ) cout << "ERROR loading texture " << filename << endl;
+	}
+
+	//Tex door
+	for(int i = 0; i < number_textures; i++){
+		filename = "textures/door" + to_string(static_cast<long long>(i)) + ".jpg";
+		tex_door[i] = SOIL_load_OGL_texture(filename.c_str(),SOIL_LOAD_AUTO,SOIL_CREATE_NEW_ID,SOIL_FLAG_MIPMAPS);
+		if (tex_door[i] == 0 ) cout << "ERROR loading texture " << filename << endl;
+	}
+
+	//Tex back
+	for(int i = 0; i < number_textures; i++){
+		filename = "textures/back" + to_string(static_cast<long long>(i)) + ".jpg";
+		tex_back[i] = SOIL_load_OGL_texture(filename.c_str(),SOIL_LOAD_AUTO,SOIL_CREATE_NEW_ID,SOIL_FLAG_MIPMAPS);
+		if (tex_back[i] == 0 ) cout << "ERROR loading texture " << filename << endl;
+	}
 
 
 
-			
-			//cout << prob1 << prob2 << prob3 << prob4;
 
- 
-    return true;                                        
+	return true;                                        
 }
 
 void display() {
+	glColor3d(1,1,1);
 
-	//gluLookAt (0.0 + horizontal, 0.0 + vertical, -10.0+zoom, xRef, yRef, zRef, 0.0, 1, 0); 
-	if(start){
+	if(light){
+		glEnable(GL_LIGHT0); 
 		glEnable(GL_LIGHT1); 
+		glEnable(GL_LIGHT2);
+		glEnable(GL_LIGHT3);
+		glEnable(GL_LIGHT4);
 		glEnable(GL_LIGHTING);
 	}
 	else{
+		glDisable(GL_LIGHT0);
 		glDisable(GL_LIGHT1);
+		glEnable(GL_LIGHT2);
+		glEnable(GL_LIGHT3);
+		glEnable(GL_LIGHT4);
 		glDisable(GL_LIGHTING);
 	}
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glClearColor(1.0, 1.0, 1.0, 1.0);
 
 	glLoadIdentity();
-	gluLookAt (-1.0+horizontal, 4+vertical, -20+zoom, xRef, yRef, zRef, 0.0, 1, 0); 
+ 
+	gluLookAt(0,horizontal+(abs(zoom_look)),vertical-(zoom_look),xRef,yRef,zRef,0,1,0);
 
-	//glScaled(zoom,zoom,zoom);
-	glTranslated(0,-10,0);
+
+	glTranslated(move_x,move_y,move_z);
 	glRotated(angle,0,1,0);
 
 	//draw ground
 	GLfloat x = 2048.0f/512.0f;//test size
-	
-	glBindTexture(GL_TEXTURE_2D, tex_env[prob1]);
+
+	glBindTexture(GL_TEXTURE_2D, tex_env[prob_set]);
+
+	//load texture in storage for mipmapping
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 	glBegin(GL_QUADS);
-		glTexCoord2f(0, 0); glVertex3d(-n+2, -0.1, -n+2);          
-		glTexCoord2f(x, 0); glVertex3d(-n+2, -0.1, n-2);          
-		glTexCoord2f(x, x); glVertex3d(n-2, -0.1, n-2);          
-		glTexCoord2f(0, x); glVertex3d(n-2, -0.1, -n+2);
+	glNormal3d(0,1,0);	glTexCoord2f(0, 0); glVertex3d(-200, -0.1, -200);
+	glNormal3d(0,1,0);	glTexCoord2f(x, 0); glVertex3d(-200, -0.1, 200);          
+	glNormal3d(0,1,0);	glTexCoord2f(x, x); glVertex3d(200, -0.1, 200);          
+	glNormal3d(0,1,0);	glTexCoord2f(0, x); glVertex3d(200, -0.1, -200);
 	glEnd();
 
 	glTranslated(-5,0,-5);
 
 
 	//Iterate over Tree
-	
+
 	tree<Symbol>::leaf_iterator leaf = Tree.begin_leaf();
+	tree<Symbol>::pre_order_iterator pre = Tree.begin(); 
 	Symbol *child;
 
-	while (leaf != Tree.end_leaf()){
 
-		if((*leaf).drawable){
+	//draw whole tree only if history == false, otherwise draw up to certain treelevel given by parameter depth
+
+	if(history){
+		while(pre != Tree.end()){
 			
-			glPushMatrix();
-		
-<<<<<<< HEAD
-			//coloooors red, blue, green, yellow
+			if (Tree.depth(pre) == depth )
+				pre.skip_children();
+			if((Tree.depth(pre) < depth) && (pre.number_of_children() == 0) || (Tree.depth(pre) == depth)){
+				glPushMatrix();
 
-			if((*leaf).getName() == "red")
-				glColor3d(1,0,0);
-			if((*leaf).getName() == "blue")
-				glColor3d(0,0,1);
-			if((*leaf).getName() == "green")
-				glColor3d(0,1,0);
-			if((*leaf).getName() == "yellow")
-				glColor3d(0,1,1);
+				glColor3d(1,1,1);
+
+				//Objects with wall texture
+				//if((*pre).getName() == "start" || (*pre).getName() == "complex" || (*pre).getName() == "facades" || (*pre).getName() == "sidewing" || (*pre).getName() == "back" || (*pre).getName() == "side" || (*pre).getName() == "floors"
+				//							   ||(*pre).getName() == "wall" || (*pre).getName() == "tile"){
+				//	glBindTexture(GL_TEXTURE_2D, tex_wall[prob_set]);
+				//}
+
+				//Objects with roof texture
+				if((*pre).getName() == "roof"){
+					glBindTexture(GL_TEXTURE_2D, tex_roof[prob_set]);
+				}
+				
+				//Back side
+				else if ((*pre).getName() == "back"){
+					x=4;
+					glBindTexture(GL_TEXTURE_2D, tex_back[prob_set]);
+					
+				}
+				//Objects with floor textures
+				else if ((*pre).getName() == "groundfloor" || (*pre).getName() == "groundlevel"){
+					x=1;
+					glBindTexture(GL_TEXTURE_2D, tex_groundfloor[prob_set]);
+				}
+				else if ((*pre).getName() == "topfloor")
+					glBindTexture(GL_TEXTURE_2D, tex_topfloor[prob_set]);
+
+				//Objects like windows, doors, entrance
+				else if ((*pre).getName() == "window")
+					glBindTexture(GL_TEXTURE_2D, tex_window[prob_window]);
+				else if ((*pre).getName() == "door"){
+					x = 1;
+					glBindTexture(GL_TEXTURE_2D, tex_door[prob_set]);
+	
+					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+				}
+				else if ((*pre).getName() == "entrance")
+					glBindTexture(GL_TEXTURE_2D, tex_entrance[prob_set]);
 
 
-			//cout << node.name << endl;
-			if((*leaf).getName() == "front" || (*leaf).getName() == "floor"){
-				//glColor4d(1,0, 0, 0.9); 
-				glBindTexture(GL_TEXTURE_2D, tex_glass[prob3]);
+				
+				//DEBUG COLORS
+				else if ((*pre).getName() == "red")
+					glColor3d(1,0,0);
+				else if ((*pre).getName() == "blue")
+					glColor3d(0,0,1);
+				else if ((*pre).getName() == "green")
+					glColor3d(0,1,0);
+				else if ((*pre).getName() == "yellow")
+					glColor3d(1,1,0);
+				else
+					glBindTexture(GL_TEXTURE_2D, tex_wall[prob_set]);
+
+
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+				glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR_MIPMAP_LINEAR);
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+				GLfloat mat_specular[] = { 1.0, 1.0, 1.0, 1.0 };
+				GLfloat mat_shininess[] = { 50.0 };
+				glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
+				glMaterialfv(GL_FRONT, GL_SHININESS, mat_shininess);
+				glTranslated((*pre).position[0], (*pre).position[1], (*pre).position[2]);
+				glScaled((*pre).scale[0], (*pre).scale[1], (*pre).scale[2]);
+
+				//glCallList(cube);
+				buildCube(x);
+				glPopMatrix();
 			}
-			else if ((*leaf).getName() == "groundfloor")
-				glBindTexture(GL_TEXTURE_2D, tex_groundfloor[prob5]);
-			else if ((*leaf).getName() == "topfloor")
-				glBindTexture(GL_TEXTURE_2D, tex_topfloor[prob6]);
 
-			else if((*leaf).getName() == "top"){
-				//glColor4d(0.7,0, 0, 0.9); 
-				glBindTexture(GL_TEXTURE_2D, tex_roof[prob4]);
+			pre++;
+		}
+	}
+	else{		
+
+
+
+		while (leaf != Tree.end_leaf()){
+
+			if((*leaf).drawable){
+
+				glPushMatrix();
+				glColor3d(1,1,1);
+				//Objects with roof texture
+				if((*leaf).getName() == "roof"){
+					glBindTexture(GL_TEXTURE_2D, tex_roof[prob_set]);
+				}
+				
+				//Objects with floor textures
+				else if ((*leaf).getName() == "groundfloor" || (*leaf).getName() == "groundlevel"){
+					x=1;
+					glBindTexture(GL_TEXTURE_2D, tex_groundfloor[prob_set]);
+				}
+				else if ((*leaf).getName() == "topfloor")
+					glBindTexture(GL_TEXTURE_2D, tex_topfloor[prob_set]);
+
+				//Objects like windows, doors, entrance
+				else if ((*leaf).getName() == "window")
+					glBindTexture(GL_TEXTURE_2D, tex_window[prob_window]);
+				else if ((*leaf).getName() == "door"){
+					x = 1;
+					glBindTexture(GL_TEXTURE_2D, tex_door[prob_set]);
+	
+					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+				}
+				else if ((*leaf).getName() == "entrance")
+					glBindTexture(GL_TEXTURE_2D, tex_entrance[prob_set]);
+				
+				else if ((*leaf).getName() == "back"){
+					x=4;
+					glBindTexture(GL_TEXTURE_2D, tex_back[prob_set]);
+
+				}
+
+				//DEBUG COLORS
+				else if ((*leaf).getName() == "red")
+					glColor3d(1,0,0);
+				else if ((*leaf).getName() == "blue")
+					glColor3d(0,0,1);
+				else if ((*leaf).getName() == "green")
+					glColor3d(0,1,0);
+				else if ((*leaf).getName() == "yellow")
+					glColor3d(1,1,0);
+				else
+					glBindTexture(GL_TEXTURE_2D, tex_wall[prob_set]);
+
+
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+				GLfloat mat_specular[] = { 1.0, 1.0, 1.0, 1.0 };
+				GLfloat mat_shininess[] = { 50.0 };
+				glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
+				glMaterialfv(GL_FRONT, GL_SHININESS, mat_shininess);
+
+				glTranslated((*leaf).position[0], (*leaf).position[1], (*leaf).position[2]);
+				glScaled((*leaf).scale[0], (*leaf).scale[1], (*leaf).scale[2]);
+
+				//glCallList(cube);
+				buildCube(x);
+				
+				glPopMatrix();
 			}
-			else if ((*leaf).getName() == "side"){
-=======
-		//coloooors red, blue, green, yellow
 
-		if((*leaf).getName() == "red")
-			glColor3d(1,0,0);
-		else if((*leaf).getName() == "blue")
-			glColor3d(0,0,1);
-		else if((*leaf).getName() == "green")
-			glColor3d(0,1,0);
-		else if((*leaf).getName() == "yellow")
-			glColor3d(1,1,0);
-		else {
-			glColor3d(1,1,1);
+			leaf++;
 		}
-
-
-		//cout << node.name << endl;
-		if((*leaf).getName() == "front" || (*leaf).getName() == "floor"){
-			//glColor4d(1,0, 0, 0.9); 
-			glBindTexture(GL_TEXTURE_2D, tex_glass[prob3]);
-		}
-		else if ((*leaf).getName() == "groundfloor")
-			glBindTexture(GL_TEXTURE_2D, tex_groundfloor[prob5]);
-		else if ((*leaf).getName() == "topfloor")
-			glBindTexture(GL_TEXTURE_2D, tex_topfloor[prob6]);
-
-		else if((*leaf).getName() == "top"){
-			//glColor4d(0.7,0, 0, 0.9); 
-			glBindTexture(GL_TEXTURE_2D, tex_roof[prob4]);
-		}
-		else if ((*leaf).getName() == "side"){
->>>>>>> 92717e5b95daee4ded041eba4654413aa1dea6d6
-			
-				glBindTexture(GL_TEXTURE_2D, tex_wall[prob5]);
-			}
-			else if ((*leaf).getName() == "back")
-				glBindTexture(GL_TEXTURE_2D, tex_wall[prob2]);
-			else
-				glBindTexture(GL_TEXTURE_2D, tex_wall[prob2]);
-
-		
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-			//glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
-			//glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
-			GLfloat mat_specular[] = { 1.0, 1.0, 1.0, 1.0 };
-			GLfloat mat_shininess[] = { 50.0 };
-			glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
-			glMaterialfv(GL_FRONT, GL_SHININESS, mat_shininess);
-
-			glTranslated((*leaf).position[0], (*leaf).position[1], (*leaf).position[2]);
-			glScaled((*leaf).scale[0], (*leaf).scale[1], (*leaf).scale[2]);
-
-			glCallList(cube);
-			glPopMatrix();
-		}
-
-		leaf++;
 	}
 
 
@@ -310,347 +443,89 @@ void reshape(GLsizei w, GLsizei h){
 
 	glLoadIdentity();
 
-	
-	
+
+
 	if(h==0) //don't divide by zero
 		h=1;
 
 	//set viewport
 	glViewport(0,0,w,h);
 	glMatrixMode(GL_PROJECTION);                  // Select The Projection Matrix
-    glLoadIdentity();                           // Reset The Projection Matrix
- 
-    aspectRatio = (GLfloat) w / (GLfloat) h;
+	glLoadIdentity();                           // Reset The Projection Matrix
+
+	aspectRatio = (GLfloat) w / (GLfloat) h;
 
 	if(w <= h)
-		glOrtho(-n, n, -n / aspectRatio, n / aspectRatio, n, -n); 
+		glOrtho(-n, n, -n / aspectRatio, n / aspectRatio, 20, -20); 
 	else
-		glOrtho(-n * aspectRatio, n * aspectRatio, -n, n, n, -n);
+		glOrtho(-n * aspectRatio, n * aspectRatio, -n, n, 20, -20);
 
-	
-	gluPerspective(4, aspectRatio, 1, 10);
 
- 
-    glMatrixMode(GL_MODELVIEW);                     // Select The Modelview Matrix
-    glLoadIdentity();   
+	gluPerspective(2, aspectRatio, 1, 10);
+
+
+	glMatrixMode(GL_MODELVIEW);                     // Select The Modelview Matrix
+	glLoadIdentity();   
 
 }
 
 //initialize Scene and build display lists
 void init(){
-		glClearColor(1.0, 1.0, 1.0, 1.0);
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		glEnable(GL_DEPTH_TEST);
-		glEnable(GL_BLEND);
-		glEnable(GL_TEXTURE_2D);
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-		//Enable Smoothing
-		glEnable(GL_POINT_SMOOTH); 
-		glEnable(GL_LINE_SMOOTH); 
-		glEnable(GL_POLYGON_SMOOTH); 
-
-		//Light
-		glLightfv(GL_LIGHT1, GL_AMBIENT, LightAmbient);  
-		glLightfv(GL_LIGHT1, GL_DIFFUSE, LightDiffuse);
-		glLightfv(GL_LIGHT1, GL_POSITION,LightPosition); 
-
-
-		loadTextures();
-		
-		cube = glGenLists (1);
-		glNewList(cube, GL_COMPILE);
-			buildCube();
-		glEndList();
-
-		shape = glGenLists(1);
-		glNewList(shape, GL_COMPILE);
-			buildShape();
-		glEndList();
-}
-
-
-void initTestTree(){
-	vector<double> pos, scale;
-	pos.push_back(0);
-	pos.push_back(0);
-	pos.push_back(0);
-	
-	scale.push_back(10);
-	scale.push_back(10);
-	scale.push_back(10);
-
-	Symbol *start = new Symbol(pos,scale, "start");
-
-	pos[0] = 0; 
-	pos[1] = 0; 
-	pos[2] = 0;
-	
-	scale[0] = 10;
-	scale[1] = 10;
-	scale[2] = 1;
-
-	Symbol *facade = new Symbol(pos,scale, "facade");
-
-
-	pos[0] = 0; 
-	pos[1] = 0; 
-	pos[2] = 1;
-	
-	scale[0] = 10;
-	scale[1] = 8;
-	scale[2] = 8;
-
-	Symbol *sidewings = new Symbol(pos,scale, "sidewings");
-
-	pos[0] = 0; 
-	pos[1] = 0; 
-	pos[2] = 1;
-	
-	scale[0] = 3;
-	scale[1] = 8;
-	scale[2] = 8;
-
-	Symbol *sidewing1 = new Symbol(pos,scale, "sidewing1");
-
-	pos[0] = 7; 
-	pos[1] = 0; 
-	pos[2] = 1;
-	
-	scale[0] = 3;
-	scale[1] = 6;
-	scale[2] = 6;
-
-	Symbol *sidewing2 = new Symbol(pos,scale, "sidewing2");
-
-	pos[0] = 0; 
-	pos[1] = 0; 
-	pos[2] = 0;
-	
-	scale[0] = 10;
-	scale[1] = 10;
-	scale[2] = 0;
-
-	Symbol *front = new Symbol(pos,scale, "front");
-
-	pos[0] = 0; 
-	pos[1] = 0; 
-	pos[2] = 0;
-	
-	scale[0] = 10;
-	scale[1] = 1;
-	scale[2] = 0;
-
-	Symbol *groundfloor = new Symbol(pos,scale, "groundfloor");
-
-
-	pos[0] = 0; 
-	pos[1] = 1; 
-	pos[2] = 0;
-	
-	scale[0] = 10;
-	scale[1] = 8;
-	scale[2] = 0;
-
-	Symbol *floor = new Symbol(pos,scale, "floor");
-
-	pos[0] = 0; 
-	pos[1] = 9; 
-	pos[2] = 0;
-	
-	scale[0] = 10;
-	scale[1] = 1;
-	scale[2] = 0;
-
-	Symbol *topfloor = new Symbol(pos,scale, "topfloor");
-
-
-
-	pos[0] = 10; 
-	pos[1] = 0; 
-	pos[2] = 0;
-	
-	scale[0] = 0;
-	scale[1] = 10;
-	scale[2] = 1;
-
-	Symbol *side1 = new Symbol(pos,scale, "side");
-
-	pos[0] = 0; 
-	pos[1] = 0; 
-	pos[2] = 0;
-	
-	scale[0] = 0;
-	scale[1] = 10;
-	scale[2] = 1;
-
-	Symbol *side2 = new Symbol(pos,scale, "side");
-
-	pos[0] = 0; 
-	pos[1] = 10; 
-	pos[2] = 0;
-	
-	scale[0] = 10;
-	scale[1] = 0;
-	scale[2] = 1;
-
-	Symbol *top = new Symbol(pos,scale, "top");
-
-	pos[0] = 0; 
-	pos[1] = 0; 
-	pos[2] = 1;
-	
-	scale[0] = 10;
-	scale[1] = 10;
-	scale[2] = 0;
-
-	Symbol *back = new Symbol(pos,scale, "back");
-
-
-	//Sidewing2
-	pos[0] = 10; 
-	pos[1] = 0; 
-	pos[2] = 1;
-	
-	scale[0] = 0;
-	scale[1] = 6;
-	scale[2] = 6;
-
-	Symbol *sidew1 = new Symbol(pos,scale, "side");
-
-	pos[0] = 7; 
-	pos[1] = 0; 
-	pos[2] = 1;
-	
-	scale[0] = 0;
-	scale[1] = 6;
-	scale[2] = 6;
-
-	Symbol *sidew2 = new Symbol(pos,scale, "side");
-
-	pos[0] = 7; 
-	pos[1] = 6; 
-	pos[2] = 1;
-	
-	scale[0] = 3;
-	scale[1] = 0;
-	scale[2] = 6;
-
-	Symbol *sidewtop = new Symbol(pos,scale, "top");
-
-	pos[0] = 7; 
-	pos[1] = 0; 
-	pos[2] = 7;
-	
-	scale[0] = 3;
-	scale[1] = 6;
-	scale[2] = 0;
-
-	Symbol *sidewback = new Symbol(pos,scale, "back");
-
-
-	//Sidewing1
-	pos[0] = 3; 
-	pos[1] = 0; 
-	pos[2] = 1;
-	
-	scale[0] = 0;
-	scale[1] = 8;
-	scale[2] = 8;
-
-	Symbol *sidew11 = new Symbol(pos,scale, "side");
-
-	pos[0] = 0; 
-	pos[1] = 0; 
-	pos[2] = 1;
-	
-	scale[0] = 0;
-	scale[1] = 8;
-	scale[2] = 8;
-
-	Symbol *sidew12 = new Symbol(pos,scale, "side");
-
-	pos[0] = 0; 
-	pos[1] = 8; 
-	pos[2] = 1;
-	
-	scale[0] = 3;
-	scale[1] = 0;
-	scale[2] = 8;
-
-	Symbol *sidewtop1 = new Symbol(pos,scale, "top");
-
-	pos[0] = 0; 
-	pos[1] = 0; 
-	pos[2] = 9;
-	
-	scale[0] = 3;
-	scale[1] = 8;
-	scale[2] = 0;
-
-	Symbol *sidewback1 = new Symbol(pos,scale, "back");
-
-	tree<Symbol> derivTree;
-	tree<Symbol>::iterator root, one, two, three, street;
-
-	root = derivTree.begin();
-
-	one = derivTree.insert(root, *start);
-		two = derivTree.append_child(one, *facade);
-			street = derivTree.append_child(two, *front);
-				derivTree.append_child(street, *groundfloor);
-				derivTree.append_child(street, *floor);
-				derivTree.append_child(street, *topfloor);
-			derivTree.append_child(two, *side1);
-			derivTree.append_child(two, *side2);
-			derivTree.append_child(two, *top);
-			derivTree.append_child(two, *back);
-		two = derivTree.append_child(one, *sidewings);
-			three = derivTree.append_child(two, *sidewing1);	
-				derivTree.append_child(three, *sidew11);
-				derivTree.append_child(three, *sidew12);
-				derivTree.append_child(three, *sidewtop1);
-				derivTree.append_child(three, *sidewback1);
-
-			three = derivTree.append_child(two, *sidewing2);
-				derivTree.append_child(three, *sidew1);
-				derivTree.append_child(three, *sidew2);
-				derivTree.append_child(three, *sidewtop);
-				derivTree.append_child(three, *sidewback);
-
-	tree<Symbol>::leaf_iterator leaf = derivTree.begin_leaf();
-
-//	cout << "leaf nodes: " << endl;
-	while (leaf != derivTree.end_leaf()){
-		//if(leaf != derivTree.begin())
-//			cout << "			" << (*leaf).getName() << endl;
-		leaf++;
-	}
-
-	Tree = derivTree;
-
-	//cout << "test, first leaf:	" << (*Tree.begin_leaf()).getName() << endl;
-
-
-
-
+	glClearColor(1.0, 1.0, 1.0, 1.0);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_BLEND);
+	glEnable(GL_TEXTURE_2D);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+	//Enable Smoothing
+	glEnable(GL_POINT_SMOOTH); 
+	glEnable(GL_LINE_SMOOTH); 
+	glEnable(GL_POLYGON_SMOOTH); 
+
+	//Light
+	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, LightAmbient);
+	glLightfv(GL_LIGHT1, GL_AMBIENT, LightAmbient);  
+	glLightfv(GL_LIGHT1, GL_DIFFUSE, LightColor1);
+	glLightfv(GL_LIGHT1, GL_POSITION,LightPosition1); 
+	glLightfv(GL_LIGHT0, GL_DIFFUSE, lightColor0);
+    glLightfv(GL_LIGHT0, GL_POSITION, lightPosition0);
+	glLightfv(GL_LIGHT2, GL_DIFFUSE, lightColor0);
+    glLightfv(GL_LIGHT2, GL_POSITION, lightPosition2);
+	glLightfv(GL_LIGHT3, GL_DIFFUSE, lightColor0);
+    glLightfv(GL_LIGHT3, GL_POSITION, lightPosition3);
+	glLightfv(GL_LIGHT4, GL_DIFFUSE, lightColor0);
+    glLightfv(GL_LIGHT4, GL_POSITION, lightPosition4);
+
+
+	loadTextures();
+
+	//cube = glGenLists (1);
+	//glNewList(cube, GL_COMPILE);
+	//buildCube();
+	//glEndList();
+
+	//shape = glGenLists(1);
+	//glNewList(shape, GL_COMPILE);
+	//buildShape();
+	//glEndList();
 }
 
 GLvoid keyboard( GLubyte key, GLint x, GLint y )
 {
-    switch (key) { 
+	switch (key) { 
 	case 27:    exit(0); //ESC = exit
-	
+
 	case 97: //a = move forward
 		zRef += 0.5;
 		//if (zRef > 15.0) zRef = 15.0;
-        glutPostRedisplay();
+		glutPostRedisplay();
 		break;
 
 	case 121: //y = move back
 		zRef -= 0.5;
 		//if (zRef < -15.0) zRef = -15.0;
-        glutPostRedisplay();
+		glutPostRedisplay();
 		break;
 
 	case 43: //+ = move camera pos left
@@ -662,86 +537,130 @@ GLvoid keyboard( GLubyte key, GLint x, GLint y )
 		horizontal -= 0.5;
 		glutPostRedisplay();
 		break;
-	
+
+	case 49: // decrement depth
+		depth --;
+		if(depth < 0)
+			depth = 0;
+		glutPostRedisplay();
+		break;
+
+	case 50: //increment depth
+		depth++;
+		//cout << Tree.max_depth() << endl;
+		if(depth > Tree.max_depth())
+			depth = Tree.max_depth();
+		glutPostRedisplay();
+		break;
+
+	case 115: //change view
+		zoom_look += 4.0;
+		glutPostRedisplay();
+		break;
+
+	case 120: //change view
+		zoom_look -= 4.0;
+		glutPostRedisplay();
+		break;
+
+	case 100: //move in x up
+		move_x += 4.0;
+		glutPostRedisplay();
+		break;
+
+	case 99: //move in x down
+		move_x -= 4.0;
+		glutPostRedisplay();
+		break;
+
+	case 118: //move in y up
+		move_y += 4.0;
+		glutPostRedisplay();
+		break;
+
+	case 102: //move in y down
+		move_y -= 4.0;
+		glutPostRedisplay();
+		break;
 	} 
 }
 
 GLvoid specialkeys( GLint key, GLint x, GLint y )
 {
-    switch (key) {
+	switch (key) {
 
-    case GLUT_KEY_LEFT:  //move left
-         //xRef -= 0.5;
-         //if (xRef < -15.0) xRef = -15.0;
-        angle += 0.5;
+	case GLUT_KEY_LEFT:  //move left
+		//xRef -= 0.5;
+		//if (xRef < -15.0) xRef = -15.0;
+		angle += 5;
 		if (angle > 360) angle = 0;
-		
+
 		glutPostRedisplay();
-         break;
+		break;
 
-    case GLUT_KEY_RIGHT:    //move right
-        // xRef += 0.5;
-         //if (xRef > 15.0) xRef = 15.0;
-		angle -= 0.5;
+	case GLUT_KEY_RIGHT:    //move right
+		// xRef += 0.5;
+		//if (xRef > 15.0) xRef = 15.0;
+		angle -= 5;
 		if (angle < 0) angle = 360;
-         glutPostRedisplay();
-         break;
+		glutPostRedisplay();
+		break;
 
-    case GLUT_KEY_UP:    //move up
-         yRef += 0.5;
-        // if (yRef > 15.0) yRef = 15.0;
-         glutPostRedisplay();
-         break;
+	case GLUT_KEY_UP:    //move up
+		yRef += 5;
+		// if (yRef > 15.0) yRef = 15.0;
+		glutPostRedisplay();
+		break;
 
-    case GLUT_KEY_DOWN:     //move down
-         yRef -= 0.5;
-         //if (yRef < -15.0) yRef = -15.0;
-         glutPostRedisplay();
-         break;
-    }
+	case GLUT_KEY_DOWN:     //move down
+		yRef -= 5;
+		//if (yRef < -15.0) yRef = -15.0;
+		glutPostRedisplay();
+		break;
+	}
 }
 
 GLvoid mousewheel(GLint wheel, GLint direction, GLint x, GLint y)
 {
-    
-    if (direction==-1)
-    {
-        zoom -= 0.5;
-		
- 
-    }
-    else if (direction==+1)
-    {
-        zoom += 0.5;
-    }
- 
- glutPostRedisplay();
- 
+
+	if (direction==-1)
+	{
+		move_z += 4.0;
+
+
+	}
+	else if (direction==+1)
+	{
+		move_z -= 4.0;
+	}
+
+	glutPostRedisplay();
+
 }
 
 GLvoid mouse(GLint button, GLint state, GLint x, GLint y) 
 {
-   switch (button) {
-      case GLUT_LEFT_BUTTON:
-         if (state == GLUT_DOWN)
-            horizontal += 0.5;
-		  glutPostRedisplay();
-         break;
-	  case GLUT_RIGHT_BUTTON:
-         if (state == GLUT_DOWN)
-            horizontal -= 0.5;
-		  glutPostRedisplay();
-         break;
-      default:
-         break;
-   }
+	switch (button) {
+	case GLUT_LEFT_BUTTON:
+		if (state == GLUT_DOWN)
+			horizontal += 0.5;
+		glutPostRedisplay();
+		break;
+	case GLUT_RIGHT_BUTTON:
+		if (state == GLUT_DOWN)
+			horizontal -= 0.5;
+		glutPostRedisplay();
+		break;
+	default:
+		break;
+	}
 }
 
 void menuEvents(int opt){
 	switch(opt){
-	case START:
-		if (start == true) start = false;
-		else start = true;
+	case LIGHT:
+		if (light == true) light = false;
+		else light = true;
 		glutPostRedisplay();
 		break;
 	case BOXES:
@@ -754,19 +673,66 @@ void menuEvents(int opt){
 		textures = true;
 		glutPostRedisplay();
 		break;
+	case HISTORY:
+		if(history) history = false;
+		else history = true;
+		glutPostRedisplay();
+		break;
 	}
 }
 
+void set_textures(int opt){
+	switch(opt){
+	case 0:
+		prob_set = 0;
+		prob_window = 0;
+		glutPostRedisplay();
+		break;
+	case 1:
+		prob_set = 1;
+		prob_window = 1;
+		glutPostRedisplay();
+		break;
+	case 2:
+		prob_set = 2;
+		prob_window = 2;
+		glutPostRedisplay();
+		break;
+	case 3:
+		prob_set = 3;
+		prob_window = 3;
+		glutPostRedisplay();
+		break;
+	case 4:
+		prob_set = 4;
+		prob_window = 4;
+		glutPostRedisplay();
+		break;
+	case 5:
+		prob_set = 5;
+		prob_window = 5;
+		glutPostRedisplay();
+		break;
+	}
+}
 
 void createMenu(){
-	int menu;
-	menu = glutCreateMenu(menuEvents);
+	int menu, submenu;
+	string tex_name;
+
+	submenu = glutCreateMenu(set_textures);
+	for (int i = 0; i < 5; i++){
+		tex_name = "Set " + to_string(static_cast<long long>(i+1));
+		glutAddMenuEntry(tex_name.c_str(), i);
+	}
 
 	//add entries to menu
-	glutAddMenuEntry("Light",START);
-	glutAddMenuEntry("Draw simple Boxes",BOXES);
-	glutAddMenuEntry("Draw Facades",FACADES);
-	glutAddMenuEntry("Draw Textures",TEXTURES);
+	menu = glutCreateMenu(menuEvents);
+	glutAddMenuEntry("Light",LIGHT);
+	glutAddMenuEntry("Enable History", HISTORY);
+	glutAddSubMenu("Change texture set", submenu);
+
+
 
 	//attach menu to right mouse button
 	glutAttachMenu(GLUT_RIGHT_BUTTON);
@@ -775,24 +741,32 @@ void createMenu(){
 void visualization(int argc, char **argv, tree<Symbol> devTree){
 
 	cout<<"-----------------------"<<endl<<"VISUALIZATION"<<endl<<"-----------------------"<<endl<<endl<<endl;
+
+	cout << "Shortcuts:  " << endl;
+	cout << "move along x:		d - c " << endl;
+	cout << "move along y:		f - v " << endl;
+	cout << "move along z:		mousewheel up - down " << endl;
+	//DEBUG
+	//map<string,float> *karte = &config;
+	//cout<<"Building Height: "<<karte->at("building_height")<<endl;
+
 	tree<Symbol>::leaf_iterator leaf = Tree.begin_leaf();
 
-
 	glutInit(&argc, argv); // Initialize GLUT
-	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH); 
-	glutInitWindowSize(800, 600); // Set the width and height of the window
-	glutInitWindowPosition(100, 100); // Set the position of the window
+	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH | GLUT_MULTISAMPLE);
+	glEnable(GLUT_MULTISAMPLE);
+	glutInitWindowSize(1280, 720); // Set the width and height of the window
+	glutInitWindowPosition(0, 0); // Set the position of the window
 	glutCreateWindow("Buildings"); // Set the title for the window
 
 	init();
-	initTestTree();
 	Tree = devTree;
 	createMenu();
 	glutReshapeFunc(reshape);
 	glutDisplayFunc(display); 
 	//glutIdleFunc(display);
-    glutKeyboardFunc( keyboard );
-    glutSpecialFunc( specialkeys );
+	glutKeyboardFunc( keyboard );
+	glutSpecialFunc( specialkeys );
 	glutMouseWheelFunc(mousewheel);
 
 	glutMainLoop(); 
