@@ -1,10 +1,10 @@
-start->scale(building_width,building_height,building_depth){complex}
+start->scale(building_width*rand[1.0-2.0],building_height*rand[1.0-2.0],building_depth){complex}
 complex->trans(Scope.sx*-0.5,0,Scope.sz*-0.5){complex}
 complex->subDiv(Z,Scope.sz*rand[0.5-0.6],1r){facades|sidewings}
-sidewings->subDiv(X,Scope.sx*0.5,1r){sidewingA|erase}:0.5->subDiv(X,Scope.sx*0.5,1r){erase|sidewingB}:0.5
+sidewings->subDiv(X,Scope.sx*0.5,1r){sidewingA|erase}:0.3->subDiv(X,Scope.sx*0.5,1r){erase|sidewingB}:0.3->subDiv(X,1r,Scope.sx*0.25,1r){sidewingA|erase|sidewingB}:0.4
 erase->scale(0,0,0){erase}
 sidewingA->scale(1,Scope.sy*rand[0.5-1.2],1.0*rand[3.0-3.0]){sidewingA}
-sidewingB->scale(1,Scope.sy*rand[0.5-1.2],1.0*rand[3.0-3.0]){sidewingB}
+sidewingB->scale(1,Scope.sy*rand[0.6-1.2],1.0*rand[3.0-2.0]){sidewingB}
 facades->comp(){bottom|roof|front|facade|back|facade}
 sidewingA->comp(){bottom|roof|facade|back|facade|facade}
 sidewingB->comp(){bottom|roof|facade|facade|facade|back}
@@ -22,6 +22,7 @@ floor->repeat(Z,20){panel}
 panel->subDiv(Y,1r,4r,2r){top|slot|tile}
 slot->subDiv(Z,1r,4r,1r){floor|window|floor}
 topfloor->repeat(X,Scope.sy*1.0){topfloor}
+red->(){groundfloor}
 END
 
 //PRIORITY 1

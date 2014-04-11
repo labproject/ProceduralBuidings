@@ -79,5 +79,8 @@
     <None Include="testing.txt">
       <Filter>Ressourcendateien</Filter>
     </None>
+    <None Include="EmpireState.txt">
+      <Filter>Ressourcendateien</Filter>
+    </None>
   </ItemGroup>
 </Project>

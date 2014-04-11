@@ -13,7 +13,7 @@ window_position=0.5
 door_width=1.2
 door_height=2.3
 //
-entrance_width=15
+entrance_width=30
 //
 building_width=100
 building_height=120

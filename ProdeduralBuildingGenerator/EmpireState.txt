@@ -1,0 +1,42 @@
+start->scale(150,450,100){rest}
+//Sockel
+rest->subDiv(Y,20,1r){sec1|rest}
+rest->scale(0.7,1,0.7){rest}
+//Teil 2
+rest->subDiv(Y,100,1r){sec2|rest}
+rest->scale(0.7,1,0.7){rest}
+//Langer Teil
+rest->subDiv(Y,150,1r){sec3|rest}
+rest->scale(0.8,1,0.8){rest}
+//Untere Spitze
+rest->subDiv(Y,30,1r){sec4|rest}
+rest->scale(0.8,1,0.8){rest}
+//mittlere Spitze
+rest->subDiv(Y,20,1r){sec5|rest}
+rest->scale(0.8,1,0.8){rest}
+//Spitzensockel
+rest->subDiv(Y,10,1r){sec6|rest}
+rest->scale(0.8,1,0.8){rest}
+//Spitze
+rest->subDiv(Y,50,1r){sec7|rest}
+rest->scale(0.8,1,0.8){rest}
+//Antenne
+rest->scale(0.1,1,0.1){antenna}
+
+sec1->trans(Scope.sx*-0.5,0,Scope.sz*-0.5){yellow}
+sec2->trans(Scope.sx*-0.5,0,Scope.sz*-0.5){red}
+sec3->trans(Scope.sx*-0.5,0,Scope.sz*-0.5){blue}
+sec4->trans(Scope.sx*-0.5,0,Scope.sz*-0.5){green}
+sec5->trans(Scope.sx*-0.5,0,Scope.sz*-0.5){yellow}
+sec6->trans(Scope.sx*-0.5,0,Scope.sz*-0.5){red}
+sec7->trans(Scope.sx*-0.5,0,Scope.sz*-0.5){blue}
+antenna->trans(Scope.sx*-0.5,0,Scope.sz*-0.5){green}
+END
+sec4->subDiv(X,1r,25,1r){sec4|middle4|sec4}
+middle4->scale(1,1,0.8){middle4}
+middle4->trans(0,0,Scope.sz*0.1){middle4}
+
+sec3->subDiv(X,1r,25,1r){sec3|middle3|sec3}
+middle3->scale(1,1,0.8){middle3}
+middle3->trans(0,0,Scope.sz*0.1){middle3}
+rest->trans(Scope.sx*-0.5,0,Scope.sz*-0.5){antenna}
