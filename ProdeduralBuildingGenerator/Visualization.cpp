@@ -23,16 +23,18 @@ tree<Symbol> Tree;
 
 //set up light
 GLfloat LightAmbient[] = { 0.5,0.5, 0.5, 1 };    
-GLfloat LightDiffuse[] = { 1.0f, 1.0f, 1.0f, 1.0f }; 
-GLfloat LightColor1[] = {0.5f, 0.5f, 0.5f, 1.0f};
+GLfloat LightDiffuse[] = {200.0,200.0,200.0,1.0}; 
+GLfloat lightColor0[] =  {255.0f, 255.0, 255.0f, 1.0f }; 
 
-GLfloat lightColor0[] = {0.7f, 0.7f, 0.7f, 1.0f}; 
-GLfloat lightPosition0[] = {-50.0f, 160.5f, -300.5f, 1.0f};
+GLfloat lightPosition0[] = {0.0,500.0,100.0, 1.0};
+
+/*
+GLfloat LightColor1[] = {120, 120, 120, 1.0f};
 GLfloat LightPosition1[]= { 0.0f, 100.0f, -400, 1.0f }; 
 GLfloat lightPosition2[] = {200.0f, 100.5f, 0.0f, 1.0f};
 GLfloat lightPosition3[] = {0.0f, 100.5f, 300.0f, 1.0f};
 GLfloat lightPosition4[] = {-200.0f, 100.5f, -0.0f, 1.0f};
-
+*/
 
 
 
@@ -88,7 +90,7 @@ void buildShape(){
 	//build a rectangular, which can be scaled and rotated
 
 	glBegin(GL_QUADS);       
-	
+	glNormal3d(0.0,1.0,0.0);
 	glVertex3d( 1.0,0.0,0.0);        
 	glVertex3d(0.0,0.0,0.0);          
 	glVertex3d(0.0, 1.0,0.0);         
@@ -480,8 +482,9 @@ void init(){
 	//Light
 	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, LightAmbient);
 	glLightfv(GL_LIGHT1, GL_AMBIENT, LightAmbient);  
-	glLightfv(GL_LIGHT1, GL_DIFFUSE, LightColor1);
-	glLightfv(GL_LIGHT1, GL_POSITION,LightPosition1); 
+	glLightfv(GL_LIGHT1, GL_DIFFUSE, LightDiffuse);
+	glLightfv(GL_LIGHT1, GL_POSITION,lightPosition0); 
+	/*
 	glLightfv(GL_LIGHT0, GL_DIFFUSE, lightColor0);
     glLightfv(GL_LIGHT0, GL_POSITION, lightPosition0);
 	glLightfv(GL_LIGHT2, GL_DIFFUSE, lightColor0);
@@ -490,7 +493,7 @@ void init(){
     glLightfv(GL_LIGHT3, GL_POSITION, lightPosition3);
 	glLightfv(GL_LIGHT4, GL_DIFFUSE, lightColor0);
     glLightfv(GL_LIGHT4, GL_POSITION, lightPosition4);
-
+	*/
 
 	loadTextures();
 
