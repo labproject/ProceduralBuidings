@@ -270,12 +270,16 @@ void display() {
 				}
 				
 				//Back side
-				else if ((*pre).getName() == "back")
+				else if ((*pre).getName() == "back"){
+					x=4;
 					glBindTexture(GL_TEXTURE_2D, tex_back[prob_set]);
-
+					
+				}
 				//Objects with floor textures
-				else if ((*pre).getName() == "groundfloor" || (*pre).getName() == "groundlevel")
+				else if ((*pre).getName() == "groundfloor" || (*pre).getName() == "groundlevel"){
+					x=1;
 					glBindTexture(GL_TEXTURE_2D, tex_groundfloor[prob_set]);
+				}
 				else if ((*pre).getName() == "topfloor")
 					glBindTexture(GL_TEXTURE_2D, tex_topfloor[prob_set]);
 
@@ -343,8 +347,10 @@ void display() {
 				}
 				
 				//Objects with floor textures
-				else if ((*leaf).getName() == "groundfloor" || (*leaf).getName() == "groundlevel")
+				else if ((*leaf).getName() == "groundfloor" || (*leaf).getName() == "groundlevel"){
+					x=1;
 					glBindTexture(GL_TEXTURE_2D, tex_groundfloor[prob_set]);
+				}
 				else if ((*leaf).getName() == "topfloor")
 					glBindTexture(GL_TEXTURE_2D, tex_topfloor[prob_set]);
 
@@ -360,8 +366,12 @@ void display() {
 				}
 				else if ((*leaf).getName() == "entrance")
 					glBindTexture(GL_TEXTURE_2D, tex_entrance[prob_set]);
+				
+				else if ((*leaf).getName() == "back"){
+					x=4;
+					glBindTexture(GL_TEXTURE_2D, tex_back[prob_set]);
 
-
+				}
 
 				//DEBUG COLORS
 				else if ((*leaf).getName() == "red")
@@ -563,13 +573,13 @@ GLvoid specialkeys( GLint key, GLint x, GLint y )
 		break;
 
 	case GLUT_KEY_UP:    //move up
-		yRef += 0.5;
+		yRef += 5;
 		// if (yRef > 15.0) yRef = 15.0;
 		glutPostRedisplay();
 		break;
 
 	case GLUT_KEY_DOWN:     //move down
-		yRef -= 0.5;
+		yRef -= 5;
 		//if (yRef < -15.0) yRef = -15.0;
 		glutPostRedisplay();
 		break;
