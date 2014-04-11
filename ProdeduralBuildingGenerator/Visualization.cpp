@@ -1,11 +1,11 @@
 #include "visualization.h"
-#define START 1
+#define LIGHT 1
 #define BOXES 2
 #define FACADES 3
 #define TEXTURES 4
 #define HISTORY 5
 
-bool start = false, boxes = true, facades = true, textures = true;
+bool light = false, boxes = true, facades = true, textures = true;
 static GLfloat spin = 0.0, aspectRatio, n = 20; //N = **Koordinatensystem**
 GLuint cube, shape;
 GLubyte *tex_pointer;
@@ -22,9 +22,18 @@ bool history = false;
 tree<Symbol> Tree;
 
 //set up light
-GLfloat LightAmbient[]= { 0.8,0.8, 0.8, 0.1 };    
-GLfloat LightDiffuse[]= { 1.0f, 1.0f, 1.0f, 1.0f }; 	
-GLfloat LightPosition[]= { 0.0f, 120.0f, -120, 1.0f }; 
+GLfloat LightAmbient[] = { 0.5,0.5, 0.5, 1 };    
+GLfloat LightDiffuse[] = { 1.0f, 1.0f, 1.0f, 1.0f }; 
+GLfloat LightColor1[] = {0.5f, 0.5f, 0.5f, 1.0f};
+
+GLfloat lightColor0[] = {0.7f, 0.7f, 0.7f, 1.0f}; 
+GLfloat lightPosition0[] = {-50.0f, 160.5f, -300.5f, 1.0f};
+GLfloat LightPosition1[]= { 0.0f, 100.0f, -400, 1.0f }; 
+GLfloat lightPosition2[] = {200.0f, 100.5f, 0.0f, 1.0f};
+GLfloat lightPosition3[] = {0.0f, 100.5f, 300.0f, 1.0f};
+GLfloat lightPosition4[] = {-200.0f, 100.5f, -0.0f, 1.0f};
+
+
 
 
 void buildCube(GLfloat x){
@@ -201,12 +210,20 @@ GLint loadTextures()
 void display() {
 	glColor3d(1,1,1);
 
-	if(start){
+	if(light){
+		glEnable(GL_LIGHT0); 
 		glEnable(GL_LIGHT1); 
+		glEnable(GL_LIGHT2);
+		glEnable(GL_LIGHT3);
+		glEnable(GL_LIGHT4);
 		glEnable(GL_LIGHTING);
 	}
 	else{
+		glDisable(GL_LIGHT0);
 		glDisable(GL_LIGHT1);
+		glEnable(GL_LIGHT2);
+		glEnable(GL_LIGHT3);
+		glEnable(GL_LIGHT4);
 		glDisable(GL_LIGHTING);
 	}
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -459,9 +476,18 @@ void init(){
 	glEnable(GL_POLYGON_SMOOTH); 
 
 	//Light
+	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, LightAmbient);
 	glLightfv(GL_LIGHT1, GL_AMBIENT, LightAmbient);  
-	glLightfv(GL_LIGHT1, GL_DIFFUSE, LightDiffuse);
-	glLightfv(GL_LIGHT1, GL_POSITION,LightPosition); 
+	glLightfv(GL_LIGHT1, GL_DIFFUSE, LightColor1);
+	glLightfv(GL_LIGHT1, GL_POSITION,LightPosition1); 
+	glLightfv(GL_LIGHT0, GL_DIFFUSE, lightColor0);
+    glLightfv(GL_LIGHT0, GL_POSITION, lightPosition0);
+	glLightfv(GL_LIGHT2, GL_DIFFUSE, lightColor0);
+    glLightfv(GL_LIGHT2, GL_POSITION, lightPosition2);
+	glLightfv(GL_LIGHT3, GL_DIFFUSE, lightColor0);
+    glLightfv(GL_LIGHT3, GL_POSITION, lightPosition3);
+	glLightfv(GL_LIGHT4, GL_DIFFUSE, lightColor0);
+    glLightfv(GL_LIGHT4, GL_POSITION, lightPosition4);
 
 
 	loadTextures();
@@ -624,9 +650,9 @@ GLvoid mouse(GLint button, GLint state, GLint x, GLint y)
 
 void menuEvents(int opt){
 	switch(opt){
-	case START:
-		if (start == true) start = false;
-		else start = true;
+	case LIGHT:
+		if (light == true) light = false;
+		else light = true;
 		glutPostRedisplay();
 		break;
 	case BOXES:
@@ -647,14 +673,59 @@ void menuEvents(int opt){
 	}
 }
 
+void set_textures(int opt){
+	switch(opt){
+	case 0:
+		prob_set = 0;
+		prob_window = 0;
+		glutPostRedisplay();
+		break;
+	case 1:
+		prob_set = 1;
+		prob_window = 1;
+		glutPostRedisplay();
+		break;
+	case 2:
+		prob_set = 2;
+		prob_window = 2;
+		glutPostRedisplay();
+		break;
+	case 3:
+		prob_set = 3;
+		prob_window = 3;
+		glutPostRedisplay();
+		break;
+	case 4:
+		prob_set = 4;
+		prob_window = 4;
+		glutPostRedisplay();
+		break;
+	case 5:
+		prob_set = 5;
+		prob_window = 5;
+		glutPostRedisplay();
+		break;
+	}
+}
 
 void createMenu(){
-	int menu;
-	menu = glutCreateMenu(menuEvents);
+	int menu, submenu;
+	string tex_name;
+
+	submenu = glutCreateMenu(set_textures);
+	for (int i = 0; i < 5; i++){
+		tex_name = "Set " + to_string(static_cast<long long>(i+1));
+		glutAddMenuEntry(tex_name.c_str(), i);
+	}
 
 	//add entries to menu
-	glutAddMenuEntry("Light",START);
+	menu = glutCreateMenu(menuEvents);
+	glutAddMenuEntry("Light",LIGHT);
 	glutAddMenuEntry("Enable History", HISTORY);
+	glutAddSubMenu("Change texture set", submenu);
+
+
+
 	//attach menu to right mouse button
 	glutAttachMenu(GLUT_RIGHT_BUTTON);
 }
