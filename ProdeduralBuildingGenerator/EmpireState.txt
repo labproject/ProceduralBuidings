@@ -1,42 +1,149 @@
-start->scale(150,450,100){rest}
+
+// ------PRIORITY 1------
+// Subdivide  into sections
+//...............................
+
 //Sockel
+start->scale(150,450,100){rest}
 rest->subDiv(Y,20,1r){sec1|rest}
-rest->scale(0.7,1,0.7){rest}
 //Teil 2
-rest->subDiv(Y,100,1r){sec2|rest}
 rest->scale(0.7,1,0.7){rest}
+rest->subDiv(Y,100,1r){sec2|rest}
 //Langer Teil
+rest->scale(0.7,1,1){rest}
 rest->subDiv(Y,150,1r){sec3|rest}
-rest->scale(0.8,1,0.8){rest}
 //Untere Spitze
+rest->scale(0.9,1,0.9){rest}
 rest->subDiv(Y,30,1r){sec4|rest}
-rest->scale(0.8,1,0.8){rest}
 //mittlere Spitze
+rest->scale(0.8,1,0.8){rest}
 rest->subDiv(Y,20,1r){sec5|rest}
-rest->scale(0.8,1,0.8){rest}
 //Spitzensockel
+rest->scale(0.8,1,0.8){rest}
 rest->subDiv(Y,10,1r){sec6|rest}
-rest->scale(0.8,1,0.8){rest}
 //Spitze
-rest->subDiv(Y,50,1r){sec7|rest}
-rest->scale(0.8,1,0.8){rest}
+rest->scale(0.5,1,0.5){rest}
+rest->subDiv(Y,30,1r){sec7|rest}
 //Antenne
+rest->scale(0.8,1,0.8){rest}
 rest->scale(0.1,1,0.1){antenna}
 
-sec1->trans(Scope.sx*-0.5,0,Scope.sz*-0.5){yellow}
-sec2->trans(Scope.sx*-0.5,0,Scope.sz*-0.5){red}
-sec3->trans(Scope.sx*-0.5,0,Scope.sz*-0.5){blue}
-sec4->trans(Scope.sx*-0.5,0,Scope.sz*-0.5){green}
-sec5->trans(Scope.sx*-0.5,0,Scope.sz*-0.5){yellow}
-sec6->trans(Scope.sx*-0.5,0,Scope.sz*-0.5){red}
-sec7->trans(Scope.sx*-0.5,0,Scope.sz*-0.5){blue}
-antenna->trans(Scope.sx*-0.5,0,Scope.sz*-0.5){green}
-END
-sec4->subDiv(X,1r,25,1r){sec4|middle4|sec4}
-middle4->scale(1,1,0.8){middle4}
-middle4->trans(0,0,Scope.sz*0.1){middle4}
 
-sec3->subDiv(X,1r,25,1r){sec3|middle3|sec3}
-middle3->scale(1,1,0.8){middle3}
-middle3->trans(0,0,Scope.sz*0.1){middle3}
-rest->trans(Scope.sx*-0.5,0,Scope.sz*-0.5){antenna}
+// ------PRIORITY 2------
+//translate sections to Center
+//...............................
+
+sec1->trans(Scope.sx*-0.5,0,Scope.sz*-0.5){sec1}
+sec2->trans(Scope.sx*-0.5,0,Scope.sz*-0.5){sec2}
+sec3->trans(Scope.sx*-0.5,0,Scope.sz*-0.5){sec3}
+sec4->trans(Scope.sx*-0.5,0,Scope.sz*-0.5){sec4}
+sec5->trans(Scope.sx*-0.5,0,Scope.sz*-0.5){sec5}
+sec6->trans(Scope.sx*-0.5,0,Scope.sz*-0.5){sec6}
+sec7->trans(Scope.sx*-0.5,0,Scope.sz*-0.5){sec7}
+antenna->trans(Scope.sx*-0.5,0,Scope.sz*-0.5){antenna}
+
+
+// ------PRIORITY 3------
+//Detailing : 1
+//...............................
+//Antenne
+antenna->subDiv(Y,1r,1r){antenna1|antenna2}
+antenna1->subDiv(X,1r,5,1r){null|antenna1|null}
+antenna1->subDiv(Z,1r,5,1r){null|antenna|null}
+antenna2->subDiv(X,1r,2,1r){null|antenna2|null|}
+antenna2->subDiv(Z,1r,2,1r){null|antenna|null}
+
+//spitze
+sec7->subDiv(Y,1r,2r,2r,3r,2r){sec71|sec72|sec73|sec74|sec75}
+sec71->subDiv(X,1r,22,1r){null|sec71|null}
+sec72->subDiv(X,1r,20,1r){null|sec72|null}
+sec73->subDiv(X,1r,18,1r){null|sec73|null}
+sec74->subDiv(X,1r,16,1r){null|sec74|null}
+sec75->subDiv(X,1r,14,1r){null|sec75|null}
+
+sec71->subDiv(Z,1r,22,1r){null|sec7|null}
+sec72->subDiv(Z,1r,20,1r){null|sec7|null}
+sec73->subDiv(Z,1r,18,1r){null|sec7|null}
+sec74->subDiv(Z,1r,16,1r){null|sec7|null}
+sec75->subDiv(Z,1r,14,1r){null|sec7|null}
+
+//Spitzensockel
+sec6->subDiv(Y,1r,1r,1r,1r){sec61|sec62|sec63|sec64}
+sec61->subDiv(X,1r,35,1r){null|sec61|null}
+sec62->subDiv(X,1r,30,1r){null|sec62|null}
+sec63->subDiv(X,1r,28,1r){null|sec63|null}
+sec64->subDiv(X,1r,25,1r){null|sec64|null}
+sec61->subDiv(Z,1r,35,1r){null|sec6|null}
+sec62->subDiv(Z,1r,30,1r){null|sec6|null}
+sec63->subDiv(Z,1r,28,1r){null|sec6|null}
+sec64->subDiv(Z,1r,25,1r){null|sec6|null}
+
+//mittlere spitze
+sec5->subDiv(Y,15,1r){sec5|top5}
+sec5->subDiv(X,1r,40,1r){tmp5|sec5|tmp5}
+tmp5->subDiv(Z,1r,40,1r){null|sec5|null}
+top5->subDiv(X,1r,40,1r){null|top5|null}
+top5->subDiv(Z,1r,40,1r){null|top5|null}
+
+//Untere Spitze
+sec4->subDiv(X,1r,20,1r){sec4L|middle4|sec4R}
+middle4->trans(0,0,Scope.sz*0.1){middle4}
+middle4->scale(1,1,0.8){middle4}
+
+//Langer Teil
+sec3->subDiv(X,1r,20,1r){sec3L|middle3|sec3R}
+middle3->subDiv(Z,1r,Scope.sz*0.72,1r){null|middle3|null}
+
+//Teil 2
+sec2->subDiv(Y,12r,3r,3r){sec2l|sec2m|sec2h}
+sec2->scale(1.1,1.0,1.0){sec2}
+sec2->trans(Scope.sx*-0.05,0,0){sec2}
+
+sec2h->subDiv(X,2r,1r,Scope.sx*0.7,1r,2r){null|cut2L|middle2h|cut2R|null}
+
+cut2L->subDiv(Z,1r,10r,1r){null|sect2L|null}
+cut2R->subDiv(Z,1r,10r,1r){null|sect2R|null}
+sec2m->subDiv(X,1r,Scope.sx*0.8,1r){null|sec2m|null}
+sec2l->subDiv(X,1r,Scope.sx*0.8,1r){sec2L|sec2l|sec2R}
+sec2m->subDiv(X,1r,1r,1r){tmp2L|middle2m|tmp2R}
+sec2l->subDiv(X,1r,1r,1r){tmp2L|middle2l|tmp2R}
+
+tmp2R->scale(1,1,1.2){tmp2R}
+tmp2L->scale(1,1,1.2){tmp2L}
+tmp2L->trans(0,0,Scope.sz*-0.1){tmp2L}
+tmp2R->trans(0,0,Scope.sz*-0.1){tmp2R}
+
+// ------PRIORITY N------
+//Erasing & Coloring
+//...............................
+
+null->scale(0,0,0){null}
+
+
+sec1->(){yellow}
+sec2->(){red}
+
+middle2h->(){red}
+sec2m->(){yellow}
+sec2l->(){blue}
+
+sec2L->(){red}
+sec2R->(){red}
+
+sec3->(){blue}
+sec3L->(){blue}
+sec3R->(){blue}
+
+sec4->(){green}
+
+sec5->(){yellow}
+top5->(){yellow}
+
+sec6->(){red}
+sec7->(){blue}
+antenna->(){green}
+
+
+
+
+END

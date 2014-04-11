@@ -1,4 +1,4 @@
-start->scale(building_width*rand[1.0-2.0],building_height*rand[1.0-2.0],building_depth){complex}
+start->scale(building_width*rand[1.0-5.0],building_height*rand[1.0-2.0],building_depth){complex}
 complex->trans(Scope.sx*-0.5,0,Scope.sz*-0.5){complex}
 complex->subDiv(Z,Scope.sz*rand[0.5-0.6],1r){facades|sidewings}
 sidewings->subDiv(X,Scope.sx*0.5,1r){sidewingA|erase}:0.3->subDiv(X,Scope.sx*0.5,1r){erase|sidewingB}:0.3->subDiv(X,1r,Scope.sx*0.25,1r){sidewingA|erase|sidewingB}:0.4

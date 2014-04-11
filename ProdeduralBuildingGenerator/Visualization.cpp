@@ -22,9 +22,9 @@ bool history = false;
 tree<Symbol> Tree;
 
 //set up light
-GLfloat LightAmbient[]= { 0.8,0.8, 0.8, 0.1 };    
-GLfloat LightDiffuse[]= { 1.0f, 1.0f, 1.0f, 1.0f }; 	
-GLfloat LightPosition[]= { 0.0f, 120.0f, -120, 1.0f }; 
+GLfloat LightAmbient[]= {0.0 ,0.0, 0.0, 1.0f };    
+GLfloat LightDiffuse[]= {100.0f, 100.0f, 100.0f, 1.0f }; 	
+GLfloat LightPosition[]= { 0, 400, 300, 100 }; 
 
 
 void buildCube(GLfloat x){
@@ -35,40 +35,42 @@ void buildCube(GLfloat x){
 	glBegin(GL_QUADS);
 
 	//Top
-	glTexCoord2f(x, 0.0f); glVertex3d( 1.0, 1.0,0.0);          
-	glTexCoord2f(0, 0.0f); glVertex3d(0.0, 1.0,0.0);          
-	glTexCoord2f(0, x); glVertex3d(0.0, 1.0, 1.0);          
-	glTexCoord2f(x, x); glVertex3d( 1.0, 1.0, 1.0);
+	glNormal3d(0.0,1.0,0.0);	glTexCoord2f(x, 0.0f);	glVertex3d( 1.0, 1.0,0.0);          
+	glNormal3d(0.0,1.0,0.0);	glTexCoord2f(0, 0.0f);	glVertex3d(0.0, 1.0,0.0);          
+	glNormal3d(0.0,1.0,0.0);	glTexCoord2f(0, x);	glVertex3d(0.0, 1.0, 1.0);          
+	glNormal3d(0.0,1.0,0.0);	glTexCoord2f(x, x);		glVertex3d( 1.0, 1.0, 1.0);
 
 	//Bottom
-	glTexCoord2f(x, 0.0f); glVertex3d( 1.0,0.0, 1.0);        
-	glTexCoord2f(x, x); glVertex3d(0.0,0.0, 1.0);          
-	glTexCoord2f(0.0f, x); glVertex3d(0.0,0.0,0.0);         
-	glTexCoord2f(0.0f, 0.0f); glVertex3d( 1.0,0.0,0.0);          
+	glNormal3d(0.0,-1.0,0.0);	glTexCoord2f(x, 0.0f); glVertex3d( 1.0,0.0, 1.0);        
+	glNormal3d(0.0,-1.0,0.0);	glTexCoord2f(x, x); glVertex3d(0.0,0.0, 1.0);          
+	glNormal3d(0.0,-1.0,0.0);	glTexCoord2f(0.0f, x); glVertex3d(0.0,0.0,0.0);         
+	glNormal3d(0.0,-1.0,0.0);	glTexCoord2f(0.0f, 0.0f); glVertex3d( 1.0,0.0,0.0);          
 
 	//Back
-	glTexCoord2f(0.0f, 0.0f); glVertex3d( 1.0, 1.0, 1.0);          
-	glTexCoord2f(x, 0); glVertex3d(0.0, 1.0, 1.0);         
-	glTexCoord2f(x,x); glVertex3d(0.0,0.0, 1.0);         
-	glTexCoord2f(0.0f, x); glVertex3d( 1.0,0.0, 1.0);         
+	
+	glNormal3d(0.0,0.0,1.0);	glTexCoord2f(0.0f, 0.0f); glVertex3d( 1.0, 1.0, 1.0);          
+	glNormal3d(0.0,0.0,1.0);	glTexCoord2f(x, 0); glVertex3d(0.0, 1.0, 1.0);         
+	glNormal3d(0.0,0.0,1.0);	glTexCoord2f(x,x); glVertex3d(0.0,0.0, 1.0);         
+	glNormal3d(0.0,0.0,1.0);	glTexCoord2f(0.0f, x); glVertex3d( 1.0,0.0, 1.0);         
 
 	//Front
-	glTexCoord2f(x, x); glVertex3d( 1.0,0.0,0.0);        
-	glTexCoord2f(0.0f, x); glVertex3d(0.0,0.0,0.0);          
-	glTexCoord2f(0.0f, 0.0f); glVertex3d(0.0, 1.0,0.0);         
-	glTexCoord2f(x, 0.0f); glVertex3d( 1.0, 1.0,0.0);   
+	glNormal3d(0.0,0.0,-1.0);	glTexCoord2f(x, x); glVertex3d( 1.0,0.0,0.0);        
+	glNormal3d(0.0,0.0,-1.0);	glTexCoord2f(0.0f, x); glVertex3d(0.0,0.0,0.0);          
+	glNormal3d(0.0,0.0,-1.0);	glTexCoord2f(0.0f, 0.0f); glVertex3d(0.0, 1.0,0.0);         
+	glNormal3d(0.0,0.0,-1.0);	glTexCoord2f(x, 0.0f); glVertex3d( 1.0, 1.0,0.0);   
 
 	//Left
-	glTexCoord2f(0, 0.0f); glVertex3d(0.0, 1.0, 1.0);          
-	glTexCoord2f(x, 0); glVertex3d(0.0, 1.0,0.0);       
-	glTexCoord2f(x, x); glVertex3d(0.0,0.0,0.0);         
-	glTexCoord2f(0.0f, x); glVertex3d(0.0,0.0, 1.0);         
+
+	glNormal3d(-1.0,0.0,0.0);	glTexCoord2f(0, 0.0f); glVertex3d(0.0, 1.0, 1.0);          
+	glNormal3d(-1.0,0.0,0.0);	glTexCoord2f(x, 0); glVertex3d(0.0, 1.0,0.0);       
+	glNormal3d(-1.0,0.0,0.0);	glTexCoord2f(x, x); glVertex3d(0.0,0.0,0.0);         
+	glNormal3d(-1.0,0.0,0.0);	glTexCoord2f(0.0f, x); glVertex3d(0.0,0.0, 1.0);         
 
 	//Right
-	glTexCoord2f(0.0f, 0.0f); glVertex3d( 1.0, 1.0,0.0);        
-	glTexCoord2f(x, 0.0f); glVertex3d( 1.0, 1.0, 1.0);         
-	glTexCoord2f(x, x); glVertex3d( 1.0,0.0, 1.0);         
-	glTexCoord2f(0.0f, x); glVertex3d( 1.0,0.0,0.0);          
+	glNormal3d(1.0,0.0,0.0);	glTexCoord2f(0.0f, 0.0f); glVertex3d( 1.0, 1.0,0.0);        
+	glNormal3d(1.0,0.0,0.0);	glTexCoord2f(x, 0.0f); glVertex3d( 1.0, 1.0, 1.0);         
+	glNormal3d(1.0,0.0,0.0);	glTexCoord2f(x, x); glVertex3d( 1.0,0.0, 1.0);         
+	glNormal3d(1.0,0.0,0.0);	glTexCoord2f(0.0f, x); glVertex3d( 1.0,0.0,0.0);          
 
 	glEnd();                       
 }
@@ -77,7 +79,7 @@ void buildShape(){
 	//build a rectangular, which can be scaled and rotated
 
 	glBegin(GL_QUADS);       
-
+	
 	glVertex3d( 1.0,0.0,0.0);        
 	glVertex3d(0.0,0.0,0.0);          
 	glVertex3d(0.0, 1.0,0.0);         
@@ -230,10 +232,10 @@ void display() {
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 	glBegin(GL_QUADS);
-	glTexCoord2f(0, 0); glVertex3d(-200, -0.1, -200);
-	glTexCoord2f(x, 0); glVertex3d(-200, -0.1, 200);          
-	glTexCoord2f(x, x); glVertex3d(200, -0.1, 200);          
-	glTexCoord2f(0, x); glVertex3d(200, -0.1, -200);
+	glNormal3d(0,1,0);	glTexCoord2f(0, 0); glVertex3d(-200, -0.1, -200);
+	glNormal3d(0,1,0);	glTexCoord2f(x, 0); glVertex3d(-200, -0.1, 200);          
+	glNormal3d(0,1,0);	glTexCoord2f(x, x); glVertex3d(200, -0.1, 200);          
+	glNormal3d(0,1,0);	glTexCoord2f(0, x); glVertex3d(200, -0.1, -200);
 	glEnd();
 
 	glTranslated(-5,0,-5);

@@ -33,7 +33,7 @@ vector<pair<string,vector<GNode>>> parsing()
 	//Read Rule Set Line by Line
 	string line;
 	ifstream infile;			
-	infile.open("testing.txt");         
+	infile.open("EmpireState.txt");         
 	while(!infile.eof()){
 		while(getline(infile,line)){					//post Line in line
 			if(line.find("END")!=line.npos){break;}		//Break reading file if END is found

@@ -1,5 +1,5 @@
 //config.txt
-groundFloor_height=15
+groundFloor_height=40
 topFloor_height=7
 floor_height=10
 tiles_width=6
