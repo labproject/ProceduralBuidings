@@ -100,7 +100,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Config.txt" />
-    <None Include="EmpireState.txt" />
+    <None Include="Empire State.txt" />
     <None Include="freeglut.dll" />
     <None Include="Office Building.txt" />
     <None Include="Simple Building.txt" />

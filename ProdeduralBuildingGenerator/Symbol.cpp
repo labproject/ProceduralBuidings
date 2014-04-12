@@ -240,9 +240,8 @@
 		double rest = scale[dim]-(number*size);
 		double add = rest/number;
 		
-		cout<< "size: "<<size<<" total: "<<total<<"rest :" << rest<< " anzahl repetitions: "<<number<< " add Per repetition: "<<add<<endl;
 		size= size+add;
-		cout<<"new Size"<<size<<endl;
+	
 		
 
 		

@@ -79,7 +79,7 @@
     <None Include="testing.txt">
       <Filter>Ressourcendateien</Filter>
     </None>
-    <None Include="EmpireState.txt">
+    <None Include="Empire State.txt">
       <Filter>Ressourcendateien</Filter>
     </None>
   </ItemGroup>

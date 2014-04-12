@@ -17,6 +17,34 @@ vector<pair<string,vector<GNode>>> parsing()
 {
 	cout<<"-----------------------"<<endl<<"PARSING"<<endl<<"-----------------------"<<endl<<endl<<endl;
 	
+	cout<<"Please choose the grammar you want do read: \n- Office Building\n- Empire State\n- Simple Building"<<endl;
+	string grammar;
+	getline(cin,grammar);
+	while(1==1){
+	if (grammar == "1"||grammar == "Office"||grammar=="office"||grammar=="Office Building"|| grammar == "office building"){
+		grammar = "Office Building.txt";
+		break;
+	}
+	else if(grammar =="2"||grammar=="Empire State"||grammar =="empire state"||grammar == "empire"||grammar=="state"){
+		grammar= "Empire State.txt";
+		break;
+	}
+	else if(grammar=="3"||grammar=="Simple"||grammar == "simple"||grammar=="Simple Building"||grammar == "simple building"){
+		grammar = "Simple Building.txt";
+		break;
+	}
+	else
+		cout<< "Please use the following keywords:"<<endl<<endl;
+		drawRed("Office Building");
+		cout<<endl<<	"	1\n	office\n	Office\n	Office Building\n	office building"<<endl;
+
+		drawRed("Empire State Building");
+		cout<<endl<<	"	2\n	empire\n	state\n	empire state\n	Empire State"<<endl;
+
+		drawRed("Simple Building");
+		cout<<endl<<	"	3\n	simple\n	Simple\n	Simple Building\n	simple building"<<endl;
+		getline(cin,grammar);
+	}
 	
 	//Read Config File and save parameters to map<string,float>config;
 	string cLine;
@@ -29,13 +57,11 @@ vector<pair<string,vector<GNode>>> parsing()
 		cStream.close();
 		break;
 	}
-
-
-
+	
 	//Read Rule Set Line by Line
 	string line;
 	ifstream infile;			
-	infile.open("testing.txt");         
+	infile.open(grammar);         
 	while(!infile.eof()){
 		while(getline(infile,line)){					//post Line in line
 			if(line.find("END")!=line.npos){break;}		//Break reading file if END is found

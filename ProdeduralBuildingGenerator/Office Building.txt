@@ -1,15 +1,87 @@
-//PRIORITY 1
-start->scale(1,building_height,1){box}
-box->subDiv(Z,Scope.sz*rand[0.3-0.5],1r){facades|sidewings}
-sidewings->subDiv(X,Scope.sy*rand[0.2-0.6],1r){sidewing|epsilon}
-sidewing->scale(1,1,Scope.sz*rand[0.4-1.0]){facades}:0.5->scale(1,Scope.sy*rand[0.2-0.9]){facades}: 0.3->(){epsilon}: 0.2
-facades->comp(){epsilon|epsilon|facade|facade|facade|front}
-//PRIORITY 2
-front->subDiv(Y,groundFloor_height,1r,topFloor_height){groundFloor|floors|topFloor}
-groundFloor->subDiv(X,1r,entrance_width,1r){groundtiles|entrance|groundtiles}
-//PRIORITY 3
-facade->(){floors}
+// ------PRIORITY 1------
+// Building Shape
+//...............................
+
+start->scale(building_width*rand[1.0-1.0],building_height*rand[1.0-1.0],building_depth){complex}
+complex->trans(Scope.sx*-0.5,0,Scope.sz*-0.5){complex}
+complex->subDiv(Z,Scope.sz*rand[0.5-0.6],1r){facades|sidewings}
+sidewings->subDiv(X,Scope.sx*0.5,1r){sidewingA|erase}:0.25->subDiv(X,Scope.sx*0.5,1r){erase|sidewingB}:0.25->subDiv(X,1r,Scope.sx*0.25,1r){sidewingA|erase|sidewingB}:0.25->subDiv(X,1r,Scope.sx*rand[0.5-0.8],1r){erase|sidewingC|erase}:0.25
+erase->scale(0,0,0){erase}
+sidewingA->scale(1,Scope.sy*rand[0.5-0.9],1*rand[3.0-3.0]){sidewingA}
+sidewingB->scale(1,Scope.sy*rand[0.6-1.2],1.0*rand[3.0-2.0]){sidewingB}
+sidewingC->scale(1,Scope.sy*rand[0.5-1.2],1.0*rand[3.0-2.0]){sidewingC}
+
+// ------PRIORITY 2------
+// Composition into facades
+//...............................
+
+facades->comp(){bottom|roof|facadeFRONT|facadeRIGHT|back|facadeLEFT}
+sidewingA->comp(){bottom|roof|back|back|side|facadeLEFT}
+sidewingB->comp(){bottom|roof|back|facadeRIGHT|side|back}
+sidewingC->comp(){bottom|roof|back|facadeRIGHT|side|facadeLEFT}
+
+// ------PRIORITY 3------
+// Facade Handling: FRONT facade
+//...............................
+
+facadeFRONT->subDiv(Y,groundFloor_height,1r,topFloor_height){groundfloor|floors|topfloor}
+groundfloor->subDiv(X,1r,entrance_width,1r){groundfloor|entrance|groundfloor}
 floors->repeat(Y,floor_height){floor}
-floor->repeat(X,tiles_width){tiles}
-tiles->subDiv(X,1r,window_width,1r){wall|tile|wall}
-tile->subDiv(Y,window_position,window_height,1r){wall|window|wall}
+floor->repeat(X,20){windowPanel}
+windowPanel->subDiv(Y,1r,4r,2r){top|windowScale|tile}
+windowScale->subDiv(X,1r,4r,1r){right|opening|left}
+
+//Window Handling
+opening->extrude(1.0){open}
+open->comp(){side|side|erase|side|rims|side}
+rims->subDiv(Y,1r,20r,1r){wood|rim|wood}
+rim->subDiv(X,1r,20r,1r){wood|wPanel|wood}
+wPanel->extrude(0.3){wPanel}
+wPanel->comp(){wood|wood|erase|wood|window|wood}
+wood->(){roof}
+
+// ------PRIORITY 3------
+// Facade Handling: LEFT facade
+//...............................
+
+facadeLEFT->subDiv(Y,groundFloor_height,1r,topFloor_height){groundfloor|floors|topfloor}
+floors->repeat(Y,floor_height){floor}
+floor->repeat(Z,20){windowPanel}
+windowPanel->subDiv(Y,1r,4r,2r){top|windowScale|tile}
+windowScale->subDiv(Z,1r,4r,1r){right|opening|left}
+
+//Window Handling
+opening->extrude(1.0){open}
+open->comp(){side|side|side|erase|side|rims}
+rims->subDiv(Y,1r,20r,1r){wood|rim|wood}
+rim->subDiv(Z,1r,20r,1r){wood|wPanel|wood}
+wPanel->extrude(0.3){wPanel}
+wPanel->comp(){wood|wood|erase|wood|wood|window}
+wood->(){roof}
+
+// ------PRIORITY 3------
+// Facade Handling: RIGHT facade
+//...........
+
+facadeRIGHT->subDiv(Y,groundFloor_height,1r,topFloor_height){groundfloor|floors|topfloor}
+floors->repeat(Y,floor_height){floor}
+floor->repeat(Z,20){windowPanel}
+windowPanel->subDiv(Y,1r,4r,2r){top|windowScale|tile}
+windowScale->subDiv(Z,1r,4r,1r){right|opening|left}
+
+//Window Handling
+opening->extrude(-1.0){open}
+open->comp(){side|side|side|rims|side|erase}
+rims->subDiv(Y,1r,20r,1r){wood|rim|wood}
+rim->subDiv(Z,1r,20r,1r){wood|wPanel|wood}
+wPanel->extrude(-0.3){wPanel}
+wPanel->comp(){wood|wood|wood|window|wood|erase}
+wood->(){roof}
+// ------PRIORITY 4------
+// Delete Management
+//...........
+
+
+erase->scale(0,0,0){null}
+
+END
