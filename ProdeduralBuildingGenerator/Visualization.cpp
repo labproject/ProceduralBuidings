@@ -22,9 +22,9 @@ bool history = false;
 tree<Symbol> Tree;
 
 //set up light
-GLfloat LightAmbient[] = {0.5,0.7,1.0,1.0};
+GLfloat LightAmbient[] = {1,1,1.0,1.0};
 GLfloat LightDiffuse[] = {1.0,1.0,1.0,1.0};
-GLfloat lightPosition[] = {400.0,400.0,400.0, 1.0};
+GLfloat lightPosition[] = {-150.0,400.0,200.0, 1.0};
 
 
 
@@ -76,34 +76,34 @@ void buildCube(GLfloat x){
 	glEnd();                       
 }
 
-void buildShape(int i){
+void buildShape(int i, GLfloat x){
 	//build a rectangular, which can be scaled and rotated
 
 	if (i==0)
 	{	
 		glBegin(GL_QUADS);
-	 	glTexCoord2d(1,1);	glNormal3d(1.0,0.0,0.0);	glVertex3d(0.0,0.0,0.0); //2
-		glTexCoord2d(1,0);	glNormal3d(1.0,0.0,0.0);	glVertex3d(0.0,1.0,0.0);  //1
-		glTexCoord2d(0,0);	glNormal3d(1.0,0.0,0.0);	glVertex3d(0.0,1.0,1.0);   //4
-		glTexCoord2d(0,1);	glNormal3d(1.0,0.0,0.0);	glVertex3d(0.0,0.0,1.0); //3
+	 	glNormal3d(1.0,0.0,0.0); glTexCoord2d(x,x);		glVertex3d(0.0,0.0,0.0); //2
+		glNormal3d(1.0,0.0,0.0);glTexCoord2d(x,0);		glVertex3d(0.0,1.0,0.0);  //1
+		glNormal3d(1.0,0.0,0.0);glTexCoord2d(0,0);		glVertex3d(0.0,1.0,1.0);   //4
+		glNormal3d(1.0,0.0,0.0);glTexCoord2d(0,x);		glVertex3d(0.0,0.0,1.0); //3
 		glEnd();  
 	}
 	if (i==1)
 	{
 		glBegin(GL_QUADS);
-		glTexCoord2d(1,1);	glNormal3d(0.0,1.0,0.0);	glVertex3d(1.0,0.0,0.0);   
-		glTexCoord2d(0,1);	glNormal3d(0.0,1.0,0.0);	glVertex3d(0.0,0.0,0.0);
+		glTexCoord2d(x,x);	glNormal3d(0.0,1.0,0.0);	glVertex3d(1.0,0.0,0.0);   
+		glTexCoord2d(0,x);	glNormal3d(0.0,1.0,0.0);	glVertex3d(0.0,0.0,0.0);
 		glTexCoord2d(0,0);	glNormal3d(0.0,1.0,0.0);	glVertex3d(0.0,0.0,1.0);
-		glTexCoord2d(1,0);	glNormal3d(0.0,1.0,0.0);	glVertex3d(1.0,0.0,1.0);   
+		glTexCoord2d(x,0);	glNormal3d(0.0,1.0,0.0);	glVertex3d(1.0,0.0,1.0);   
 		glEnd();  
 	}
 	if (i==2)
 	{
 		glBegin(GL_QUADS);
-		glTexCoord2d(1,1);	glNormal3d(0.0,0.0,1.0);	glVertex3d(1.0,0.0,0.0);        
-		glTexCoord2d(0,1);	glNormal3d(0.0,0.0,1.0);	glVertex3d(0.0,0.0,0.0);
-		glTexCoord2d(0,0);	glNormal3d(0.0,0.0,1.0);	glVertex3d(0.0,1.0,0.0);         
-		glTexCoord2d(1,0);	glNormal3d(0.0,0.0,1.0);	glVertex3d(1.0,1.0,0.0); 
+		glNormal3d(0.0,0.0,-1.0);glTexCoord2d(x,x);		glVertex3d(1.0,0.0,0.0);        
+		glNormal3d(0.0,0.0,-1.0);glTexCoord2d(0,x);		glVertex3d(0.0,0.0,0.0);
+		glNormal3d(0.0,0.0,-1.0);glTexCoord2d(0,0);		glVertex3d(0.0,1.0,0.0);         
+		glNormal3d(0.0,0.0,-1.0);glTexCoord2d(x,0);		glVertex3d(1.0,1.0,0.0); 
 		glEnd();  
 	}
 	                     
@@ -349,7 +349,7 @@ void display() {
 				glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR_MIPMAP_LINEAR);
 				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 				GLfloat mat_specular[] = { 1.0, 1.0, 1.0, 1.0 };
-				GLfloat mat_shininess[] = { 50.0 };
+				GLfloat mat_shininess[] = { 120.0 };
 				glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
 				glMaterialfv(GL_FRONT, GL_SHININESS, mat_shininess);
 				glTranslated((*pre).position[0], (*pre).position[1], (*pre).position[2]);
@@ -357,11 +357,11 @@ void display() {
 
 				
 				if((*pre).scale[0]==0)
-					buildShape(0);
+					buildShape(0,x);
 				else if((*pre).scale[1]==0)
-					buildShape(1);
+					buildShape(1,x);
 				else if((*pre).scale[2]==0)
-					buildShape(2);
+					buildShape(2,x);
 				//glCallList(cube);
 				if((*pre).scale[2]!=0&&(*pre).scale[1]!=0&&(*pre).scale[0]!=0){
 					buildCube(x);
@@ -451,15 +451,20 @@ void display() {
 					glColor3d(0,1,0);
 				else if ((*leaf).getName() == "yellow")
 					glColor3d(1,1,0);
-				else
+				else{
 					glBindTexture(GL_TEXTURE_2D, tex_wall[prob_set]);
+				}
 
 
 				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+				
+				glTexGeni(GL_S, GL_TEXTURE_GEN_MODE, GL_SPHERE_MAP);
+
+				glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR_MIPMAP_LINEAR);
 				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 				GLfloat mat_specular[] = { 1.0, 1.0, 1.0, 1.0 };
-				GLfloat mat_shininess[] = { 50.0 };
+				GLfloat mat_shininess[] = { 120.0 };
 				glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
 				glMaterialfv(GL_FRONT, GL_SHININESS, mat_shininess);
 
@@ -468,11 +473,11 @@ void display() {
 		
 				
 				if((*leaf).scale[0]==0)
-					buildShape(0);
+					buildShape(0,x);
 				if((*leaf).scale[1]==0)
-					buildShape(1);
+					buildShape(1,x);
 				if((*leaf).scale[2]==0)
-					buildShape(2);
+					buildShape(2,x);
 				//glCallList(cube);
 				if((*leaf).scale[2]!=0&&(*pre).scale[1]!=0&&(*pre).scale[0]!=0){
 					buildCube(x);
