@@ -174,6 +174,12 @@ GLint loadTextures()
 		if (tex_window[i] == 0 ) cout << "ERROR loading texture " << filename << endl;
 	}
 
+	//Tex glass
+	for(int i = 0; i < 4; i++){
+		filename = "textures/glass" + to_string(static_cast<long long>(i)) + ".jpg";
+		tex_glass[i] = SOIL_load_OGL_texture(filename.c_str(),SOIL_LOAD_AUTO,SOIL_CREATE_NEW_ID,SOIL_FLAG_MIPMAPS);
+		if (tex_glass[i] == 0 ) cout << "ERROR loading texture " << filename << endl;
+	}
 
 	//Tex door
 	for(int i = 0; i < number_textures; i++){
@@ -321,6 +327,22 @@ void display() {
 					glBindTexture(GL_TEXTURE_2D, tex_window[7]);
 				}
 
+					else if ((*pre).getName() == "glass1"){
+					glBindTexture(GL_TEXTURE_2D, tex_glass[0]);
+					x = 4;}
+					else if ((*pre).getName() == "glass1a"){
+					glBindTexture(GL_TEXTURE_2D, tex_glass[0]);
+					x = 2;
+				}	else if ((*pre).getName() == "glass2"){
+					glBindTexture(GL_TEXTURE_2D, tex_glass[1]);
+				}	else if ((*pre).getName() == "glass3"){
+					glBindTexture(GL_TEXTURE_2D, tex_glass[2]);
+					x = 4;
+				}
+				else if ((*pre).getName() == "glass4"){
+					glBindTexture(GL_TEXTURE_2D, tex_glass[3]);
+					x=2;
+				}
 				else if ((*pre).getName() == "door"){
 					x = 1;
 					glBindTexture(GL_TEXTURE_2D, tex_door[prob_set]);
@@ -427,6 +449,24 @@ void display() {
 					glBindTexture(GL_TEXTURE_2D, tex_window[6]);
 				}	else if ((*leaf).getName() == "window8"){
 					glBindTexture(GL_TEXTURE_2D, tex_window[7]);
+				}
+						
+					else if ((*pre).getName() == "glass1"){
+						glBindTexture(GL_TEXTURE_2D, tex_glass[0]);
+						x=8;
+					}
+					else if ((*pre).getName() == "glass1a"){
+					glBindTexture(GL_TEXTURE_2D, tex_glass[0]);
+					x = 2;
+				}	else if ((*pre).getName() == "glass2"){
+					glBindTexture(GL_TEXTURE_2D, tex_glass[1]);
+					x = 12;
+				}	else if ((*pre).getName() == "glass3"){
+					glBindTexture(GL_TEXTURE_2D, tex_glass[2]);
+					x=10;
+				}	else if ((*pre).getName() == "glass4"){
+					glBindTexture(GL_TEXTURE_2D, tex_glass[3]);
+					x=8;
 				}
 
 				else if ((*leaf).getName() == "door"){
