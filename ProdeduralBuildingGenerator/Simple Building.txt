@@ -1,11 +1,103 @@
-//PRIORITY 1
-footprint->S(1r,building_height,1r){facades}->T(0,building_height,0){roof}
-facades->Comp("Sidefaces"){facade|front}
-//PRIORITY 2
-front->subDiv(X,1r,door_width*1.5){tiles|entrance}:0.5->subDiv(X,door_width*1.5,1r){entrance|tiles}:0.5
-facade->("Faces"){tiles}
-tiles->repeat(X,windows_spaceing){tile}
-tile->subDiv(Y,1r,window_width,1r){wall|windowtile|wall}
-windowtile->subDiv(Y,2r,window_height,1r){wall|window|wall}
-//window->(Scope.occ["noparent"]){}
-//window->S(1r,1r,window_depth){win.obj}
+// ------PRIORITY 1------
+// Building Shape
+//...............................
+
+start->scale(building_width*rand[1.0-1.0],building_height*rand[0.7-0.9],building_depth){complex}
+complex->trans(Scope.sx*-0.5,0,0){complex}
+complex->subDiv(Z,Scope.sz*rand[0.5-0.6],1r){facades|sidewings}
+sidewings->subDiv(X,1r,Scope.sx*0.2,1r){sidewingA|elevator|sidewingB}
+elevator->trans(0,0,60){elevator}
+sidewingA->subDiv(Y,3r,1r){erase|sidewingA}
+sidewingB->subDiv(Y,3r,1r){erase|sidewingB}
+erase->scale(0,0,0){erase}
+sidewingA->scale(1,1,4){sidewingA}
+sidewingB->scale(1,1,4){sidewingB}
+facades->subDiv(X,1r,Scope.sx*0.2,1r){facadeA|facadeB|facadeC}
+facadeB->scale(1,1,0.9){facadeB}
+
+// ------PRIORITY 2------
+// Composition into facades
+//...............................
+
+facadeA->comp(){bottom|roof|facadeFRONT|facadeRIGHT|back|facadeLEFT}
+facadeB->comp(){bottom|roof|glasswall|facadeRIGHT|glasswall|facadeLEFT}
+facadeC->comp(){bottom|roof|facadeFRONT|facadeRIGHT|back|facadeLEFT}
+sidewingA->comp(){bottom|roof|windowwall|windowwall|windowwall|windowwall}
+sidewingB->comp(){bottom|roof|windowwall|windowwall|windowwall|windowwall}
+elevator->comp(){bottom|roof|glasswall|glasswall|glasswall|glasswall}
+END
+// ------PRIORITY 3------
+// Facade Handling: FRONT facade
+//...............................
+
+facadeFRONT->subDiv(Y,groundFloor_height,1r,topFloor_height*0.5){groundfloor|floors|topfloor}
+groundfloor->subDiv(X,1r,entrance_width,1r){groundfloor|entrance|groundfloor}
+floors->repeat(Y,floor_height){floor}
+floor->repeat(X,20){windowPanel}
+windowPanel->subDiv(Y,1r,4r,2r){top|windowScale|tile}
+windowScale->subDiv(X,1r,4r,1r){right|opening|left}
+
+//Window Handling
+opening->extrude(1.0){open}
+open->comp(){side|side|erase|side|rims|side}
+rims->subDiv(Y,1r,20r,1r){wood|rim|wood}
+rim->subDiv(X,1r,20r,1r){wood|wPanel|wood}
+wPanel->extrude(0.3){wPanel}
+wPanel->comp(){wood|wood|erase|wood|window|wood}
+wood->(){roof}
+END
+// ------PRIORITY 3------
+// Facade Handling: LEFT facade
+//...............................
+
+facadeLEFT->subDiv(Y,groundFloor_height,1r,topFloor_height){groundfloor|floors|topfloor}
+floors->repeat(Y,floor_height){floor}
+floor->repeat(Z,20){windowPanel}
+windowPanel->subDiv(Y,1r,4r,2r){top|windowScale|tile}
+windowScale->subDiv(Z,1r,4r,1r){right|opening|left}
+
+//Window Handling
+opening->extrude(1.0){open}
+open->comp(){side|side|side|erase|side|rims}
+rims->subDiv(Y,1r,20r,1r){wood|rim|wood}
+rim->subDiv(Z,1r,20r,1r){wood|wPanel|wood}
+wPanel->extrude(0.3){wPanel}
+wPanel->comp(){wood|wood|erase|wood|wood|window}
+wood->(){roof}
+
+// ------PRIORITY 3------
+// Facade Handling: RIGHT facade
+//...........
+
+facadeRIGHT->subDiv(Y,groundFloor_height,1r,topFloor_height){groundfloor|floors|topfloor}
+floors->repeat(Y,floor_height){floor}
+floor->repeat(Z,20){windowPanel}
+windowPanel->subDiv(Y,1r,4r,2r){top|windowScale|tile}
+windowScale->subDiv(Z,1r,4r,1r){right|opening|left}
+
+//Window Handling
+opening->extrude(-1.0){open}
+open->comp(){side|side|side|rims|side|erase}
+rims->subDiv(Y,1r,20r,1r){wood|rim|wood}
+rim->subDiv(Z,1r,20r,1r){wood|wPanel|wood}
+wPanel->extrude(-0.3){wPanel}
+wPanel->comp(){wood|wood|wood|window|wood|erase}
+wood->(){roof}
+
+windowwall->subDiv(Y,groundFloor_height,1r,topFloor_height){floors}
+floors->repeat(Y,floor_height){floor}
+floor->repeat(Z,20){window}
+
+
+glasswall->subDiv(Y,groundFloor_height,1r,topFloor_height){floors}
+floors->repeat(Y,floor_height){floor}
+floor->repeat(Z,20){glass}
+
+// ------PRIORITY 4------
+// Delete Management
+//...........
+
+
+erase->scale(0,0,0){null}
+
+END

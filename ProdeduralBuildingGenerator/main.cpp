@@ -6,10 +6,11 @@
 
 int main(int argc, char **argv)
 {
-
-	vector< pair < string, vector<GNode>> > parse = parsing();
-	tree<Symbol> derivTree = modeling( parse);
-	visualization(argc, argv,derivTree);
+	while(true){
+		vector< pair < string, vector<GNode>> > parse = parsing();
+		tree<Symbol> derivTree = modeling( parse);
+		visualization(argc, argv,derivTree);
+	}
 	
 
 	return 0;

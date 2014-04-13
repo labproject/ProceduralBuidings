@@ -7,6 +7,7 @@
 
 bool light = true, boxes = true, facades = true, textures = true;
 static GLfloat spin = 0.0, aspectRatio, n = 20; //N = **Koordinatensystem**
+bool initGL = false;
 GLuint cube, shape;
 GLubyte *tex_pointer;
 //movement in scene:
@@ -15,8 +16,7 @@ static GLdouble xRef = 0.0, yRef = 60.0, zRef = 0.0, move_z = 1, move_x = 0, mov
 GLuint	tex_wall[12], tex_window[10], tex_glass[10], tex_roof[10], tex_floor[10], tex_groundfloor[10], tex_topfloor[10], tex_env[11], tex_entrance[11], tex_door[11], tex_back[11], garage[1];
 int prob_set, prob_window;
 int depth = 0;
-bool history = false;
-
+bool history = true, valid_window = true;
 //GLfloat x = 4;
 //Tree
 tree<Symbol> Tree;
@@ -201,6 +201,10 @@ GLint loadTextures()
 }
 
 void display() {
+	if(!valid_window)
+		 return;
+
+
 	glColor3d(1,1,1);
 
 	if(light){
@@ -252,7 +256,7 @@ void display() {
 
 
 	//draw whole tree only if history == false, otherwise draw up to certain treelevel given by parameter depth
-
+	
 	if(history){
 		while(pre != Tree.end()){
 			
@@ -526,6 +530,12 @@ void reshape(GLsizei w, GLsizei h){
 
 }
 
+
+ 
+
+ 
+
+
 //initialize Scene and build display lists
 void init(){
 	glClearColor(1.0, 1.0, 1.0, 1.0);
@@ -549,7 +559,7 @@ void init(){
 	glLightfv(GL_LIGHT0, GL_POSITION,lightPosition); 
 	glEnable(GL_NORMALIZE);
 
-
+	
 	loadTextures();
 
 	//cube = glGenLists (1);
@@ -566,7 +576,10 @@ void init(){
 GLvoid keyboard( GLubyte key, GLint x, GLint y )
 {
 	switch (key) { 
-	case 27:    exit(0); //ESC = exit
+	case 27:    
+				valid_window = false;
+				glutDestroyWindow(glutGetWindow());
+				break;
 
 	case 97: //a = move forward
 		zRef += 0.5;
@@ -791,7 +804,9 @@ void createMenu(){
 }
 
 void visualization(int argc, char **argv, tree<Symbol> devTree){
-
+	valid_window = true;
+	depth = devTree.max_depth();
+	int mainWindow;
 	cout<<"-----------------------"<<endl<<"VISUALIZATION"<<endl<<"-----------------------"<<endl<<endl<<endl;
 
 	cout << "Shortcuts:  " << endl;
@@ -804,12 +819,15 @@ void visualization(int argc, char **argv, tree<Symbol> devTree){
 
 	tree<Symbol>::leaf_iterator leaf = Tree.begin_leaf();
 
-	glutInit(&argc, argv); // Initialize GLUT
+	if(!initGL){
+		initGL = true;
+		glutInit(&argc, argv); // Initialize GLUT only once
+	}
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH | GLUT_MULTISAMPLE);
 	glEnable(GLUT_MULTISAMPLE);
 	glutInitWindowSize(1280, 720); // Set the width and height of the window
 	glutInitWindowPosition(0, 0); // Set the position of the window
-	glutCreateWindow("Buildings"); // Set the title for the window
+	mainWindow = glutCreateWindow("Buildings"); // Set the title for the window
 
 	init();
 	Tree = devTree;
@@ -821,5 +839,10 @@ void visualization(int argc, char **argv, tree<Symbol> devTree){
 	glutSpecialFunc( specialkeys );
 	glutMouseWheelFunc(mousewheel);
 
-	glutMainLoop(); 
+	while(valid_window){
+		 glutMainLoopEvent();
+		display();
+	}
+
+	
 }
