@@ -5,14 +5,14 @@
 #define TEXTURES 4
 #define HISTORY 5
 
-bool light = false, boxes = true, facades = true, textures = true;
+bool light = true, boxes = true, facades = true, textures = true;
 static GLfloat spin = 0.0, aspectRatio, n = 20; //N = **Koordinatensystem**
 GLuint cube, shape;
 GLubyte *tex_pointer;
 //movement in scene:
 //static GLdouble xRef = 0.0, yRef = 60.0, zRef = 0.0, zoom = 1, horizontal = config.at("building_height")+30, vertical = -2*config.at("building_height"), angle = 0.0;
 static GLdouble xRef = 0.0, yRef = 60.0, zRef = 0.0, move_z = 1, move_x = 0, move_y = -10, horizontal = 150, vertical = -300, angle = 0.0, zoom_look = 1;
-GLuint	tex_wall[12], tex_window[10], tex_glass[10], tex_roof[10], tex_floor[10], tex_groundfloor[10], tex_topfloor[10], tex_env[11], tex_entrance[11], tex_door[11], tex_back[11];
+GLuint	tex_wall[12], tex_window[10], tex_glass[10], tex_roof[10], tex_floor[10], tex_groundfloor[10], tex_topfloor[10], tex_env[11], tex_entrance[11], tex_door[11], tex_back[11], garage[1];
 int prob_set, prob_window;
 int depth = 0;
 bool history = false;
@@ -22,19 +22,11 @@ bool history = false;
 tree<Symbol> Tree;
 
 //set up light
-GLfloat LightAmbient[] = { 0.5,0.5, 0.5, 1 };    
-GLfloat LightDiffuse[] = {200.0,200.0,200.0,1.0}; 
-GLfloat lightColor0[] =  {255.0f, 255.0, 255.0f, 1.0f }; 
+GLfloat LightAmbient[] = {0.5,0.7,1.0,1.0};
+GLfloat LightDiffuse[] = {1.0,1.0,1.0,1.0};
+GLfloat lightPosition[] = {400.0,400.0,400.0, 1.0};
 
-GLfloat lightPosition0[] = {0.0,500.0,100.0, 1.0};
 
-/*
-GLfloat LightColor1[] = {120, 120, 120, 1.0f};
-GLfloat LightPosition1[]= { 0.0f, 100.0f, -400, 1.0f }; 
-GLfloat lightPosition2[] = {200.0f, 100.5f, 0.0f, 1.0f};
-GLfloat lightPosition3[] = {0.0f, 100.5f, 300.0f, 1.0f};
-GLfloat lightPosition4[] = {-200.0f, 100.5f, -0.0f, 1.0f};
-*/
 
 
 
@@ -48,21 +40,20 @@ void buildCube(GLfloat x){
 	//Top
 	glNormal3d(0.0,1.0,0.0);	glTexCoord2f(x, 0.0f);	glVertex3d( 1.0, 1.0,0.0);          
 	glNormal3d(0.0,1.0,0.0);	glTexCoord2f(0, 0.0f);	glVertex3d(0.0, 1.0,0.0);          
-	glNormal3d(0.0,1.0,0.0);	glTexCoord2f(0, x);	glVertex3d(0.0, 1.0, 1.0);          
+	glNormal3d(0.0,1.0,0.0);	glTexCoord2f(0, x);		glVertex3d(0.0, 1.0, 1.0);          
 	glNormal3d(0.0,1.0,0.0);	glTexCoord2f(x, x);		glVertex3d( 1.0, 1.0, 1.0);
 
 	//Bottom
-	glNormal3d(0.0,-1.0,0.0);	glTexCoord2f(x, 0.0f); glVertex3d( 1.0,0.0, 1.0);        
-	glNormal3d(0.0,-1.0,0.0);	glTexCoord2f(x, x); glVertex3d(0.0,0.0, 1.0);          
-	glNormal3d(0.0,-1.0,0.0);	glTexCoord2f(0.0f, x); glVertex3d(0.0,0.0,0.0);         
-	glNormal3d(0.0,-1.0,0.0);	glTexCoord2f(0.0f, 0.0f); glVertex3d( 1.0,0.0,0.0);          
+	glNormal3d(0.0,-1.0,0.0);	glTexCoord2f(x, 0.0f);	glVertex3d( 1.0,0.0, 1.0);        
+	glNormal3d(0.0,-1.0,0.0);	glTexCoord2f(x, x);		glVertex3d(0.0,0.0, 1.0);          
+	glNormal3d(0.0,-1.0,0.0);	glTexCoord2f(0.0f, x);	glVertex3d(0.0,0.0,0.0);         
+	glNormal3d(0.0,-1.0,0.0);	glTexCoord2f(0.0f,0.0f); glVertex3d( 1.0,0.0,0.0);          
 
 	//Back
-	
-	glNormal3d(0.0,0.0,1.0);	glTexCoord2f(0.0f, 0.0f); glVertex3d( 1.0, 1.0, 1.0);          
-	glNormal3d(0.0,0.0,1.0);	glTexCoord2f(x, 0); glVertex3d(0.0, 1.0, 1.0);         
-	glNormal3d(0.0,0.0,1.0);	glTexCoord2f(x,x); glVertex3d(0.0,0.0, 1.0);         
-	glNormal3d(0.0,0.0,1.0);	glTexCoord2f(0.0f, x); glVertex3d( 1.0,0.0, 1.0);         
+	glNormal3d(0.0,0.0,-1.0);	glTexCoord2f(0.0f, 0.0f); glVertex3d( 1.0, 1.0, 1.0);          
+	glNormal3d(0.0,0.0,-1.0);	glTexCoord2f(x, 0); glVertex3d(0.0, 1.0, 1.0);         
+	glNormal3d(0.0,0.0,-1.0);	glTexCoord2f(x,x); glVertex3d(0.0,0.0, 1.0);         
+	glNormal3d(0.0,0.0,-1.0);	glTexCoord2f(0.0f, x); glVertex3d( 1.0,0.0, 1.0);         
 
 	//Front
 	glNormal3d(0.0,0.0,-1.0);	glTexCoord2f(x, x); glVertex3d( 1.0,0.0,0.0);        
@@ -71,7 +62,6 @@ void buildCube(GLfloat x){
 	glNormal3d(0.0,0.0,-1.0);	glTexCoord2f(x, 0.0f); glVertex3d( 1.0, 1.0,0.0);   
 
 	//Left
-
 	glNormal3d(-1.0,0.0,0.0);	glTexCoord2f(0, 0.0f); glVertex3d(0.0, 1.0, 1.0);          
 	glNormal3d(-1.0,0.0,0.0);	glTexCoord2f(x, 0); glVertex3d(0.0, 1.0,0.0);       
 	glNormal3d(-1.0,0.0,0.0);	glTexCoord2f(x, x); glVertex3d(0.0,0.0,0.0);         
@@ -86,17 +76,37 @@ void buildCube(GLfloat x){
 	glEnd();                       
 }
 
-void buildShape(){
+void buildShape(int i){
 	//build a rectangular, which can be scaled and rotated
 
-	glBegin(GL_QUADS);       
-	glNormal3d(0.0,1.0,0.0);
-	glVertex3d( 1.0,0.0,0.0);        
-	glVertex3d(0.0,0.0,0.0);          
-	glVertex3d(0.0, 1.0,0.0);         
-	glVertex3d( 1.0, 1.0,0.0);   		       
-
-	glEnd();                       
+	if (i==0)
+	{	
+		glBegin(GL_QUADS);
+	 	glTexCoord2d(1,1);	glNormal3d(1.0,0.0,0.0);	glVertex3d(0.0,0.0,0.0); //2
+		glTexCoord2d(1,0);	glNormal3d(1.0,0.0,0.0);	glVertex3d(0.0,1.0,0.0);  //1
+		glTexCoord2d(0,0);	glNormal3d(1.0,0.0,0.0);	glVertex3d(0.0,1.0,1.0);   //4
+		glTexCoord2d(0,1);	glNormal3d(1.0,0.0,0.0);	glVertex3d(0.0,0.0,1.0); //3
+		glEnd();  
+	}
+	if (i==1)
+	{
+		glBegin(GL_QUADS);
+		glTexCoord2d(1,1);	glNormal3d(0.0,1.0,0.0);	glVertex3d(1.0,0.0,0.0);   
+		glTexCoord2d(0,1);	glNormal3d(0.0,1.0,0.0);	glVertex3d(0.0,0.0,0.0);
+		glTexCoord2d(0,0);	glNormal3d(0.0,1.0,0.0);	glVertex3d(0.0,0.0,1.0);
+		glTexCoord2d(1,0);	glNormal3d(0.0,1.0,0.0);	glVertex3d(1.0,0.0,1.0);   
+		glEnd();  
+	}
+	if (i==2)
+	{
+		glBegin(GL_QUADS);
+		glTexCoord2d(1,1);	glNormal3d(0.0,0.0,1.0);	glVertex3d(1.0,0.0,0.0);        
+		glTexCoord2d(0,1);	glNormal3d(0.0,0.0,1.0);	glVertex3d(0.0,0.0,0.0);
+		glTexCoord2d(0,0);	glNormal3d(0.0,0.0,1.0);	glVertex3d(0.0,1.0,0.0);         
+		glTexCoord2d(1,0);	glNormal3d(0.0,0.0,1.0);	glVertex3d(1.0,1.0,0.0); 
+		glEnd();  
+	}
+	                     
 }
 
 GLint loadTextures()                                    
@@ -112,8 +122,9 @@ GLint loadTextures()
 	prob_set = rand() % 5;
 	prob_window = rand() % 5;
 
-	cout << prob_set << "  " << prob_window << endl;
+	//cout << prob_set << "  " << prob_window << endl;
 	//Textures for Environment
+
 	for(int i = 0; i < number_textures; i++){
 		filename = "textures/ground" + to_string(static_cast<long long>(i)) + ".jpg";
 		tex_env[i] = SOIL_load_OGL_texture(filename.c_str(),SOIL_LOAD_AUTO,SOIL_CREATE_NEW_ID,SOIL_FLAG_MIPMAPS);
@@ -130,17 +141,6 @@ GLint loadTextures()
 	}
 
 
-
-	//Textures Glass
-
-	for(int i = 0; i < number_textures; i++){
-		filename = "textures/glass" + to_string(static_cast<long long>(i)) + ".jpg";
-		tex_glass[i] = SOIL_load_OGL_texture(filename.c_str(),SOIL_LOAD_AUTO,SOIL_CREATE_NEW_ID,SOIL_FLAG_MIPMAPS);
-		if (tex_glass[i] == 0 ) cout << "ERROR loading texture " << filename << endl;
-	}
-
-
-
 	//Textures for Roof
 
 	for(int i = 0; i < number_textures; i++){
@@ -149,9 +149,7 @@ GLint loadTextures()
 		if (tex_roof[i] == 0 ) cout << "ERROR loading texture " << filename << endl;
 	}
 
-
-
-
+	
 	//Textures for Groundfloor
 
 	for(int i = 0; i < number_textures; i++){
@@ -159,9 +157,7 @@ GLint loadTextures()
 		tex_groundfloor[i] = SOIL_load_OGL_texture(filename.c_str(),SOIL_LOAD_AUTO,SOIL_CREATE_NEW_ID,SOIL_FLAG_MIPMAPS);
 		if (tex_groundfloor[i] == 0 ) cout << "ERROR loading texture " << filename << endl;
 	}
-
-
-
+	
 	//Textures for topfloor
 
 	for(int i = 0; i < number_textures; i++){
@@ -170,26 +166,14 @@ GLint loadTextures()
 		if (tex_topfloor[i] == 0 ) cout << "ERROR loading texture " << filename << endl;
 	}
 
-	//Tex floor
-	for(int i = 0; i < number_textures; i++){
-		filename = "textures/floor" + to_string(static_cast<long long>(i)) + ".jpg";
-		tex_floor[i] = SOIL_load_OGL_texture(filename.c_str(),SOIL_LOAD_AUTO,SOIL_CREATE_NEW_ID,SOIL_FLAG_MIPMAPS);
-		if (tex_floor[i] == 0 ) cout << "ERROR loading texture " << filename << endl;
-	}
-
+	
 	//Tex window
-	for(int i = 0; i < number_textures; i++){
+	for(int i = 0; i < 8; i++){
 		filename = "textures/window" + to_string(static_cast<long long>(i)) + ".jpg";
 		tex_window[i] = SOIL_load_OGL_texture(filename.c_str(),SOIL_LOAD_AUTO,SOIL_CREATE_NEW_ID,SOIL_FLAG_MIPMAPS);
 		if (tex_window[i] == 0 ) cout << "ERROR loading texture " << filename << endl;
 	}
 
-	//Tex entrance
-	for(int i = 0; i < number_textures; i++){
-		filename = "textures/entrance" + to_string(static_cast<long long>(i)) + ".jpg";
-		tex_entrance[i] = SOIL_load_OGL_texture(filename.c_str(),SOIL_LOAD_AUTO,SOIL_CREATE_NEW_ID,SOIL_FLAG_MIPMAPS);
-		if (tex_entrance[i] == 0 ) cout << "ERROR loading texture " << filename << endl;
-	}
 
 	//Tex door
 	for(int i = 0; i < number_textures; i++){
@@ -204,7 +188,12 @@ GLint loadTextures()
 		tex_back[i] = SOIL_load_OGL_texture(filename.c_str(),SOIL_LOAD_AUTO,SOIL_CREATE_NEW_ID,SOIL_FLAG_MIPMAPS);
 		if (tex_back[i] == 0 ) cout << "ERROR loading texture " << filename << endl;
 	}
-
+	
+	//Tex garage
+		filename = "textures/garage.jpg";
+		garage[0] = SOIL_load_OGL_texture(filename.c_str(),SOIL_LOAD_AUTO,SOIL_CREATE_NEW_ID,SOIL_FLAG_MIPMAPS);
+		if (garage[0] == 0 ) cout << "ERROR loading texture " << filename << endl;
+	
 
 
 
@@ -216,22 +205,16 @@ void display() {
 
 	if(light){
 		glEnable(GL_LIGHT0); 
-		glEnable(GL_LIGHT1); 
-		glEnable(GL_LIGHT2);
-		glEnable(GL_LIGHT3);
-		glEnable(GL_LIGHT4);
+
 		glEnable(GL_LIGHTING);
 	}
 	else{
 		glDisable(GL_LIGHT0);
-		glDisable(GL_LIGHT1);
-		glEnable(GL_LIGHT2);
-		glEnable(GL_LIGHT3);
-		glEnable(GL_LIGHT4);
+
 		glDisable(GL_LIGHTING);
 	}
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glClearColor(1.0, 1.0, 1.0, 1.0);
+	glClearColor(1,1,1, 1.0);
 
 	glLoadIdentity();
  
@@ -242,7 +225,7 @@ void display() {
 	glRotated(angle,0,1,0);
 
 	//draw ground
-	GLfloat x = 2048.0f/512.0f;//test size
+	GLfloat x = 1;//2048.0f/512.0f;//test size
 
 	glBindTexture(GL_TEXTURE_2D, tex_env[prob_set]);
 
@@ -251,13 +234,14 @@ void display() {
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 	glBegin(GL_QUADS);
-	glNormal3d(0,1,0);	glTexCoord2f(0, 0); glVertex3d(-200, -0.1, -200);
-	glNormal3d(0,1,0);	glTexCoord2f(x, 0); glVertex3d(-200, -0.1, 200);          
-	glNormal3d(0,1,0);	glTexCoord2f(x, x); glVertex3d(200, -0.1, 200);          
-	glNormal3d(0,1,0);	glTexCoord2f(0, x); glVertex3d(200, -0.1, -200);
+		glNormal3d(0,1,0);	glTexCoord2f(0, 0); glVertex3d(-200, -0.1, -200);
+		glNormal3d(0,1,0);	glTexCoord2f(x, 0); glVertex3d(-200, -0.1, 200);          
+		glNormal3d(0,1,0);	glTexCoord2f(x, x); glVertex3d(200, -0.1, 200);          
+		glNormal3d(0,1,0);	glTexCoord2f(0, x); glVertex3d(200, -0.1, -200);
 	glEnd();
 
 	glTranslated(-5,0,-5);
+
 
 
 	//Iterate over Tree
@@ -299,14 +283,40 @@ void display() {
 				//Objects with floor textures
 				else if ((*pre).getName() == "groundfloor" || (*pre).getName() == "groundlevel"){
 					x=1;
-					glBindTexture(GL_TEXTURE_2D, tex_groundfloor[prob_set]);
+					glBindTexture(GL_TEXTURE_2D, tex_groundfloor[0]);
+				}	
+				else if ((*pre).getName() == "groundfloor2" || (*pre).getName() == "groundlevel"){
+					x=1;
+					glBindTexture(GL_TEXTURE_2D, tex_groundfloor[1]);
 				}
 				else if ((*pre).getName() == "topfloor")
 					glBindTexture(GL_TEXTURE_2D, tex_topfloor[prob_set]);
 
 				//Objects like windows, doors, entrance
-				else if ((*pre).getName() == "window")
+				else if ((*pre).getName() == "window"){
+							prob_window = 1+((int)rand())%8;
+					string tmp  = static_cast<ostringstream*>( &(ostringstream() << prob_window) )->str();
+					(*pre).name.append(tmp);
 					glBindTexture(GL_TEXTURE_2D, tex_window[prob_window]);
+				}
+					else if ((*pre).getName() == "window1"){
+					glBindTexture(GL_TEXTURE_2D, tex_window[0]);
+				}	else if ((*pre).getName() == "window2"){
+					glBindTexture(GL_TEXTURE_2D, tex_window[1]);
+				}	else if ((*pre).getName() == "window3"){
+					glBindTexture(GL_TEXTURE_2D, tex_window[2]);
+				}	else if ((*pre).getName() == "window4"){
+					glBindTexture(GL_TEXTURE_2D, tex_window[3]);
+				}	else if ((*pre).getName() == "window5"){
+					glBindTexture(GL_TEXTURE_2D, tex_window[4]);
+				}	else if ((*pre).getName() == "window6"){
+					glBindTexture(GL_TEXTURE_2D, tex_window[5]);
+				}	else if ((*pre).getName() == "window7"){
+					glBindTexture(GL_TEXTURE_2D, tex_window[6]);
+				}	else if ((*pre).getName() == "window8"){
+					glBindTexture(GL_TEXTURE_2D, tex_window[7]);
+				}
+
 				else if ((*pre).getName() == "door"){
 					x = 1;
 					glBindTexture(GL_TEXTURE_2D, tex_door[prob_set]);
@@ -314,8 +324,8 @@ void display() {
 					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
 					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
 				}
-				else if ((*pre).getName() == "entrance")
-					glBindTexture(GL_TEXTURE_2D, tex_entrance[prob_set]);
+					else if ((*pre).getName() == "garage")
+					glBindTexture(GL_TEXTURE_2D, garage[0]);
 
 
 				
@@ -331,9 +341,10 @@ void display() {
 				else
 					glBindTexture(GL_TEXTURE_2D, tex_wall[prob_set]);
 
-
 				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+				
+				glTexGeni(GL_S, GL_TEXTURE_GEN_MODE, GL_SPHERE_MAP);
 
 				glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR_MIPMAP_LINEAR);
 				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
@@ -344,8 +355,17 @@ void display() {
 				glTranslated((*pre).position[0], (*pre).position[1], (*pre).position[2]);
 				glScaled((*pre).scale[0], (*pre).scale[1], (*pre).scale[2]);
 
+				
+				if((*pre).scale[0]==0)
+					buildShape(0);
+				else if((*pre).scale[1]==0)
+					buildShape(1);
+				else if((*pre).scale[2]==0)
+					buildShape(2);
 				//glCallList(cube);
-				buildCube(x);
+				if((*pre).scale[2]!=0&&(*pre).scale[1]!=0&&(*pre).scale[0]!=0){
+					buildCube(x);
+				}
 				glPopMatrix();
 			}
 
@@ -370,14 +390,41 @@ void display() {
 				//Objects with floor textures
 				else if ((*leaf).getName() == "groundfloor" || (*leaf).getName() == "groundlevel"){
 					x=1;
-					glBindTexture(GL_TEXTURE_2D, tex_groundfloor[prob_set]);
+					glBindTexture(GL_TEXTURE_2D, tex_groundfloor[0]);
+				}	
+				else if ((*leaf).getName() == "groundfloor2" || (*leaf).getName() == "groundlevel"){
+					x=1;
+					glBindTexture(GL_TEXTURE_2D, tex_groundfloor[1]);
 				}
 				else if ((*leaf).getName() == "topfloor")
 					glBindTexture(GL_TEXTURE_2D, tex_topfloor[prob_set]);
-
+			
 				//Objects like windows, doors, entrance
-				else if ((*leaf).getName() == "window")
+				else if ((*leaf).getName() == "window"){
+					prob_window = 1+((int)rand())%8;
+					string tmp  = static_cast<ostringstream*>( &(ostringstream() << prob_window) )->str();
+					(*leaf).name.append(tmp);
 					glBindTexture(GL_TEXTURE_2D, tex_window[prob_window]);
+				}
+				
+					else if ((*leaf).getName() == "window1"){
+					glBindTexture(GL_TEXTURE_2D, tex_window[0]);
+				}	else if ((*leaf).getName() == "window2"){
+					glBindTexture(GL_TEXTURE_2D, tex_window[1]);
+				}	else if ((*leaf).getName() == "window3"){
+					glBindTexture(GL_TEXTURE_2D, tex_window[2]);
+				}	else if ((*leaf).getName() == "window4"){
+					glBindTexture(GL_TEXTURE_2D, tex_window[3]);
+				}	else if ((*leaf).getName() == "window5"){
+					glBindTexture(GL_TEXTURE_2D, tex_window[4]);
+				}	else if ((*leaf).getName() == "window6"){
+					glBindTexture(GL_TEXTURE_2D, tex_window[5]);
+				}	else if ((*leaf).getName() == "window7"){
+					glBindTexture(GL_TEXTURE_2D, tex_window[6]);
+				}	else if ((*leaf).getName() == "window8"){
+					glBindTexture(GL_TEXTURE_2D, tex_window[7]);
+				}
+
 				else if ((*leaf).getName() == "door"){
 					x = 1;
 					glBindTexture(GL_TEXTURE_2D, tex_door[prob_set]);
@@ -385,14 +432,15 @@ void display() {
 					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
 					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
 				}
-				else if ((*leaf).getName() == "entrance")
-					glBindTexture(GL_TEXTURE_2D, tex_entrance[prob_set]);
-				
+			
 				else if ((*leaf).getName() == "back"){
 					x=4;
 					glBindTexture(GL_TEXTURE_2D, tex_back[prob_set]);
 
 				}
+				else if ((*leaf).getName() == "garage")
+					glBindTexture(GL_TEXTURE_2D, garage[0]);
+
 
 				//DEBUG COLORS
 				else if ((*leaf).getName() == "red")
@@ -417,9 +465,18 @@ void display() {
 
 				glTranslated((*leaf).position[0], (*leaf).position[1], (*leaf).position[2]);
 				glScaled((*leaf).scale[0], (*leaf).scale[1], (*leaf).scale[2]);
-
+		
+				
+				if((*leaf).scale[0]==0)
+					buildShape(0);
+				if((*leaf).scale[1]==0)
+					buildShape(1);
+				if((*leaf).scale[2]==0)
+					buildShape(2);
 				//glCallList(cube);
-				buildCube(x);
+				if((*leaf).scale[2]!=0&&(*pre).scale[1]!=0&&(*pre).scale[0]!=0){
+					buildCube(x);
+				}
 				
 				glPopMatrix();
 			}
@@ -427,7 +484,6 @@ void display() {
 			leaf++;
 		}
 	}
-
 
 
 	glFlush();
@@ -480,20 +536,14 @@ void init(){
 	glEnable(GL_POLYGON_SMOOTH); 
 
 	//Light
+	glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER, GL_TRUE);
+	glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, GL_TRUE);
 	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, LightAmbient);
-	glLightfv(GL_LIGHT1, GL_AMBIENT, LightAmbient);  
-	glLightfv(GL_LIGHT1, GL_DIFFUSE, LightDiffuse);
-	glLightfv(GL_LIGHT1, GL_POSITION,lightPosition0); 
-	/*
-	glLightfv(GL_LIGHT0, GL_DIFFUSE, lightColor0);
-    glLightfv(GL_LIGHT0, GL_POSITION, lightPosition0);
-	glLightfv(GL_LIGHT2, GL_DIFFUSE, lightColor0);
-    glLightfv(GL_LIGHT2, GL_POSITION, lightPosition2);
-	glLightfv(GL_LIGHT3, GL_DIFFUSE, lightColor0);
-    glLightfv(GL_LIGHT3, GL_POSITION, lightPosition3);
-	glLightfv(GL_LIGHT4, GL_DIFFUSE, lightColor0);
-    glLightfv(GL_LIGHT4, GL_POSITION, lightPosition4);
-	*/
+	glLightfv(GL_LIGHT0,GL_AMBIENT,LightAmbient);
+	glLightfv(GL_LIGHT0, GL_DIFFUSE, LightDiffuse);
+	glLightfv(GL_LIGHT0, GL_POSITION,lightPosition); 
+	glEnable(GL_NORMALIZE);
+
 
 	loadTextures();
 

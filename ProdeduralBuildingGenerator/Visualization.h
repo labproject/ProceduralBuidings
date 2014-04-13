@@ -9,14 +9,14 @@
 #include	"SOIL.h"
 #include	"tree.hh"
 #include	"Global.h"
-
+#include	<sstream>
 using namespace std;
 
 
 
 
 void buildCube();
-void buildShape();
+void buildShape(int);
 GLint loadTextures();
 void display();
 void reshape(GLsizei w, GLsizei h);

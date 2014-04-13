@@ -15,8 +15,8 @@ door_height=2.3
 //
 entrance_width=30
 //
-building_width=100
+building_width=120
 building_height=120
 building_depth=80
 
-
+garage_width=50
