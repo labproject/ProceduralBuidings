@@ -259,8 +259,9 @@ void display() {
 	tree<Symbol>::leaf_iterator leaf = Tree.begin_leaf();
 	tree<Symbol>::pre_order_iterator pre = Tree.begin(); 
 	Symbol *child;
-
-
+	//cout << "nodes:  " << Tree.size() << endl;
+	//cout << "depth: " << Tree.max_depth() << endl;
+	int leafs = 0;
 	//draw whole tree only if history == false, otherwise draw up to certain treelevel given by parameter depth
 	
 	if(history){
@@ -382,16 +383,24 @@ void display() {
 				glScaled((*pre).scale[0], (*pre).scale[1], (*pre).scale[2]);
 
 				
-				if((*pre).scale[0]==0)
+				if((*pre).scale[0]==0){
+					leafs++;
 					buildShape(0,x);
-				else if((*pre).scale[1]==0)
+				}
+				else if((*pre).scale[1]==0){
+					leafs++;
 					buildShape(1,x);
-				else if((*pre).scale[2]==0)
+				}
+				else if((*pre).scale[2]==0){
+					leafs++;
 					buildShape(2,x);
+				}
 				//glCallList(cube);
 				if((*pre).scale[2]!=0&&(*pre).scale[1]!=0&&(*pre).scale[0]!=0){
 					buildCube(x);
+					leafs++;
 				}
+				
 				glPopMatrix();
 			}
 
@@ -534,6 +543,7 @@ void display() {
 		}
 	}
 
+	//cout << "Leaf nodes: " << leafs << endl;
 
 	glFlush();
 	glutSwapBuffers();
